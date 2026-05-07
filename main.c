@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
+#include "boss.h"
 #include <allegro5/allegro_primitives.h>
 #include <stdio.h>
 #include <allegro5/allegro.h>
@@ -52,10 +53,11 @@ int main() {
         printf("Erreur chargement ressources\n");
         return -1;
     }
-    niv2Grotte(HEIGHT,WIDTH,NOMBREVIE,BULLET_SPEED, SPEED, MaxBullets, TempsAttenteRechargement, SCROLL_SPEED, background,  ship, coeur, tirLaser, tempsTir, timer, queue, display, grotte );
+    //garder tout ce qui au dessus pour que ça tourne
+    // niv2Grotte(HEIGHT,WIDTH,NOMBREVIE,BULLET_SPEED, SPEED, MaxBullets, TempsAttenteRechargement, SCROLL_SPEED, background,  ship, coeur, tirLaser, tempsTir, timer, queue, display, grotte );
 
 
-  /*  int ship_w = 150;
+    int ship_w = 150;
     int ship_h = 50;
     int bg_w = al_get_bitmap_width(background);
     int vies = NOMBREVIE;// definit le nombre de vie dans la partie
@@ -75,12 +77,13 @@ int main() {
 
     Stalactites stalactites[MAX_STALAC];
     Stalactites_init(stalactites, MAX_STALAC, WIDTH, HEIGHT);
+    boss_init(WIDTH, HEIGHT);
 
     //Position joueur
     float x = 100;
     float y = HEIGHT / 2;
 
-    BulletLASER bullets[MAX_BULLET_LASER] = {};
+    BulletLASER bulletLASER[MAX_BULLET_LASER] = {};
     Bullet bullet[MaxBullets]={0};
     BulletSPRAY bullet_sp[MaxBullets]={0};
 
@@ -134,7 +137,7 @@ int main() {
             }
 
             Updatescrolling(&x, &y, &bgx,key,ship_w, ship_h,WIDTH, HEIGHT,SPEED, SCROLL_SPEED,bg_w);
-            update_bulletsLASER(bullets,x,y ,MAX_BULLET_LASER,collision);
+            update_bulletsLASER(bulletLASER,x,y ,MAX_BULLET_LASER,collision);
             update_bullets(bullet,MaxBullets,BULLET_SPEED,WIDTH);
             update_bulletsSpray(bullet_sp,MaxBullets,WIDTH,HEIGHT,BULLET_SPEED);
 
@@ -142,15 +145,15 @@ int main() {
 
             redraw = 1;
         }
-        if(key[ALLEGRO_KEY_SPACE]&& nombreTirLaser>0 && !bullet_active(bullets, MAX_BULLET_LASER)){
-            fire_bulletLASER(bullets, x+40, y+10, MAX_BULLET_LASER);
+        if(key[ALLEGRO_KEY_SPACE]&& nombreTirLaser>0 && !bullet_active(bulletLASER, MAX_BULLET_LASER)){
+            fire_bulletLASER(bulletLASER, x+40, y+10, MAX_BULLET_LASER);
             nombreTirLaser-=1;
             tempsEntreLesTires = 120;
         }
         if(key[ALLEGRO_KEY_ENTER]&& TempsChargementSpray==0){
-                fire_bulletSPRAY(bullet_sp,x,y, MaxBullets);
-                TempsChargementSpray = TempsAttenteRechargement;
-                tempsEntreLesTires = 120;
+            fire_bulletSPRAY(bullet_sp,x,y, MaxBullets);
+            TempsChargementSpray = TempsAttenteRechargement;
+            tempsEntreLesTires = 120;
 
         }
 
@@ -167,8 +170,8 @@ int main() {
             vie(&vies, coeur, &fin);
 
             DrawNombreTirsLaser(nombreTirLaser,tirLaser);
-            draw_bulletsLASER(bullets,MAX_BULLET_LASER, WIDTH,x,y);
-           DrawTempsEntreTir(TempsChargementSpray,tempsTir,WIDTH,HEIGHT,TempsAttenteRechargement);
+            draw_bulletsLASER(bulletLASER,MAX_BULLET_LASER, WIDTH,x,y);
+            DrawTempsEntreTir(TempsChargementSpray,tempsTir,WIDTH,HEIGHT,TempsAttenteRechargement);
 
             al_flip_display();
 
@@ -181,19 +184,6 @@ int main() {
 
 
 
-        /*else if (ev.type == ALLEGRO_EVENT_TIMER) {
-            if (key[ALLEGRO_KEY_ESCAPE]) running = 0;
-            redraw = 1;
-        }
-
-        if (redraw && al_is_event_queue_empty(queue)) {
-            redraw = 0;
-
-            modeboss(&x, &y, ship, background, bgx, key,
-                     ship_w, ship_h, WIDTH, HEIGHT);
-
-        }*/
-
 
         //Libération mémoire
         al_destroy_bitmap(ship);
@@ -204,4 +194,5 @@ int main() {
 
         return 0;
     }
+
 

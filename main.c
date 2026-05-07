@@ -53,7 +53,7 @@ int main() {
         printf("Erreur chargement ressources\n");
         return -1;
     }
-    //garder tout ce qui au dessus pour que ça tourne
+    //garder tout ce qui au dessus pour que ça tourne l
     // niv2Grotte(HEIGHT,WIDTH,NOMBREVIE,BULLET_SPEED, SPEED, MaxBullets, TempsAttenteRechargement, SCROLL_SPEED, background,  ship, coeur, tirLaser, tempsTir, timer, queue, display, grotte );
 
 

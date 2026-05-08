@@ -723,7 +723,7 @@ void spawn_laser(laserPlus *c,
 
     c->x = WIDTH + 50;
 
-    // spawn dans le passage visible
+
     c->y = rand() % (HEIGHT) -50;
 
     c->active = true;

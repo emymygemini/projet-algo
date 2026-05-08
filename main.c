@@ -140,7 +140,7 @@ int main() {
             }
             if (!laserBonus.active) {
 
-                // petite chance de spawn
+                // petite chance de spawn peut changer
                 if (rand() % 300 == 0) {
 
                     spawn_laser(&laserBonus, WIDTH,HEIGHT);

@@ -112,7 +112,7 @@ void boss_update(float player_x, float player_y, int WIDTH, int HEIGHT) {
         if (g_boss.parts[i].laser_cooldown > 0) g_boss.parts[i].laser_cooldown--;
 
 
-    // PHASE 1 – Logique d'attaques
+    // PHASE 1 – Logique d'attaques d
     if (g_boss.phase == BOSS_PHASE1) {
 
         // Laser : machine à états

@@ -566,25 +566,27 @@ void nivBOSS(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, 
             //Sortie du jeu
             if (key[ALLEGRO_KEY_ESCAPE]) running = 0;
             collision=0;
-            if (tempsEntreLesTires>0) {
+            if (tempsEntreLesTires>0) { // permet de laisser 10ms entre chaque tir
                 tempsEntreLesTires -= 1;
             }
             else {
                 fire_bullet(bullet,x,y, MaxBullets);
                 tempsEntreLesTires = 10;
             }
-            if (TempsChargementSpray>0) {
+            if (TempsChargementSpray>0) { // permet de faire que les tirs se recharfe
                 TempsChargementSpray -= 1;
             }
 
             modeboss(&x, &y, ship, background, bgx, key,
-                    ship_w, ship_h, WIDTH, HEIGHT);
+                    ship_w, ship_h, WIDTH, HEIGHT); // dessine et prend en compte les déplacement du joueur
+            // on met a jour tout les tirs
             update_bulletsLASER(bullets,x,y ,MAX_BULLET_LASER,collision);
             update_bullets(bullet,MaxBullets,BULLET_SPEED,WIDTH);
             update_bulletsSpray(bullet_sp,MaxBullets,WIDTH,HEIGHT,BULLET_SPEED);
 
             redraw = 1;
         }
+        // on vérifie quel touche ont été appuyé pour pouvoir faire les tirs qu'il faut
         if(key[ALLEGRO_KEY_SPACE]&& nombreTirLaser>0 && !bullet_active(bullets, MAX_BULLET_LASER)){
             fire_bulletLASER(bullets, x+40, y+10, MAX_BULLET_LASER);
             nombreTirLaser-=1;

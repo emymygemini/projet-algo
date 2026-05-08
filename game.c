@@ -268,7 +268,7 @@ void draw_bulletsLASER(BulletLASER bullets[], int MAX_BULLETS,int WIDTH, float x
         }
     }
 }
-bool laser_hits_enemy(float laser_y, float laser_height, Enemy *e) {
+/*bool laser_hits_enemy(float laser_y, float laser_height, Enemy *e) {
     if (e->state != ESTATE_ALIVE) return false;
 
     float enemy_top = e->y - e->h / 2;
@@ -276,7 +276,7 @@ bool laser_hits_enemy(float laser_y, float laser_height, Enemy *e) {
 
     return (enemy_bottom >= laser_y &&
             enemy_top <= laser_y + laser_height);
-}
+}*/
 bool bullet_active(BulletLASER bullets[], int MAX) {
     for(int i = 0; i < MAX; i++) {
         if(bullets[i].active)
@@ -455,7 +455,7 @@ void Stalactites_init(Stalactites s[], int MAX_GROTTE, int WIDTH, int HEIGHT)
         s[i].x = i * largeur;
 
         // taille passage
-        s[i].gap_height = 180;
+        s[i].gap_height = 200;
 
         // variation douce verticale
         current_gap_y += (rand() % 121) - 60;
@@ -473,8 +473,7 @@ void Stalactites_init(Stalactites s[], int MAX_GROTTE, int WIDTH, int HEIGHT)
 void Stalactites_update(Stalactites s[],
                         int MAX_GROTTE,
                         int WIDTH,
-                        int HEIGHT)
-{
+                        int HEIGHT) {
     static float vitesse = 4.5f;
 
     for (int i = 0; i < MAX_GROTTE; i++) {
@@ -499,29 +498,24 @@ void Stalactites_update(Stalactites s[],
             // replace à la suite
             s[i].x = max_x + s[last].width;
 
-            // parfois passage serré
-            if (rand() % 5 == 0)
-                s[i].gap_height = 200;
-            else
-                s[i].gap_height = 230;
 
             // variation organique
-            if (rand() % 5 == 0)
-                s[i].gap_height = 200;
+            if (rand() % 4 == 0)
+                s[i].gap_height = 170;
             else
-                s[i].gap_height = 250;
+                s[i].gap_height = 220;
 
             // variation plus douce
-            int variation = (rand() % 121) - 60;
+            int variation = (rand() % 141) - 70;
 
             s[i].gap_y = s[last].gap_y + variation;
 
-            // empêche les virages impossibles
-            if (s[i].gap_y - s[last].gap_y > 70)
-                s[i].gap_y = s[last].gap_y + 70;
+            // garde le tunnel dans l'écran
+            if (s[i].gap_y < 80)
+                s[i].gap_y = 80;
 
-            if (s[last].gap_y - s[i].gap_y > 70)
-                s[i].gap_y = s[last].gap_y - 70;
+            if (s[i].gap_y > HEIGHT - s[i].gap_height - 80)
+                s[i].gap_y = HEIGHT - s[i].gap_height - 80;
         }
     }
 }
@@ -540,8 +534,8 @@ void stalactique_collision(Stalactites s[],
         invincible_timer--;
 
     // hitbox réduite
-    float margin_x = 15;
-    float margin_y = 15 ;
+    float margin_x = 20;
+    float margin_y = 20;
 
     float left   = *x + margin_x;
     float right  = *x + ship_w - margin_x;
@@ -551,11 +545,22 @@ void stalactique_collision(Stalactites s[],
 
     for (int i = 0; i < MAX_GROTTE; i++) {
 
-        if (right > s[i].x &&
-            left < s[i].x + s[i].width) {
+        // 🔥 ALIGNEMENT RENDU / COLLISION
+        float sx = (int)(s[i].x + 0.5f);
+        float sw = (int)(s[i].width + 1);
 
-            if (top < s[i].gap_y ||
-                bottom > s[i].gap_y + s[i].gap_height) {
+        if (right > sx &&
+            left < sx + sw) {
+
+            // 🔥 MARGE POUR ÉVITER COLLISIONS FANTÔMES
+            float top_limit =
+                s[i].gap_y + 6;
+
+            float bottom_limit =
+                s[i].gap_y + s[i].gap_height - 6;
+
+            if (top < top_limit ||
+                bottom > bottom_limit) {
 
                 if (invincible_timer == 0) {
 
@@ -569,7 +574,8 @@ void stalactique_collision(Stalactites s[],
 
                     // recentrage dans le tunnel
                     float center =
-                        s[i].gap_y + s[i].gap_height / 2;
+                        s[i].gap_y +
+                        s[i].gap_height / 2;
 
                     *y = center - ship_h / 2;
 
@@ -578,7 +584,8 @@ void stalactique_collision(Stalactites s[],
                         *y = s[i].gap_y + 10;
 
                     if (*y + ship_h >
-                        s[i].gap_y + s[i].gap_height - 10)
+                        s[i].gap_y +
+                        s[i].gap_height - 10)
 
                         *y =
                             s[i].gap_y +
@@ -589,8 +596,8 @@ void stalactique_collision(Stalactites s[],
                 }
 
                 return;
-                }
             }
+        }
     }
 }
 void stalactique_render(Stalactites s[],
@@ -604,44 +611,166 @@ void stalactique_render(Stalactites s[],
 
     for (int i = 0; i < MAX_GROTTE; i++) {
 
+        int x = (int)s[i].x +1;
+        int largeur = (int)s[i].width +1;
+
         // plafond
-        int top_h = s[i].gap_y;
+        int top_h = (int)s[i].gap_y;
 
-        for (int x = s[i].x;
-             x < s[i].x + s[i].width;
-             x += tile_w) {
-
-            al_draw_scaled_bitmap(
-                grotte,
-                0, 0,
-                tile_w, tile_h,
-                x,
-                0,
-                tile_w,
-                top_h,
-                0
-            );
-             }
+        al_draw_scaled_bitmap(
+            grotte,
+            0, 0,
+            tile_w, tile_h,
+            x,
+            0,
+            largeur,
+            top_h,
+            0
+        );
 
         // sol
-        int bottom_y = s[i].gap_y + s[i].gap_height;
+        int bottom_y = (int)(s[i].gap_y + s[i].gap_height) +1;
 
         int bottom_h = HEIGHT - bottom_y;
 
-        for (int x = s[i].x;
-             x < s[i].x + s[i].width;
-             x += tile_w) {
-
-            al_draw_scaled_bitmap(
-                grotte,
-                0, 0,
-                tile_w, tile_h,
-                x,
-                bottom_y,
-                tile_w,
-                bottom_h,
-                ALLEGRO_FLIP_VERTICAL
-            );
-             }
+        al_draw_scaled_bitmap(
+            grotte,
+            0, 0,
+            tile_w, tile_h,
+            x,
+            bottom_y,
+            largeur,
+            bottom_h,
+            ALLEGRO_FLIP_VERTICAL
+        );
     }
+}
+void spawn_coeur(CoeurVie *c,
+                 int WIDTH,
+                 Stalactites s[],
+                 int MAX_GROTTE)
+{
+    float max_x = s[0].x;
+    int last = 0;
+
+    // cherche le morceau le plus à droite
+    for (int i = 1; i < MAX_GROTTE; i++) {
+
+        if (s[i].x > max_x) {
+            max_x = s[i].x;
+            last = i;
+        }
+    }
+
+    c->x = WIDTH + 50;
+
+    // spawn dans le passage visible
+    c->y = s[last].gap_y + 30 +
+           rand() % ((int)s[last].gap_height - 60);
+
+    c->active = true;
+}
+void update_coeur(CoeurVie *c,int *vies,
+                     float ship_x,
+                     float ship_y,
+                     int ship_w,
+                     int ship_h){
+    if (!c->active)
+        return;
+
+    c->x -= 3;
+
+    if (c->x < -30)
+        c->active = false;
+
+
+    float left   = ship_x;
+    float right  = ship_x + ship_w;
+
+    float top    = ship_y;
+    float bottom = ship_y + ship_h;
+
+    if (right > c->x &&
+        left < c->x + 30 &&
+        bottom > c->y &&
+        top < c->y + 30)
+    {
+        (*vies)++;
+
+        c->active = false;
+    }
+}
+void draw_coeur(CoeurVie *c,ALLEGRO_BITMAP *vie){
+    if (!c->active)
+        return;
+
+    al_draw_scaled_bitmap(
+        vie,
+        0, 0,
+        al_get_bitmap_width(vie),
+        al_get_bitmap_height(vie),
+        c->x,
+        c->y,
+        30,
+        30,
+        0
+    );
+}
+void spawn_laser(laserPlus *c,
+                 int WIDTH,
+                 int HEIGHT)
+{
+
+    c->x = WIDTH + 50;
+
+    // spawn dans le passage visible
+    c->y = rand() % (HEIGHT) -50;
+
+    c->active = true;
+}
+void update_laser_Recup(laserPlus *c,int *maxBullet,
+                     float ship_x,
+                     float ship_y,
+                     int ship_w,
+                     int ship_h){
+    if (!c->active)
+        return;
+
+    c->x -= 3;
+
+    if (c->x < -30)
+        c->active = false;
+
+
+    float left   = ship_x;
+    float right  = ship_x + ship_w;
+
+    float top    = ship_y;
+    float bottom = ship_y + ship_h;
+
+    if (right > c->x &&
+        left < c->x + 30 &&
+        bottom > c->y &&
+        top < c->y + 30)
+    {
+        (*maxBullet)++;
+
+        c->active = false;
+    }
+}
+void draw_laserplus(laserPlus *c,ALLEGRO_BITMAP *laser){
+    if (!c->active)
+        return;
+
+    al_draw_scaled_bitmap(
+        laser,
+        0, 0,
+        al_get_bitmap_width(laser),
+        al_get_bitmap_height(laser),
+        c->x,
+        c->y,
+        60,
+        25,
+        0
+    );
 }

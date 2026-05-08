@@ -28,7 +28,7 @@ int main() {
 
     al_install_keyboard();
     al_init_image_addon();
-    enemies_init();
+    //enemies_init();
 
 
     ALLEGRO_DISPLAY *display = al_create_display(WIDTH, HEIGHT);
@@ -65,6 +65,13 @@ int main() {
     int nombreTirLaser=3;
     int tempsEntreLesTires = 0;
     int TempsChargementSpray=0;
+
+    CoeurVie coeurBonus;
+    coeurBonus.active = false;
+
+    laserPlus laserBonus;
+    laserBonus.active = false;
+
 
 
 
@@ -123,6 +130,24 @@ int main() {
             //Sortie du jeu
             if (key[ALLEGRO_KEY_ESCAPE]) running = 0;
             collision=0;
+            if (!coeurBonus.active) {
+
+                // petite chance de spawn
+                if (rand() % 300 == 0) {
+
+                    spawn_coeur(&coeurBonus, WIDTH,stalactites,MAX_STALAC);
+                }
+            }
+            if (!laserBonus.active) {
+
+                // petite chance de spawn
+                if (rand() % 300 == 0) {
+
+                    spawn_laser(&laserBonus, WIDTH,HEIGHT);
+                }
+            }
+
+
 
 
             if (tempsEntreLesTires>0) {
@@ -135,11 +160,15 @@ int main() {
             if (TempsChargementSpray>0) {
                 TempsChargementSpray -= 1;
             }
+            update_coeur(&coeurBonus,&vies, x,y,ship_w,ship_h);
+            update_laser_Recup(&laserBonus,&nombreTirLaser,x,y,ship_w,ship_h);
 
             Updatescrolling(&x, &y, &bgx,key,ship_w, ship_h,WIDTH, HEIGHT,SPEED, SCROLL_SPEED,bg_w);
             update_bulletsLASER(bulletLASER,x,y ,MAX_BULLET_LASER,collision);
             update_bullets(bullet,MaxBullets,BULLET_SPEED,WIDTH);
             update_bulletsSpray(bullet_sp,MaxBullets,WIDTH,HEIGHT,BULLET_SPEED);
+            //Stalactites_update(stalactites, MAX_STALAC, WIDTH, HEIGHT);
+            //stalactique_collision(stalactites, MAX_STALAC, &x, &y, ship_w, ship_h, HEIGHT, &vies);
 
 
 
@@ -165,8 +194,11 @@ int main() {
 
             draw_bullets(bullet,MaxBullets);
             draw_bulletSpray(bullet_sp,MaxBullets);
-            enemies_draw();
-            enemy_bullets_draw();
+            //enemies_draw();
+            //enemy_bullets_draw();
+           // stalactique_render(stalactites, MAX_STALAC, HEIGHT, WIDTH, grotte);
+            draw_coeur(&coeurBonus, coeur);
+            draw_laserplus(&laserBonus, tirLaser);
             vie(&vies, coeur, &fin);
 
             DrawNombreTirsLaser(nombreTirLaser,tirLaser);

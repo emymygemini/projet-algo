@@ -23,12 +23,10 @@
 //  kamikaze fonce droit sur le joueur, pas de tir
 //  zigzag rebondit verticalement entre 2 bornes,
 //  tir en diagonale vers le joueur
-typedef enum {
-   ENEMY_DRONE = 0,
-   ENEMY_SINUS,
-   ENEMY_TURRET,
-   ENEMY_KAMIKAZE,
-   ENEMY_ZIGZAG,
+/*typedef enum {
+   ENEMY_BASE = 0,
+   ENEMY_TIRE,
+   ENEMY_KAMIKASE,
    ENEMY_TYPE_COUNT
 } EnemyType;
 
@@ -111,7 +109,10 @@ void enemy_spawn(EnemyType type, float x, float y);
 
 
 // Mise à jour
-void enemies_update(float dt, float player_x, float player_y,int WIDTH,int HEIGHT);
+
+void enemies_update(float dt, float scroll_speed,
+                    float player_x, float player_y,
+                    float player_w, float player_h);
 void enemy_bullets_update(float dt,int WIDTH,int HEIGHT);
 
 
@@ -127,5 +128,5 @@ bool   enemy_bullet_hits_player(const EnemyBullet *b,
                                float px, float py,
                                float pw, float ph);
 
-
+*/
 #endif

@@ -22,6 +22,16 @@ typedef struct {
 } Grotte;
 typedef struct {
     float x;
+    float y;
+    bool active;
+} CoeurVie;
+typedef struct {
+    float x;
+    float y;
+    bool active;
+} laserPlus;
+typedef struct {
+    float x;
     float gap_y;
     float gap_height;
     float width;
@@ -76,24 +86,30 @@ void modeboss(float *x, float *y,
             int ship_w, int ship_h,
             int WIDTH, int HEIGHT
             );
-void vie(int* vies, ALLEGRO_BITMAP *vie, int *fin) ;
-void draw_bulletsLASER(BulletLASER bullets[], int MAX_BULLETS,int WIDTH, float x, float y);
-void fire_bulletLASER(BulletLASER bullets[], float x, float y, int MAX_BULLETS);
-void update_bulletsLASER(BulletLASER bullets[], float x, float y, int MAX_BULLETS, int collision );
-bool bullet_active(BulletLASER bullets[], int MAX);
-void DrawNombreTirsLaser(int tirsLaser, ALLEGRO_BITMAP *tirLaser) ;
-bool laser_hits_enemy(float laser_y, float laser_height, Enemy *e);
-void draw_bullets(Bullet bullets[], int MAX_BULLETS);
-void update_bullets(Bullet bullets[], int MAX_BULLETS, int BULLET_SPEED, int WIDTH);
-void fire_bullet(Bullet bullets[], float x, float y, int MAX_BULLETS);
-void fire_bulletSPRAY(BulletSPRAY bullets[], float x, float y, int MAX_BULLETS);
-void draw_bulletSpray(BulletSPRAY bullets[], int MAX_BULLETS);
-void update_bulletsSpray(BulletSPRAY bullets[], int MAX_BULLETS, int WIDTH, int HEIGHT, int BULLET_SPEED);
-void DrawTempsEntreTir(int temps, ALLEGRO_BITMAP *tirSPRAY, int WIDTH, int HEIGHT, int TEMPSATTENTE);
-void Stalactites_init(Stalactites s[], int MAX_GROTTE, int WIDTH, int HEIGHT);
-void Stalactites_update(Stalactites s[], int MAX_GROTTE, int WIDTH, int HEIGHT);
-void stalactique_collision(Stalactites s[], int MAX_GROTTE,float *x, float *y,int ship_w, int ship_h,int HEIGHT, int *vie) ;
-void stalactique_render(Stalactites s[], int MAX_GROTTE,int HEIGHT, int WIDTH,ALLEGRO_BITMAP *grotte);
+void vie(int* vies, ALLEGRO_BITMAP *vie, int *fin) ; // permet de dessiner les coeurs
+void draw_bulletsLASER(BulletLASER bullets[], int MAX_BULLETS,int WIDTH, float x, float y); // fonction pour dessiner le laser
+void fire_bulletLASER(BulletLASER bullets[], float x, float y, int MAX_BULLETS); //fonction qui gére si oui ou non on peut tirer un laser
+void update_bulletsLASER(BulletLASER bullets[], float x, float y, int MAX_BULLETS, int collision ); // permet que le laser suive le vaisseau
+bool bullet_active(BulletLASER bullets[], int MAX); // vérifie si un tir est actif ou pas
+void DrawNombreTirsLaser(int tirsLaser, ALLEGRO_BITMAP *tirLaser) ; // affiche les tirs laser restant
+//bool laser_hits_enemy(float laser_y, float laser_height, Enemy *e); // permet de savoir si un tir laser a touché un ennemi
+void draw_bullets(Bullet bullets[], int MAX_BULLETS); // dessine les tirs simple
+void update_bullets(Bullet bullets[], int MAX_BULLETS, int BULLET_SPEED, int WIDTH); // permet de faire défilier les tirs simple
+void fire_bullet(Bullet bullets[], float x, float y, int MAX_BULLETS); // responsable de faire tirer le vaisseau
+void fire_bulletSPRAY(BulletSPRAY bullets[], float x, float y, int MAX_BULLETS); //tire les tirs éparpillé
+void draw_bulletSpray(BulletSPRAY bullets[], int MAX_BULLETS); //déssine les tirs épariller
+void update_bulletsSpray(BulletSPRAY bullets[], int MAX_BULLETS, int WIDTH, int HEIGHT, int BULLET_SPEED); // met a jour les coordonné pour que ça défile
+void DrawTempsEntreTir(int temps, ALLEGRO_BITMAP *tirSPRAY, int WIDTH, int HEIGHT, int TEMPSATTENTE); // barre de recharge des tirs
+void Stalactites_init(Stalactites s[], int MAX_GROTTE, int WIDTH, int HEIGHT); // permet de dessiner les stalactiques
+void Stalactites_update(Stalactites s[], int MAX_GROTTE, int WIDTH, int HEIGHT); // fait en sorte que ça défile
+void spawn_coeur(CoeurVie *c,int WIDTH,Stalactites s[],int MAX_GROTTE); // permet de faire apparaitre un coeur a réculpere
+void update_coeur(CoeurVie *c,int *vies,float ship_x,float ship_y,int ship_w,int ship_h); // vérifie si le joueur a récupérer un coeur et met a jour les coordonnées
+void draw_coeur(CoeurVie *c,ALLEGRO_BITMAP *vie); // dessine le coeur
+void spawn_laser(laserPlus *c,int WIDTH,int HEIGHT); //position aléatoire de laser
+void draw_laserplus(laserPlus *c,ALLEGRO_BITMAP *laser);
+void update_laser_Recup(laserPlus *c,int *maxBullet,float ship_x,float ship_y,int ship_w,int ship_h); //permet de récup laserPlus
+void stalactique_collision(Stalactites s[], int MAX_GROTTE,float *x, float *y,int ship_w, int ship_h,int HEIGHT, int *vie) ; // vérifie si le vaisseau entre en collision avec les stalactiques
+void stalactique_render(Stalactites s[], int MAX_GROTTE,int HEIGHT, int WIDTH,ALLEGRO_BITMAP *grotte);  // dessine les stalactiques
 void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display );
 void niv2(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display,ALLEGRO_BITMAP *grotte  );
 void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display,ALLEGRO_BITMAP *grotte  ) ;

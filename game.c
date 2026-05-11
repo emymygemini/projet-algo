@@ -534,8 +534,8 @@ void stalactique_collision(Stalactites s[],
         invincible_timer--;
 
     // hitbox réduite
-    float margin_x = 20;
-    float margin_y = 20;
+    float margin_x = 30;
+    float margin_y = 12;
 
     float left   = *x + margin_x;
     float right  = *x + ship_w - margin_x;

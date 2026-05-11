@@ -450,7 +450,7 @@ void niv2Grotte(int HEIGHT, int WIDTH ,int NOMBREVIE, int BULLET_SPEED, int SPEE
             }
             else {
                 fire_bullet(bullet,x,y, MaxBullets);
-                tempsEntreLesTires = 10;
+                tempsEntreLesTires = 17;
             }
             if (TempsChargementSpray>0) {
                 TempsChargementSpray -= 1;
@@ -460,8 +460,8 @@ void niv2Grotte(int HEIGHT, int WIDTH ,int NOMBREVIE, int BULLET_SPEED, int SPEE
             update_bulletsLASER(bullets,x,y ,MAX_BULLET_LASER,collision);
             update_bullets(bullet,MaxBullets,BULLET_SPEED,WIDTH);
             update_bulletsSpray(bullet_sp,MaxBullets,WIDTH,HEIGHT,BULLET_SPEED);
-            Stalactites_update(stalactites, MAX_STALAC, WIDTH, HEIGHT);
-            stalactique_collision(stalactites, MAX_STALAC, &x, &y, ship_w, ship_h, HEIGHT, &vies);
+          //  Stalactites_update(stalactites, MAX_STALAC, WIDTH, HEIGHT);
+          //  stalactique_collision(stalactites, MAX_STALAC, &x, &y, ship_w, ship_h, HEIGHT, &vies);
             redraw = 1;
         }
         if(key[ALLEGRO_KEY_SPACE]&& nombreTirLaser>0 && !bullet_active(bullets, MAX_BULLET_LASER)){
@@ -482,7 +482,7 @@ void niv2Grotte(int HEIGHT, int WIDTH ,int NOMBREVIE, int BULLET_SPEED, int SPEE
             redraw = 0;
             render(x, y, bgx,ship, background,ship_w, ship_h,WIDTH, HEIGHT,bg_w);
             draw_bullets(bullet,MaxBullets);
-            stalactique_render(stalactites, MAX_STALAC, HEIGHT, WIDTH, grotte);
+           // stalactique_render(stalactites, MAX_STALAC, HEIGHT, WIDTH, grotte);
             draw_bulletSpray(bullet_sp,MaxBullets);
             vie(&vies, coeur, &fin);
 

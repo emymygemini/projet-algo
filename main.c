@@ -46,10 +46,11 @@ int main() {
     ALLEGRO_BITMAP *coeur = al_load_bitmap("coeur.png");
     ALLEGRO_BITMAP *tirLaser = al_load_bitmap("tirLaser.png");
     ALLEGRO_BITMAP *tempsTir = al_load_bitmap("Spray.png");
+    ALLEGRO_BITMAP *Enemy1 = al_load_bitmap("Rouge.png");
 
 
 
-    if (!ship || !background || !grotte || !coeur|| !tirLaser || !tempsTir) {
+    if (!ship || !background || !grotte || !coeur|| !tirLaser || !tempsTir || !Enemy1) {
         printf("Erreur chargement ressources\n");
         return -1;
     }
@@ -90,9 +91,15 @@ int main() {
     float x = 100;
     float y = HEIGHT / 2;
 
+    //les tirs du joueur
+
     BulletLASER bulletLASER[MAX_BULLET_LASER] = {};
-    Bullet bullet[MaxBullets]={0};
-    BulletSPRAY bullet_sp[MaxBullets]={0};
+    Bullet bullet[MaxBullets]={};
+    BulletSPRAY bullet_sp[MaxBullets]={};
+
+    //les ennemis
+    int MAX_ENEMIES1 = 40;
+    EnemyNiv1BIS EnemysNIV1[MAX_ENEMIES1];
 
 
     //Scrolling
@@ -130,22 +137,21 @@ int main() {
             //Sortie du jeu
             if (key[ALLEGRO_KEY_ESCAPE]) running = 0;
             collision=0;
-            if (!coeurBonus.active) {
 
                 // petite chance de spawn
-                if (rand() % 300 == 0) {
+                if (rand() % 70 == 0) {
 
-                    spawn_coeur(&coeurBonus, WIDTH,stalactites,MAX_STALAC);
+                    spawn_NIV_ENEMY1BIS(EnemysNIV1,MAX_ENEMIES1,WIDTH,HEIGHT);
                 }
-            }
-            if (!laserBonus.active) {
+
+           // if (!laserBonus.active) {
 
                 // petite chance de spawn peut changer
-                if (rand() % 300 == 0) {
+              //  if (rand() % 300 == 0) {
 
-                    spawn_laser(&laserBonus, WIDTH,HEIGHT);
-                }
-            }
+                   // spawn_laser(&laserBonus, WIDTH,HEIGHT);
+               // }
+           // }
 
 
 
@@ -155,20 +161,23 @@ int main() {
             }
             else {
                 fire_bullet(bullet,x,y, MaxBullets);
-                tempsEntreLesTires = 10;
+                tempsEntreLesTires = 17;
             }
             if (TempsChargementSpray>0) {
                 TempsChargementSpray -= 1;
             }
-            update_coeur(&coeurBonus,&vies, x,y,ship_w,ship_h);
-            update_laser_Recup(&laserBonus,&nombreTirLaser,x,y,ship_w,ship_h);
+            //update_coeur(&coeurBonus,&vies, x,y,ship_w,ship_h);
+            //update_laser_Recup(&laserBonus,&nombreTirLaser,x,y,ship_w,ship_h);
 
             Updatescrolling(&x, &y, &bgx,key,ship_w, ship_h,WIDTH, HEIGHT,SPEED, SCROLL_SPEED,bg_w);
             update_bulletsLASER(bulletLASER,x,y ,MAX_BULLET_LASER,collision);
+
             update_bullets(bullet,MaxBullets,BULLET_SPEED,WIDTH);
             update_bulletsSpray(bullet_sp,MaxBullets,WIDTH,HEIGHT,BULLET_SPEED);
-            //Stalactites_update(stalactites, MAX_STALAC, WIDTH, HEIGHT);
-            //stalactique_collision(stalactites, MAX_STALAC, &x, &y, ship_w, ship_h, HEIGHT, &vies);
+          //  Stalactites_update(stalactites, MAX_STALAC, WIDTH, HEIGHT);
+          //  stalactique_collision(stalactites, MAX_STALAC, &x, &y, ship_w, ship_h, HEIGHT, &vies);
+            grotte_update(&g, &x, &y, ship_w, ship_h, HEIGHT, WIDTH, &vies, &collision);
+            update_NIV_ENEMY1BIS(EnemysNIV1,MAX_ENEMIES1,&vies,x,y,ship_w,ship_h,bullet,MaxBullets,bulletLASER,MAX_BULLET_LASER,bullet_sp);
 
 
 
@@ -194,11 +203,12 @@ int main() {
 
             draw_bullets(bullet,MaxBullets);
             draw_bulletSpray(bullet_sp,MaxBullets);
-            //enemies_draw();
+            render_NIV_ENEMY1BIS(EnemysNIV1,MAX_ENEMIES1,Enemy1);
+            grotte_render(g, HEIGHT, WIDTH, grotte);
             //enemy_bullets_draw();
-           // stalactique_render(stalactites, MAX_STALAC, HEIGHT, WIDTH, grotte);
-            draw_coeur(&coeurBonus, coeur);
-            draw_laserplus(&laserBonus, tirLaser);
+          // stalactique_render(stalactites, MAX_STALAC, HEIGHT, WIDTH, grotte);
+           // draw_coeur(&coeurBonus, coeur);
+           // draw_laserplus(&laserBonus, tirLaser);
             vie(&vies, coeur, &fin);
 
             DrawNombreTirsLaser(nombreTirLaser,tirLaser);

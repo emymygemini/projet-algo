@@ -61,7 +61,7 @@ void boss_init(int WIDTH, int HEIGHT) {
     g_boss.y            = HEIGHT * 0.5f;
     g_boss.origin_y     = HEIGHT * 0.5f;
     g_boss.w            = BOSS_W;
-    g_boss.h            = BOSS_H;
+    g_boss.h            = BOSS_HEIGHT;
 
     g_boss.float_amplitude = 55.0f;
     g_boss.float_speed     = 0.025f;  // radians/frame → période ~4s

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "fonctions.h"
-
+#include "menu.h"
 #include <stdbool.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
@@ -54,7 +54,7 @@ int main() {
         printf("Erreur chargement ressources\n");
         return -1;
     }
-    //garder tout ce qui au dessus pour que ça tourne l
+    //garder tout ce qui au dessus pour que ça tourne
     // niv2Grotte(HEIGHT,WIDTH,NOMBREVIE,BULLET_SPEED, SPEED, MaxBullets, TempsAttenteRechargement, SCROLL_SPEED, background,  ship, coeur, tirLaser, tempsTir, timer, queue, display, grotte );
 
 
@@ -116,125 +116,48 @@ int main() {
     al_start_timer(timer);
     printf("ship_w = %d\n", ship_w);
 
-    //Boucle principale
-    while (running) {
-        ALLEGRO_EVENT ev;
-        al_wait_for_event(queue, &ev);
+    // Affiche le menu et récupère le choix
+    int choix = afficher_menu(display, queue, timer, WIDTH, HEIGHT);
 
-        // Gestion événements
-        if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-            running = 0;
-
-
-        else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
-            key[ev.keyboard.keycode] = true;
-
-        else if (ev.type == ALLEGRO_EVENT_KEY_UP)
-            key[ev.keyboard.keycode] = false;
-
-
-        else if (ev.type == ALLEGRO_EVENT_TIMER) {
-            //Sortie du jeu
-            if (key[ALLEGRO_KEY_ESCAPE]) running = 0;
-            collision=0;
-
-                // petite chance de spawn
-                if (rand() % 70 == 0) {
-
-                    spawn_NIV_ENEMY1BIS(EnemysNIV1,MAX_ENEMIES1,WIDTH,HEIGHT);
-                }
-
-           // if (!laserBonus.active) {
-
-                // petite chance de spawn peut changer
-              //  if (rand() % 300 == 0) {
-
-                   // spawn_laser(&laserBonus, WIDTH,HEIGHT);
-               // }
-           // }
-
-
-
-
-            if (tempsEntreLesTires>0) {
-                tempsEntreLesTires -= 1;
-            }
-            else {
-                fire_bullet(bullet,x,y, MaxBullets);
-                tempsEntreLesTires = 17;
-            }
-            if (TempsChargementSpray>0) {
-                TempsChargementSpray -= 1;
-            }
-            //update_coeur(&coeurBonus,&vies, x,y,ship_w,ship_h);
-            //update_laser_Recup(&laserBonus,&nombreTirLaser,x,y,ship_w,ship_h);
-
-            Updatescrolling(&x, &y, &bgx,key,ship_w, ship_h,WIDTH, HEIGHT,SPEED, SCROLL_SPEED,bg_w);
-            update_bulletsLASER(bulletLASER,x,y ,MAX_BULLET_LASER,collision);
-
-            update_bullets(bullet,MaxBullets,BULLET_SPEED,WIDTH);
-            update_bulletsSpray(bullet_sp,MaxBullets,WIDTH,HEIGHT,BULLET_SPEED);
-          //  Stalactites_update(stalactites, MAX_STALAC, WIDTH, HEIGHT);
-          //  stalactique_collision(stalactites, MAX_STALAC, &x, &y, ship_w, ship_h, HEIGHT, &vies);
-            grotte_update(&g, &x, &y, ship_w, ship_h, HEIGHT, WIDTH, &vies, &collision);
-            update_NIV_ENEMY1BIS(EnemysNIV1,MAX_ENEMIES1,&vies,x,y,ship_w,ship_h,bullet,MaxBullets,bulletLASER,MAX_BULLET_LASER,bullet_sp);
-
-
-
-            redraw = 1;
-        }
-        if(key[ALLEGRO_KEY_SPACE]&& nombreTirLaser>0 && !bullet_active(bulletLASER, MAX_BULLET_LASER)){
-            fire_bulletLASER(bulletLASER, x+40, y+10, MAX_BULLET_LASER);
-            nombreTirLaser-=1;
-            tempsEntreLesTires = 120;
-        }
-        if(key[ALLEGRO_KEY_ENTER]&& TempsChargementSpray==0){
-            fire_bulletSPRAY(bullet_sp,x,y, MaxBullets);
-            TempsChargementSpray = TempsAttenteRechargement;
-            tempsEntreLesTires = 120;
-
-        }
-
-
-        //Rendu
-        if (redraw && al_is_event_queue_empty(queue)) {
-            redraw = 0;
-            render(x, y, bgx,ship, background,ship_w, ship_h,WIDTH, HEIGHT,bg_w);
-
-            draw_bullets(bullet,MaxBullets);
-            draw_bulletSpray(bullet_sp,MaxBullets);
-            render_NIV_ENEMY1BIS(EnemysNIV1,MAX_ENEMIES1,Enemy1);
-            grotte_render(g, HEIGHT, WIDTH, grotte);
-            //enemy_bullets_draw();
-          // stalactique_render(stalactites, MAX_STALAC, HEIGHT, WIDTH, grotte);
-           // draw_coeur(&coeurBonus, coeur);
-           // draw_laserplus(&laserBonus, tirLaser);
-            vie(&vies, coeur, &fin);
-
-            DrawNombreTirsLaser(nombreTirLaser,tirLaser);
-            draw_bulletsLASER(bulletLASER,MAX_BULLET_LASER, WIDTH,x,y);
-            DrawTempsEntreTir(TempsChargementSpray,tempsTir,WIDTH,HEIGHT,TempsAttenteRechargement);
-
-            al_flip_display();
-
-        }
-        if (fin==1) {
-            running=0;
-        }
+    // Lance le niveau correspondant
+    switch (choix) {
+        case MENU_NIV1:
+            niv1(HEIGHT, WIDTH, NOMBREVIE, BULLET_SPEED, SPEED, MaxBullets,
+                 TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+                 coeur, tirLaser, tempsTir, timer, queue, display);
+            break;
+        case MENU_NIV2:
+            niv2(HEIGHT, WIDTH, NOMBREVIE, BULLET_SPEED, SPEED, MaxBullets,
+                 TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+                 coeur, tirLaser, tempsTir, timer, queue, display, grotte);
+            break;
+        case MENU_NIV3:
+            niv3(HEIGHT, WIDTH, NOMBREVIE, BULLET_SPEED, SPEED, MaxBullets,
+                 TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+                 coeur, tirLaser, tempsTir, timer, queue, display, grotte);
+            break;
+        case MENU_BOSS:
+            nivBOSS(HEIGHT, WIDTH, NOMBREVIE, BULLET_SPEED, SPEED, MaxBullets,
+                    TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+                    coeur, tirLaser, tempsTir, timer, queue, display, grotte);
+            break;
+        case MENU_QUITTER:
+        default:
+            break;
     }
 
+    //Libération mémoire;
+    al_destroy_bitmap(ship);
+    al_destroy_bitmap(background);
+    al_destroy_bitmap(grotte);
+    al_destroy_bitmap(coeur);
+    al_destroy_bitmap(tirLaser);
+    al_destroy_bitmap(tempsTir);
+    al_destroy_bitmap(Enemy1);
+    al_destroy_timer(timer);
+    al_destroy_event_queue(queue);
+    al_destroy_display(display);
 
-
-
-
-        //Libération mémoire
-        al_destroy_bitmap(ship);
-        al_destroy_bitmap(background);
-        al_destroy_timer(timer);
-        al_destroy_event_queue(queue);
-        al_destroy_display(display);
-
-        return 0;
-    }
-
+    return 0;
+}
 

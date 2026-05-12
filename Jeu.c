@@ -3,7 +3,7 @@
 //
 #include <stdio.h>
 #include "fonctions.h"
-
+#include "boss.h"
 #include <stdbool.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
@@ -22,7 +22,6 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
     int nombreTirLaser=3;
     int tempsEntreLesTires = 0;
     int TempsChargementSpray=0;
-
 
 
     //la grotte
@@ -52,8 +51,14 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
     int fin=0;
     int collision = 0;
 
+    al_stop_timer(timer);
+    ALLEGRO_EVENT ev_vide;
+    while (!al_is_event_queue_empty(queue))
+        al_get_next_event(queue, &ev_vide);
     al_start_timer(timer);
-    printf("ship_w = %d\n", ship_w);
+
+
+
 
     //Boucle principale
     while (running) {
@@ -92,7 +97,7 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
             update_bullets(bullet,MaxBullets,BULLET_SPEED,WIDTH);
             update_bulletsSpray(bullet_sp,MaxBullets,WIDTH,HEIGHT,BULLET_SPEED);
             redraw = 1;
-        }
+            }
         if(key[ALLEGRO_KEY_SPACE]&& nombreTirLaser>0 && !bullet_active(bullets, MAX_BULLET_LASER)){
             fire_bulletLASER(bullets, x+40, y+10, MAX_BULLET_LASER);
             nombreTirLaser-=1;
@@ -116,21 +121,17 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
 
             DrawNombreTirsLaser(nombreTirLaser,tirLaser);
             draw_bulletsLASER(bullets,MAX_BULLET_LASER, WIDTH,x,y);
-           DrawTempsEntreTir(TempsChargementSpray,tempsTir,WIDTH,HEIGHT,TempsAttenteRechargement);
+            DrawTempsEntreTir(TempsChargementSpray,tempsTir,WIDTH,HEIGHT,TempsAttenteRechargement);
 
             al_flip_display();
-
+        }
         }
         if (fin==1) {
             running=0;
         }
-    }
-    al_destroy_bitmap(ship);
-    al_destroy_bitmap(background);
-    al_destroy_timer(timer);
-    al_destroy_event_queue(queue);
-    al_destroy_display(display);
+
 }
+
 void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display,ALLEGRO_BITMAP *grotte  ) {
     int ship_w = 150;
     int ship_h = 50;
@@ -140,7 +141,9 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
     int nombreTirLaser=3;
     int tempsEntreLesTires = 0;
     int TempsChargementSpray=0;
-
+    int timer_boss = 0;
+    int kills = 0;
+    bool boss_spawned = false;
 
 
     //la grotte
@@ -170,8 +173,13 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
     int fin=0;
     int collision = 0;
 
+    al_stop_timer(timer);
+    ALLEGRO_EVENT ev_vide;
+    while (!al_is_event_queue_empty(queue))
+        al_get_next_event(queue, &ev_vide);
     al_start_timer(timer);
-    printf("ship_w = %d\n", ship_w);
+
+
 
     //Boucle principale
     while (running) {
@@ -245,11 +253,7 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
             running=0;
         }
     }
-    al_destroy_bitmap(ship);
-    al_destroy_bitmap(background);
-    al_destroy_timer(timer);
-    al_destroy_event_queue(queue);
-    al_destroy_display(display);
+
 }
 void niv2(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display,ALLEGRO_BITMAP *grotte  ) {
     int ship_w = 150;
@@ -290,8 +294,13 @@ void niv2(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
     int fin=0;
     int collision = 0;
 
+    al_stop_timer(timer);
+    ALLEGRO_EVENT ev_vide;
+    while (!al_is_event_queue_empty(queue))
+        al_get_next_event(queue, &ev_vide);
     al_start_timer(timer);
-    printf("ship_w = %d\n", ship_w);
+
+
 
     //Boucle principale
     while (running) {
@@ -365,11 +374,7 @@ void niv2(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
             running=0;
         }
     }
-    al_destroy_bitmap(ship);
-    al_destroy_bitmap(background);
-    al_destroy_timer(timer);
-    al_destroy_event_queue(queue);
-    al_destroy_display(display);
+
 }
 void niv2Grotte(int HEIGHT, int WIDTH ,int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display,ALLEGRO_BITMAP *grotte  ) {
     int ship_w = 150;
@@ -417,7 +422,11 @@ void niv2Grotte(int HEIGHT, int WIDTH ,int NOMBREVIE, int BULLET_SPEED, int SPEE
     int tempsNiveau= 1200;
 
     al_start_timer(timer);
-    printf("ship_w = %d\n", ship_w);
+
+    // Vider les événements résiduels du menu
+    ALLEGRO_EVENT ev_vide;
+    while (!al_is_event_queue_empty(queue))
+        al_get_next_event(queue, &ev_vide);
 
     //Boucle principale
     while (running) {
@@ -497,11 +506,7 @@ void niv2Grotte(int HEIGHT, int WIDTH ,int NOMBREVIE, int BULLET_SPEED, int SPEE
             running=0;
         }
     }
-    al_destroy_bitmap(ship);
-    al_destroy_bitmap(background);
-    al_destroy_timer(timer);
-    al_destroy_event_queue(queue);
-    al_destroy_display(display);
+
 }
 void nivBOSS(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display,ALLEGRO_BITMAP *grotte  ) {
     int ship_w = 150;
@@ -512,7 +517,8 @@ void nivBOSS(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, 
     int nombreTirLaser=3;
     int tempsEntreLesTires = 0;
     int TempsChargementSpray=0;
-
+    int kills = 0;
+    bool boss_spawned = false;
 
 
     //la grotte
@@ -542,8 +548,13 @@ void nivBOSS(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, 
     int fin=0;
     int collision = 0;
 
+    al_stop_timer(timer);
+    boss_init(WIDTH, HEIGHT);
+    boss_spawned = true;
+    ALLEGRO_EVENT ev_vide;
+    while (!al_is_event_queue_empty(queue))
+        al_get_next_event(queue, &ev_vide);
     al_start_timer(timer);
-    printf("ship_w = %d\n", ship_w);
 
     //Boucle principale
     while (running) {
@@ -583,6 +594,17 @@ void nivBOSS(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, 
             update_bulletsLASER(bullets,x,y ,MAX_BULLET_LASER,collision);
             update_bullets(bullet,MaxBullets,BULLET_SPEED,WIDTH);
             update_bulletsSpray(bullet_sp,MaxBullets,WIDTH,HEIGHT,BULLET_SPEED);
+            boss_update(x, y, WIDTH, HEIGHT);
+            boss_check_player_bullets(bullet, MaxBullets);
+            boss_check_player_laser(bullets, MAX_BULLET_LASER);
+            boss_check_player_spray(bullet_sp, MaxBullets);
+
+            if (boss_bullet_hits_player(x, y, ship_w, ship_h) ||
+                boss_laser_hits_player(x, y, ship_w, ship_h)) {
+                vies--;
+                x = 100;
+                y = HEIGHT / 2;
+                }
 
             redraw = 1;
         }
@@ -606,6 +628,7 @@ void nivBOSS(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, 
             render(x, y, bgx,ship, background,ship_w, ship_h,WIDTH, HEIGHT,bg_w);
             draw_bullets(bullet,MaxBullets);
             draw_bulletSpray(bullet_sp,MaxBullets);
+            boss_draw(WIDTH, HEIGHT);
             vie(&vies, coeur, &fin);
 
             DrawNombreTirsLaser(nombreTirLaser,tirLaser);
@@ -615,13 +638,7 @@ void nivBOSS(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, 
             al_flip_display();
 
         }
-        if (fin==1) {
-            running=0;
+        if (fin==1) running = 0;
+        if (boss_is_dead()) running = 0;
         }
     }
-    al_destroy_bitmap(ship);
-    al_destroy_bitmap(background);
-    al_destroy_timer(timer);
-    al_destroy_event_queue(queue);
-    al_destroy_display(display);
-}

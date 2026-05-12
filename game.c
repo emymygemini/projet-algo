@@ -198,8 +198,13 @@ void vie(int* vies, ALLEGRO_BITMAP *vie, int *fin) {
 
     int taille = 30;      // taille des icônes
     int espace = 10;      // espace entre elles
+    int vi= (*vies);
 
-    for (int i = 0; i < *vies; i++) {
+    if (*vies>3) {
+        vi = 3;
+    }
+
+    for (int i = 0; i < vi; i++) {
         al_draw_scaled_bitmap(vie,0, 0,al_get_bitmap_width(vie),al_get_bitmap_height(vie),
             10 + i * (taille + espace),  // décalage horizontal
             10,                          // en haut
@@ -208,7 +213,8 @@ void vie(int* vies, ALLEGRO_BITMAP *vie, int *fin) {
             0
         );
     }
-    if (*vies<=0) {
+
+    if (*vies<=0 ) {
         printf("mort");
         *fin=1;
 

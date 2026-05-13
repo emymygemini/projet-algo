@@ -301,7 +301,6 @@ void niv2(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
     al_start_timer(timer);
 
 
-
     //Boucle principale
     while (running) {
         ALLEGRO_EVENT ev;

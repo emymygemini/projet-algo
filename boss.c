@@ -42,6 +42,22 @@ static void fire_burst(float player_x, float player_y) {
         fire_targeted(player_x, player_y, spreads[s]);
 }
 
+//tirs éparpillés PARTIE 2
+static void fire_scatter(void) {
+    int num = 10;
+    for (int j = 0; j < num; j++) {
+        int idx = bullet_alloc();
+        if (idx < 0) continue;
+        float angle = (2.0f * (float)M_PI / num) * j;
+        g_boss.bullets[idx].x  = g_boss.x;
+        g_boss.bullets[idx].y  = g_boss.y;
+        g_boss.bullets[idx].vx = cosf(angle) * BOSS_BULLET_SPEED;
+        g_boss.bullets[idx].vy = sinf(angle) * BOSS_BULLET_SPEED;
+        g_boss.bullets[idx].active = true;
+    }
+}
+
+
 // Positions des 3parties du boooss
 static void parts_sync_position(void) {
     float part_x = g_boss.x - g_boss.w * 0.5f + PART_W * 0.5f + 4;
@@ -79,6 +95,25 @@ void boss_init(int WIDTH, int HEIGHT) {
 
     (void)WIDTH;
 }
+
+// Transition vers la phase 2
+static void enter_phase2(int WIDTH, int HEIGHT) {
+    g_boss.phase    = BOSS_PHASE2;
+    g_boss.x        = WIDTH  * 0.5f;
+    g_boss.y        = HEIGHT * 0.5f;
+    g_boss.origin_y = HEIGHT * 0.5f;
+    g_boss.w        = BOSS_MINI_W;
+    g_boss.h        = BOSS_MINI_H;
+    g_boss.hp       = BOSS_MINI_HP;
+    g_boss.attack_state = ATTACK_NONE;
+    g_boss.attack_timer = 60;
+    g_boss.float_speed  = 0.06f;     // flottement plus rapide en phase 2
+    // Désactiver tous les projectiles existants
+    for (int i = 0; i < MAX_BOSS_BULLETS; i++)
+        g_boss.bullets[i].active = false;
+    printf("[BOSS] Phase 2 – boss miniature !\n");
+}
+
 
 // Mise à jour principale (une fois par frame)
 void boss_update(float player_x, float player_y, int WIDTH, int HEIGHT) {
@@ -154,6 +189,17 @@ void boss_update(float player_x, float player_y, int WIDTH, int HEIGHT) {
         bool all_dead = true;
         for (int i = 0; i < 3; i++)
             if (g_boss.parts[i].alive) { all_dead = false; break; }
+        if (all_dead)
+            enter_phase2(WIDTH, HEIGHT);
+    }
+    // PHASE 2 – Tirs éparpillés rapides
+    //
+    else if (g_boss.phase == BOSS_PHASE2) {
+        g_boss.attack_timer--;
+        if (g_boss.attack_timer <= 0) {
+            fire_scatter();
+            g_boss.attack_timer = 55 + rand() % 50;
+        }
     }
 
 
@@ -206,7 +252,7 @@ void boss_draw(int WIDTH, int HEIGHT) {
         al_draw_line(bx - hw, by + hh * 0.33f, bx + hw, by + hh * 0.33f, line_col, 2);
         al_draw_line(bx,      by - hh,          bx,      by + hh,          line_col, 2);
 
-        // Canon du boss (j'avoue liberté personnel c'était fun, il faut bien s'amuser un peu)
+        // Canon du boss
         ALLEGRO_COLOR cannon_col = al_map_rgb(40, 45, 55);
         al_draw_filled_rectangle(bx - hw - 20, by - 10, bx - hw, by + 10, cannon_col);
 
@@ -301,6 +347,45 @@ void boss_draw(int WIDTH, int HEIGHT) {
             }
         }
     }
+
+// PHASE 2 – Boss miniature
+//
+else if (g_boss.phase == BOSS_PHASE2) {
+    float bx = g_boss.x;
+    float by = g_boss.y;
+    float hw = g_boss.w * 0.5f;
+    float hh = g_boss.h * 0.5f;
+
+    // Corps : violet clignotant si flash
+    ALLEGRO_COLOR col = (g_boss.hit_flash > 0)
+        ? al_map_rgb(255, 255, 255)
+        : al_map_rgb(180, 40, 220);
+
+    al_draw_filled_rectangle(bx - hw, by - hh, bx + hw, by + hh, col);
+    al_draw_rectangle(bx - hw, by - hh, bx + hw, by + hh,
+                      al_map_rgb(255, 150, 255), 3);
+
+    // Indicateur HP (2 petits cœurs en haut)
+    for (int i = 0; i < g_boss.hp; i++) {
+        al_draw_filled_circle(bx - 10 + i * 24, by - hh - 14, 8,
+                              al_map_rgb(255, 80, 80));
+    }
+
+    // Texte indicatif (hachuré) – optionnel
+    // Si vous avez allegro_font chargé, vous pouvez draw_text ici
+}
+
+// Projectiles du boss
+for (int i = 0; i < MAX_BOSS_BULLETS; i++) {
+    const BossBullet *b = &g_boss.bullets[i];
+    if (!b->active) continue;
+
+    al_draw_filled_circle(b->x, b->y, 7.0f, al_map_rgb(255, 80, 30));
+    al_draw_circle      (b->x, b->y, 9.0f,
+                         al_map_rgba(255, 120, 60, 120), 1.5f);
+}
+
+(void)HEIGHT;
 }
 
 // Collisions : attaques du joueur sur le boss
@@ -311,6 +396,26 @@ void boss_check_player_bullets(Bullet bullets[], int max) {
         if (!bullets[b].active) continue;
         float bx = bullets[b].x + 5;
         float by = bullets[b].y + 1;
+
+        // ── Phase 2 : frappe le corps miniature ───────────────────────────
+        if (g_boss.phase == BOSS_PHASE2) {
+            if (bx >= g_boss.x - g_boss.w*0.5f &&
+                bx <= g_boss.x + g_boss.w*0.5f &&
+                by >= g_boss.y - g_boss.h*0.5f &&
+                by <= g_boss.y + g_boss.h*0.5f)
+            {
+                bullets[b].active = false;
+                g_boss.hp--;
+                g_boss.hit_flash = 12;
+                printf("[BOSS P2] HP restant : %d\n", g_boss.hp);
+                if (g_boss.hp <= 0) {
+                    g_boss.dying       = true;
+                    g_boss.death_timer = 0;
+                }
+            }
+            continue;
+        }
+
 
         // Phase 1 : frappe uniquement les parties vivantes
         if (g_boss.phase != BOSS_PHASE1) continue;
@@ -343,6 +448,25 @@ void boss_check_player_laser(BulletLASER bullets[], int max) {
         float beam_y  = bullets[b].y;          // haut du faisceau
         float beam_y2 = bullets[b].y + 2;      // bas du faisceau
 
+        // ── Phase 2 ───────────────────────────────────────────────────────
+        if (g_boss.phase == BOSS_PHASE2) {
+            if (beam_y2 >= g_boss.y - g_boss.h*0.5f &&
+                beam_y  <= g_boss.y + g_boss.h*0.5f)
+            {
+                // 1 dégât par frame, limité par cooldown
+                if (g_boss.hit_flash == 0) {
+                    g_boss.hp--;
+                    g_boss.hit_flash = 12;
+                    printf("[BOSS P2 LASER] HP restant : %d\n", g_boss.hp);
+                    if (g_boss.hp <= 0) {
+                        g_boss.dying       = true;
+                        g_boss.death_timer = 0;
+                        bullets[b].active  = false;
+                    }
+                }
+            }
+            continue;
+        }
 
         //  Phase 1
         if (g_boss.phase != BOSS_PHASE1) continue;
@@ -376,6 +500,26 @@ void boss_check_player_spray(BulletSPRAY bullets[], int max) {
             if (!bullets[b].bullets[j].active) continue;
             float bx = bullets[b].bullets[j].x + 5;
             float by = bullets[b].bullets[j].y + 1;
+
+            // Phase 2
+            if (g_boss.phase == BOSS_PHASE2) {
+                if (bx >= g_boss.x - g_boss.w*0.5f &&
+                    bx <= g_boss.x + g_boss.w*0.5f &&
+                    by >= g_boss.y - g_boss.h*0.5f &&
+                    by <= g_boss.y + g_boss.h*0.5f)
+                {
+                    bullets[b].bullets[j].active = false;
+                    g_boss.hp--;
+                    g_boss.hit_flash = 12;
+                    printf("[BOSS P2 SPRAY] HP restant : %d\n", g_boss.hp);
+                    if (g_boss.hp <= 0) {
+                        g_boss.dying       = true;
+                        g_boss.death_timer = 0;
+                    }
+                }
+                continue;
+            }
+
 
             // Phase 1
             if (g_boss.phase != BOSS_PHASE1) continue;

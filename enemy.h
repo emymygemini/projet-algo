@@ -14,6 +14,8 @@ typedef struct {
     bool active;
     int nmbVie;
     int laserCooldown;
+    bool dying;
+    int dyingTimer;
 } EnemyNiv1;
 typedef struct {
     float x;
@@ -22,6 +24,8 @@ typedef struct {
     int nmbVie;
     int laserCooldown;
     float wave_offset;
+    bool dying;
+    int dyingTimer;
 } EnemyNiv1BIS;
 typedef struct {
     float x;
@@ -30,6 +34,8 @@ typedef struct {
     int nmbVie;
     int laserCooldown;
     float wave_offset;
+    bool dying;
+    int dyingTimer;
 
     BulletsEnemy bullets[20];
     int tirCooldown;
@@ -42,6 +48,8 @@ typedef struct {
     int nmbVie;
     int laserCooldown;
     float wave_offset;
+    bool dying;
+    int dyingTimer;
 
     BulletsEnemy bullets[20];
     int tirCooldown;
@@ -155,5 +163,6 @@ void draw_EnemyNiv3(EnemyNiv3 *e,
                     int ship_w,
                     int ship_h,
                     int *vies);
+void draw_death_animation(float x, float y, int timer);
 
 #endif

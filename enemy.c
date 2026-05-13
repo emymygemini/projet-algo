@@ -35,6 +35,8 @@ void spawn_EnemyNiv1(EnemyNiv1 *e,int WIDTH, int HEIGHT)
     e->active = true;
     e->nmbVie =3;
     e->laserCooldown = 0;
+    e->dying = false;
+    e->dyingTimer = 0;
 }
 void spawn_NIV_ENEMY1(EnemyNiv1 enemies[],
                       int MAX_ENEMIES,
@@ -79,6 +81,8 @@ void spawn_NIV_ENEMY1(EnemyNiv1 enemies[],
                 enemies[i].nmbVie = 3;
 
                 enemies[i].laserCooldown = 0;
+                enemies[i].dying = false;
+                enemies[i].dyingTimer = 0;
             }
 
             break;
@@ -114,8 +118,20 @@ void update_NIV_ENEMY1(EnemyNiv1 enemies[],int MAX_ENEMIES,int *vies,float ship_
 }
 
 void update_EnemyNiv1(EnemyNiv1 *e,int *vies,float ship_x,float ship_y,int ship_w,int ship_h){
-    if (!e->active)
+    if (!e->active && !e->dying)
         return;
+
+    if (e->dying) {
+
+        e->dyingTimer--;
+
+        if (e->dyingTimer <= 0) {
+            e->dying = false;
+            e->active = false;
+        }
+
+        return;
+    }
 
     e->x -= 3;
 
@@ -141,8 +157,18 @@ void update_EnemyNiv1(EnemyNiv1 *e,int *vies,float ship_x,float ship_y,int ship_
     }
 }
 void draw_EnemyNiv1( EnemyNiv1 *e,ALLEGRO_BITMAP *EnemyNiv1){
-    if (!e->active)
+    if (!e->active && !e->dying)
         return;
+    if (e->dying) {
+
+        draw_death_animation(
+            e->x + 30,
+            e->y + 30,
+            e->dyingTimer
+        );
+
+        return;
+    }
 
     al_draw_scaled_bitmap(
         EnemyNiv1,
@@ -178,7 +204,7 @@ void draw_EnemyNiv1( EnemyNiv1 *e,ALLEGRO_BITMAP *EnemyNiv1){
 }
 void enemyNIV1_touche(EnemyNiv1 *e,Bullet bullets[],int MAX_BULLETS,BulletLASER laser[],int MAX_LASER,BulletSPRAY spray[])
 {
-    if (!e->active)
+    if (!e->active || e->dying)
         return;
 
     if (e->laserCooldown > 0)
@@ -204,7 +230,8 @@ void enemyNIV1_touche(EnemyNiv1 *e,Bullet bullets[],int MAX_BULLETS,BulletLASER 
             e->nmbVie--;
 
             if (e->nmbVie <= 0) {
-                e->active = false;
+                e->dying = true;
+                e->dyingTimer = 15;
                 return;
             }
         }
@@ -224,7 +251,8 @@ void enemyNIV1_touche(EnemyNiv1 *e,Bullet bullets[],int MAX_BULLETS,BulletLASER 
                 e->nmbVie--;
 
                 if (e->nmbVie <= 0) {
-                    e->active = false;
+                    e->dying = true;
+e->dyingTimer = 15;
                     return;
                 }
 
@@ -256,15 +284,18 @@ void enemyNIV1_touche(EnemyNiv1 *e,Bullet bullets[],int MAX_BULLETS,BulletLASER 
 
 
                 if (e->nmbVie <= 0) {
-                    e->active = false;
+                    e->dying = true;
+e->dyingTimer = 15;
                     return;
                 }
             }
         }
     }
 
-    if (e->nmbVie <= 0)
-        e->active = false;
+    if (e->nmbVie <= 0) {
+        e->dying = true;
+        e->dyingTimer = 15;
+    }
 }
 
 void spawn_EnemyNiv1BIS(EnemyNiv1BIS *e,int WIDTH, int HEIGHT)
@@ -288,6 +319,8 @@ void spawn_EnemyNiv1BIS(EnemyNiv1BIS *e,int WIDTH, int HEIGHT)
     e->active = true;
     e->nmbVie =3;
     e->laserCooldown = 0;
+    e->dying = false;
+    e->dyingTimer = 0;
 }
 void spawn_NIV_ENEMY1BIS(EnemyNiv1BIS enemies[],
                       int MAX_ENEMIES,
@@ -332,6 +365,9 @@ void spawn_NIV_ENEMY1BIS(EnemyNiv1BIS enemies[],
 
                 enemies[i].laserCooldown = 0;
                 enemies[i].wave_offset = (float)(rand() % 360);
+
+                enemies[i].dying = false;
+                enemies[i].dyingTimer = 0;
             }
 
             break;
@@ -359,8 +395,19 @@ void update_NIV_ENEMY1BIS(EnemyNiv1BIS enemies[],int MAX_ENEMIES,int *vies,float
 }
 
 void update_EnemyNiv1BIS(EnemyNiv1BIS *e,int *vies,float ship_x,float ship_y,int ship_w,int ship_h){
-    if (!e->active)
+    if (!e->active && !e->dying)
         return;
+    if (e->dying) {
+
+        e->dyingTimer--;
+
+        if (e->dyingTimer <= 0) {
+            e->dying = false;
+            e->active = false;
+        }
+
+        return;
+    }
 
     e->x -= 3;
     // mouvement sinusoïdal
@@ -410,8 +457,18 @@ void render_NIV_ENEMY1BIS(EnemyNiv1BIS enemies[],int MAX_ENEMIES,ALLEGRO_BITMAP 
 
 }
 void draw_EnemyNiv1BIS( EnemyNiv1BIS *e,ALLEGRO_BITMAP *EnemyNiv1){
-    if (!e->active)
+    if (!e->active && !e->dying)
         return;
+    if (e->dying) {
+
+        draw_death_animation(
+            e->x + 30,
+            e->y + 30,
+            e->dyingTimer
+        );
+
+        return;
+    }
 
     al_draw_scaled_bitmap(
         EnemyNiv1,
@@ -447,7 +504,7 @@ void draw_EnemyNiv1BIS( EnemyNiv1BIS *e,ALLEGRO_BITMAP *EnemyNiv1){
 }
 void enemyNIV1_toucheBIS(EnemyNiv1BIS *e,Bullet bullets[],int MAX_BULLETS,BulletLASER laser[],int MAX_LASER,BulletSPRAY spray[])
 {
-    if (!e->active)
+    if (!e->active || !e->dying)
         return;
 
     if (e->laserCooldown > 0)
@@ -473,7 +530,8 @@ void enemyNIV1_toucheBIS(EnemyNiv1BIS *e,Bullet bullets[],int MAX_BULLETS,Bullet
             e->nmbVie--;
 
             if (e->nmbVie <= 0) {
-                e->active = false;
+                e->dying = true;
+e->dyingTimer = 15;
                 return;
             }
         }
@@ -493,7 +551,8 @@ void enemyNIV1_toucheBIS(EnemyNiv1BIS *e,Bullet bullets[],int MAX_BULLETS,Bullet
                 e->nmbVie--;
 
                 if (e->nmbVie <= 0) {
-                    e->active = false;
+                    e->dying = true;
+e->dyingTimer = 15;
                     return;
                 }
 
@@ -525,15 +584,17 @@ void enemyNIV1_toucheBIS(EnemyNiv1BIS *e,Bullet bullets[],int MAX_BULLETS,Bullet
 
 
                 if (e->nmbVie <= 0) {
-                    e->active = false;
+                    e->dying = true;
+e->dyingTimer = 15;
                     return;
                 }
             }
         }
     }
-
-    if (e->nmbVie <= 0)
-        e->active = false;
+    if (e->nmbVie <= 0) {
+        e->dying = true;
+        e->dyingTimer = 15;
+    }
 }
 void spawn_EnemyNiv2(EnemyNiv2 *e,int WIDTH, int HEIGHT)
 {
@@ -551,6 +612,8 @@ void spawn_EnemyNiv2(EnemyNiv2 *e,int WIDTH, int HEIGHT)
     e->nmbVie =3;
     e->laserCooldown = 0;
     e->tirCooldown = rand() % 120;
+    e->dying = false;
+    e->dyingTimer = 0;
     for (int i = 0; i < 20; i++) {
         e->bullets[i].active = false;
     }
@@ -600,6 +663,11 @@ void spawn_NIV_ENEMY2(EnemyNiv2 enemies[],
                 enemies[i].laserCooldown = 0;
 
                 enemies[i].tirCooldown = rand() % 120;
+                enemies[i].dying = false;
+                enemies[i].dyingTimer = 0;
+                for (int k = 0; k < 20; k++) {
+                    enemies[i].bullets[k].active = false;
+                }
             }
 
             break;
@@ -691,8 +759,19 @@ void draw_enemyNIV2_bullets(EnemyNiv2 *e)
 }
 
 void update_EnemyNiv2(EnemyNiv2 *e,int *vies,float ship_x,float ship_y,int ship_w,int ship_h){
-    if (!e->active)
+    if (!e->active && !e->dying)
         return;
+    if (e->dying) {
+
+        e->dyingTimer--;
+
+        if (e->dyingTimer <= 0) {
+            e->dying = false;
+            e->active = false;
+        }
+
+        return;
+    }
 
     e->x -= 3;
 
@@ -718,8 +797,18 @@ void update_EnemyNiv2(EnemyNiv2 *e,int *vies,float ship_x,float ship_y,int ship_
     }
 }
 void draw_EnemyNiv2( EnemyNiv2 *e,ALLEGRO_BITMAP *EnemyNiv1){
-    if (!e->active)
+    if (!e->active && !e->dying)
         return;
+    if (e->dying) {
+
+        draw_death_animation(
+            e->x + 30,
+            e->y + 30,
+            e->dyingTimer
+        );
+
+        return;
+    }
 
     al_draw_scaled_bitmap(
         EnemyNiv1,
@@ -755,7 +844,7 @@ void draw_EnemyNiv2( EnemyNiv2 *e,ALLEGRO_BITMAP *EnemyNiv1){
 }
 void enemyNIV2_touche(EnemyNiv2 *e,Bullet bullets[],int MAX_BULLETS,BulletLASER laser[],int MAX_LASER,BulletSPRAY spray[])
 {
-    if (!e->active)
+    if (!e->active || !e->dying)
         return;
 
     if (e->laserCooldown > 0)
@@ -781,7 +870,8 @@ void enemyNIV2_touche(EnemyNiv2 *e,Bullet bullets[],int MAX_BULLETS,BulletLASER 
             e->nmbVie--;
 
             if (e->nmbVie <= 0) {
-                e->active = false;
+                e->dying = true;
+e->dyingTimer = 15;
                 return;
             }
         }
@@ -801,7 +891,8 @@ void enemyNIV2_touche(EnemyNiv2 *e,Bullet bullets[],int MAX_BULLETS,BulletLASER 
                 e->nmbVie--;
 
                 if (e->nmbVie <= 0) {
-                    e->active = false;
+                    e->dying = true;
+e->dyingTimer = 15;
                     return;
                 }
 
@@ -833,15 +924,18 @@ void enemyNIV2_touche(EnemyNiv2 *e,Bullet bullets[],int MAX_BULLETS,BulletLASER 
 
 
                 if (e->nmbVie <= 0) {
-                    e->active = false;
+                    e->dying = true;
+e->dyingTimer = 15;
                     return;
                 }
             }
         }
     }
 
-    if (e->nmbVie <= 0)
-        e->active = false;
+    if (e->nmbVie <= 0) {
+        e->dying = true;
+        e->dyingTimer = 15;
+    }
 }
 void update_enemyNIV2_bullets(EnemyNiv2 *e,
                           int *vies,
@@ -901,6 +995,8 @@ void spawn_EnemyNiv2BIS(EnemyNiv2BIS *e,int WIDTH, int HEIGHT)
     for (int i = 0; i < 20; i++) {
         e->bullets[i].active = false;
     }
+    e->dying = false;
+    e->dyingTimer = 0;
 }
 void spawn_NIV_ENEMY2BIS(EnemyNiv2BIS enemies[],
                       int MAX_ENEMIES,
@@ -947,6 +1043,11 @@ void spawn_NIV_ENEMY2BIS(EnemyNiv2BIS enemies[],
                 enemies[i].wave_offset = (float)(rand() % 360);
 
                 enemies[i].tirCooldown = rand() % 120;
+                enemies[i].dying = false;
+                enemies[i].dyingTimer = 0;
+                for (int k = 0; k < 20; k++) {
+                    enemies[i].bullets[k].active = false;
+                }
             }
 
             break;
@@ -1038,8 +1139,20 @@ void draw_enemyNIV2BIS_bullets(EnemyNiv2BIS *e)
 }
 
 void update_EnemyNiv2BIS(EnemyNiv2BIS *e,int *vies,float ship_x,float ship_y,int ship_w,int ship_h){
-    if (!e->active)
+    if (!e->active && !e->dying)
         return;
+
+    if (e->dying) {
+
+        e->dyingTimer--;
+
+        if (e->dyingTimer <= 0) {
+            e->dying = false;
+            e->active = false;
+        }
+
+        return;
+    }
 
     e->x -= 3;
     // mouvement sinusoïdal
@@ -1081,8 +1194,19 @@ void update_EnemyNiv2BIS(EnemyNiv2BIS *e,int *vies,float ship_x,float ship_y,int
     }
 }
 void draw_EnemyNiv2BIS( EnemyNiv2BIS *e,ALLEGRO_BITMAP *EnemyNiv1){
-    if (!e->active)
+
+    if (!e->active && !e->dying)
         return;
+    if (e->dying) {
+
+        draw_death_animation(
+            e->x + 30,
+            e->y + 30,
+            e->dyingTimer
+        );
+
+        return;
+    }
 
     al_draw_scaled_bitmap(
         EnemyNiv1,
@@ -1118,7 +1242,7 @@ void draw_EnemyNiv2BIS( EnemyNiv2BIS *e,ALLEGRO_BITMAP *EnemyNiv1){
 }
 void enemyNIV2BIS_touche(EnemyNiv2BIS *e,Bullet bullets[],int MAX_BULLETS,BulletLASER laser[],int MAX_LASER,BulletSPRAY spray[])
 {
-    if (!e->active)
+    if (!e->active || e->dying)
         return;
 
     if (e->laserCooldown > 0)
@@ -1144,7 +1268,8 @@ void enemyNIV2BIS_touche(EnemyNiv2BIS *e,Bullet bullets[],int MAX_BULLETS,Bullet
             e->nmbVie--;
 
             if (e->nmbVie <= 0) {
-                e->active = false;
+                e->dying = true;
+                e->dyingTimer = 15;
                 return;
             }
         }
@@ -1164,7 +1289,8 @@ void enemyNIV2BIS_touche(EnemyNiv2BIS *e,Bullet bullets[],int MAX_BULLETS,Bullet
                 e->nmbVie--;
 
                 if (e->nmbVie <= 0) {
-                    e->active = false;
+                    e->dying = true;
+e->dyingTimer = 15;
                     return;
                 }
 
@@ -1196,15 +1322,18 @@ void enemyNIV2BIS_touche(EnemyNiv2BIS *e,Bullet bullets[],int MAX_BULLETS,Bullet
 
 
                 if (e->nmbVie <= 0) {
-                    e->active = false;
+                    e->dying = true;
+e->dyingTimer = 15;
                     return;
                 }
             }
         }
     }
 
-    if (e->nmbVie <= 0)
-        e->active = false;
+    if (e->nmbVie <= 0) {
+        e->dying = true;
+        e->dyingTimer = 15;
+    }
 }
 void update_enemyNIV2BIS_bullets(EnemyNiv2BIS *e,
                           int *vies,
@@ -1702,6 +1831,39 @@ void update_enemyNIV3_bullets(EnemyNiv3 *e,
             e->bullets[i].active = false;
         }
     }
+}
+void draw_death_animation(float x, float y, int timer)
+{
+    // commence gros puis rétrécit
+    float r = timer * 1.5;
+
+    // minimum
+    if (r < 0)
+        r = 0;
+
+    // extérieur rouge/orange
+    al_draw_filled_circle(
+        x,
+        y,
+        r,
+        al_map_rgb(255, 80, 0)
+    );
+
+    // milieu orange
+    al_draw_filled_circle(
+        x,
+        y,
+        r * 0.6,
+        al_map_rgb(255, 180, 0)
+    );
+
+    // coeur jaune
+    al_draw_filled_circle(
+        x,
+        y,
+        r * 0.3,
+        al_map_rgb(255, 255, 150)
+    );
 }
 
 

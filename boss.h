@@ -8,6 +8,7 @@
 #define BOSS_H
 
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include <stdbool.h>
 #include <math.h>
@@ -21,8 +22,8 @@
 #define PART_H            60        // hauteur d'une partie sensible
 #define PART_HP_MAX       20        // coups nécessaires pour détruire une partie
 
-#define BOSS_MINI_W       70        // largeur phase 2
-#define BOSS_MINI_H       70        // hauteur phase 2
+#define BOSS_MINI_W       35       // largeur phase 2
+#define BOSS_MINI_H       35       // hauteur phase 2
 #define BOSS_MINI_HP      2         // coups pour tuer phase 2
 
 // ─── Projectiles boss ─────────────────────────────────────────────────────────
@@ -40,6 +41,8 @@
 // ─── Dégâts laser joueur sur le boss ──────────────────────────────────────────
 #define LASER_HIT_COOLDOWN 8        // frames entre deux dégâts du laser joueur
 
+#define BOSS_MINI_W  30
+#define BOSS_MINI_H  30
 // ─── Structures ───────────────────────────────────────────────────────────────
 
 typedef struct {
@@ -73,6 +76,8 @@ typedef struct {
     // Corps
     float          x, y;        // centre du boss
     float          w, h;        // dimensions courantes
+    ALLEGRO_BITMAP *sprite;
+    float          vx, vy;      // vitesse phase 2
     int            hp;          // HP pour phase 2
 
     // Flottement sinusoïdal
@@ -119,6 +124,8 @@ void boss_draw(int WIDTH, int HEIGHT);
 // Détection de collision : projectiles joueur → boss
 // Inclure fonctions.h avant boss.h pour avoir Bullet, BulletLASER, BulletSPRAY
 #include "fonctions.h"
+#include <allegro5/allegro_image.h>
+
 void boss_check_player_bullets  (Bullet      bullets[], int max);
 void boss_check_player_laser    (BulletLASER bullets[], int max);
 void boss_check_player_spray    (BulletSPRAY bullets[], int max);

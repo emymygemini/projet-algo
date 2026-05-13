@@ -14,7 +14,7 @@
 
 // ─── Dimensions ───────────────────────────────────────────────────────────────
 #define BOSS_W            200       // largeur corps phase 1
-#define BOSS_H            300       // hauteur corps phase 1
+#define BOSS_HEIGHT       300       // hauteur corps phase 1
 #define BOSS_X_POS        870.0f    // position X fixe (côté droit)
 
 #define PART_W            70        // largeur d'une partie sensible
@@ -131,6 +131,8 @@ bool boss_laser_hits_player  (float px, float py, float pw, float ph);
 // Statut
 bool boss_is_dead(void);
 bool boss_is_active(void);   // true si pas BOSS_DEAD
+
+
 
 #endif // BOSS_H
 #endif //BOSSCODE_BOSS_H

@@ -20,7 +20,17 @@ void spawn_EnemyNiv1(EnemyNiv1 *e,int WIDTH, int HEIGHT)
     e->x = WIDTH ;
 
 
-    e->y = 80 + rand() % (HEIGHT - 160);
+
+    int marge_haut = 120;
+    int marge_bas  = 120;
+
+    int zone_spawn = HEIGHT - marge_haut - marge_bas - 70;
+
+    // sécurité
+    if (zone_spawn < 1)
+        zone_spawn = 1;
+
+    e->y = marge_haut + rand() % zone_spawn;
 
     e->active = true;
     e->nmbVie =3;
@@ -35,9 +45,18 @@ void spawn_NIV_ENEMY1(EnemyNiv1 enemies[],
 
         if (!enemies[i].active) {
 
-            float new_y = 50 + rand() % (HEIGHT - 100);
+            int marge_haut = 120;
+            int marge_bas  = 120;
 
+            int zone_spawn = HEIGHT - marge_haut - marge_bas - 70;
+
+            // sécurité
+            if (zone_spawn < 1)
+                zone_spawn = 1;
+
+            int new_y = marge_haut + rand() % zone_spawn;
             bool place_libre = true;
+
 
             // vérifie juste la hauteur
             for (int j = 0; j < MAX_ENEMIES; j++) {
@@ -254,7 +273,16 @@ void spawn_EnemyNiv1BIS(EnemyNiv1BIS *e,int WIDTH, int HEIGHT)
     e->x = WIDTH ;
 
 
-    e->y = 80 + rand() % (HEIGHT - 160);
+    int marge_haut = 120;
+    int marge_bas  = 120;
+
+    int zone_spawn = HEIGHT - marge_haut - marge_bas - 70;
+
+    // sécurité
+    if (zone_spawn < 1)
+        zone_spawn = 1;
+
+    e->y = marge_haut + rand() % zone_spawn;
 
     e->wave_offset = (float)(rand() % 360);
     e->active = true;
@@ -270,8 +298,16 @@ void spawn_NIV_ENEMY1BIS(EnemyNiv1BIS enemies[],
 
         if (!enemies[i].active) {
 
-            float new_y = 50 + rand() % (HEIGHT - 100);
+            int marge_haut = 120;
+            int marge_bas  = 120;
 
+            int zone_spawn = HEIGHT - marge_haut - marge_bas - 70;
+
+            // sécurité
+            if (zone_spawn < 1)
+                zone_spawn = 1;
+
+            int new_y = marge_haut + rand() % zone_spawn;
             bool place_libre = true;
 
             // vérifie juste la hauteur
@@ -528,9 +564,18 @@ void spawn_NIV_ENEMY2(EnemyNiv2 enemies[],
 
         if (!enemies[i].active) {
 
-            float new_y = 50 + rand() % (HEIGHT - 100);
+            int marge_haut = 120;
+            int marge_bas  = 120;
 
+            int zone_spawn = HEIGHT - marge_haut - marge_bas - 70;
+
+            // sécurité
+            if (zone_spawn < 1)
+                zone_spawn = 1;
+
+            int new_y = marge_haut + rand() % zone_spawn;
             bool place_libre = true;
+
 
             // vérifie juste la hauteur
             for (int j = 0; j < MAX_ENEMIES; j++) {
@@ -865,9 +910,16 @@ void spawn_NIV_ENEMY2BIS(EnemyNiv2BIS enemies[],
     for (int i = 0; i < MAX_ENEMIES; i++) {
 
         if (!enemies[i].active) {
+            int marge_haut = 120;
+            int marge_bas  = 120;
 
-            float new_y = 50 + rand() % (HEIGHT - 100);
+            int zone_spawn = HEIGHT - marge_haut - marge_bas - 70;
 
+            // sécurité
+            if (zone_spawn < 1)
+                zone_spawn = 1;
+
+            int new_y = marge_haut + rand() % zone_spawn;
             bool place_libre = true;
 
             // vérifie juste la hauteur

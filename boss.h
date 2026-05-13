@@ -8,6 +8,7 @@
 #define BOSS_H
 
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include <stdbool.h>
 #include <math.h>
@@ -73,6 +74,8 @@ typedef struct {
     // Corps
     float          x, y;        // centre du boss
     float          w, h;        // dimensions courantes
+    ALLEGRO_BITMAP *sprite;
+
     int            hp;          // HP pour phase 2
 
     // Flottement sinusoïdal
@@ -119,6 +122,8 @@ void boss_draw(int WIDTH, int HEIGHT);
 // Détection de collision : projectiles joueur → boss
 // Inclure fonctions.h avant boss.h pour avoir Bullet, BulletLASER, BulletSPRAY
 #include "fonctions.h"
+#include <allegro5/allegro_image.h>
+
 void boss_check_player_bullets  (Bullet      bullets[], int max);
 void boss_check_player_laser    (BulletLASER bullets[], int max);
 void boss_check_player_spray    (BulletSPRAY bullets[], int max);

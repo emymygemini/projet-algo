@@ -61,7 +61,7 @@ static void fire_scatter(void) {
 // Positions des 3parties du boooss
 static void parts_sync_position(void) {
     float part_x = g_boss.x - g_boss.w * 0.5f + PART_W * 0.5f + 4;
-    float offsets[3] = {-g_boss.h * 0.33f,0.0f, g_boss.h * 0.33f};
+    float offsets[3] = { -95.0f, 0.0f, 95.0f };
     for (int i = 0; i < 3; i++) {
         g_boss.parts[i].x = part_x;
         g_boss.parts[i].y = g_boss.y + offsets[i];
@@ -71,17 +71,13 @@ static void parts_sync_position(void) {
 //  Initialisation
 void boss_init(int WIDTH, int HEIGHT) {
     g_boss = (Boss){0};
-    g_boss.sprite = al_load_bitmap("bossf.png");
+
     g_boss.phase        = BOSS_PHASE1;
-    g_boss.w = WIDTH * 0.25f;   // 1/4 de l'écran
-    g_boss.h = HEIGHT;          // toute la hauteur
-
-    // Le boss est collé à droite
-    g_boss.x = WIDTH - g_boss.w * 0.5f;
-
-    // Centre vertical
-    g_boss.y = HEIGHT * 0.5f;
-    g_boss.origin_y = g_boss.y;
+    g_boss.x            = BOSS_X_POS;
+    g_boss.y            = HEIGHT * 0.5f;
+    g_boss.origin_y     = HEIGHT * 0.5f;
+    g_boss.w            = BOSS_W;
+    g_boss.h            = BOSS_HEIGHT;
 
     g_boss.float_amplitude = 55.0f;
     g_boss.float_speed     = 0.025f;  // radians/frame → période ~4s
@@ -248,20 +244,7 @@ void boss_draw(int WIDTH, int HEIGHT) {
 
         // Corps principal
         ALLEGRO_COLOR body_col = al_map_rgb(55, 60, 70);
-        al_draw_scaled_bitmap(
-    g_boss.sprite,
-
-    0, 0,
-    al_get_bitmap_width(g_boss.sprite),
-    al_get_bitmap_height(g_boss.sprite),
-
-    bx - hw,
-    by - hh,
-    g_boss.w,
-    g_boss.h,
-
-    0
-);
+        al_draw_filled_rectangle(bx - hw, by - hh, bx + hw, by + hh, body_col);
 
         // Détails visuels du corps
         ALLEGRO_COLOR line_col = al_map_rgb(80, 90, 110);

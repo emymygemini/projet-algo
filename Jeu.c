@@ -13,6 +13,8 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 
+#include "enemy.h"
+
 void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display ) {
     int ship_w = 150;
     int ship_h = 50;
@@ -447,6 +449,13 @@ void niv2Grotte(int HEIGHT, int WIDTH ,int NOMBREVIE, int BULLET_SPEED, int SPEE
         else if (ev.type == ALLEGRO_EVENT_TIMER) {
             //Sortie du jeu
             if (key[ALLEGRO_KEY_ESCAPE]) running = 0;
+            if (rand() % 200 == 0) {
+                // spawn_NIV_ENEMY3(EnemysNIV3,MAX_ENEMIES3,WIDTH,HEIGHT);
+                // spawn_NIV_ENEMY2(EnemysNIV2,MAX_ENEMIES2,WIDTH,HEIGHT);
+               // spawn_NIV_ENEMY1(EnemysNIV1,MAX_ENEMIES1,WIDTH,HEIGHT);
+                //  spawn_NIV_ENEMY1BIS(EnemysNIV1BIS,MAX_ENEMIES1,WIDTH,HEIGHT);
+                //spawn_NIV_ENEMY2BIS(EnemysNIV2BIS,MAX_ENEMIES2,WIDTH,HEIGHT);
+            }
             if (tempsNiveau>0) {
                 tempsNiveau -= 1;
             }else {

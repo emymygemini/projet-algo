@@ -37,6 +37,7 @@ void spawn_EnemyNiv1(EnemyNiv1 *e,int WIDTH, int HEIGHT)
     e->laserCooldown = 0;
     e->dying = false;
     e->dyingTimer = 0;
+    e->counted = false;
 }
 void spawn_NIV_ENEMY1(EnemyNiv1 enemies[],
                       int MAX_ENEMIES,
@@ -83,6 +84,7 @@ void spawn_NIV_ENEMY1(EnemyNiv1 enemies[],
                 enemies[i].laserCooldown = 0;
                 enemies[i].dying = false;
                 enemies[i].dyingTimer = 0;
+
             }
 
             break;
@@ -321,6 +323,7 @@ void spawn_EnemyNiv1BIS(EnemyNiv1BIS *e,int WIDTH, int HEIGHT)
     e->laserCooldown = 0;
     e->dying = false;
     e->dyingTimer = 0;
+    e->counted = false;
 }
 void spawn_NIV_ENEMY1BIS(EnemyNiv1BIS enemies[],
                       int MAX_ENEMIES,
@@ -368,6 +371,7 @@ void spawn_NIV_ENEMY1BIS(EnemyNiv1BIS enemies[],
 
                 enemies[i].dying = false;
                 enemies[i].dyingTimer = 0;
+                enemies[i].counted = false;
             }
 
             break;
@@ -504,7 +508,7 @@ void draw_EnemyNiv1BIS( EnemyNiv1BIS *e,ALLEGRO_BITMAP *EnemyNiv1){
 }
 void enemyNIV1_toucheBIS(EnemyNiv1BIS *e,Bullet bullets[],int MAX_BULLETS,BulletLASER laser[],int MAX_LASER,BulletSPRAY spray[])
 {
-    if (!e->active || !e->dying)
+    if (!e->active || e->dying)
         return;
 
     if (e->laserCooldown > 0)
@@ -614,6 +618,7 @@ void spawn_EnemyNiv2(EnemyNiv2 *e,int WIDTH, int HEIGHT)
     e->tirCooldown = rand() % 120;
     e->dying = false;
     e->dyingTimer = 0;
+    e->counted = false;
     for (int i = 0; i < 20; i++) {
         e->bullets[i].active = false;
     }
@@ -665,6 +670,8 @@ void spawn_NIV_ENEMY2(EnemyNiv2 enemies[],
                 enemies[i].tirCooldown = rand() % 120;
                 enemies[i].dying = false;
                 enemies[i].dyingTimer = 0;
+
+                enemies[i].counted = false;
                 for (int k = 0; k < 20; k++) {
                     enemies[i].bullets[k].active = false;
                 }
@@ -844,7 +851,7 @@ void draw_EnemyNiv2( EnemyNiv2 *e,ALLEGRO_BITMAP *EnemyNiv1){
 }
 void enemyNIV2_touche(EnemyNiv2 *e,Bullet bullets[],int MAX_BULLETS,BulletLASER laser[],int MAX_LASER,BulletSPRAY spray[])
 {
-    if (!e->active || !e->dying)
+    if (!e->active || e->dying)
         return;
 
     if (e->laserCooldown > 0)
@@ -990,6 +997,7 @@ void spawn_EnemyNiv2BIS(EnemyNiv2BIS *e,int WIDTH, int HEIGHT)
     e->active = true;
     e->nmbVie =3;
     e->laserCooldown = 0;
+    e->counted = false;
     e->tirCooldown = rand() % 120;
     e->wave_offset = (float)(rand() % 360);
     for (int i = 0; i < 20; i++) {
@@ -1039,6 +1047,7 @@ void spawn_NIV_ENEMY2BIS(EnemyNiv2BIS enemies[],
                 enemies[i].nmbVie = 3;
 
                 enemies[i].laserCooldown = 0;
+                enemies[i].counted = false;
 
                 enemies[i].wave_offset = (float)(rand() % 360);
 
@@ -1190,8 +1199,8 @@ void update_EnemyNiv2BIS(EnemyNiv2BIS *e,int *vies,float ship_x,float ship_y,int
         (*vies)--;
 
         e->active = false;
-
     }
+
 }
 void draw_EnemyNiv2BIS( EnemyNiv2BIS *e,ALLEGRO_BITMAP *EnemyNiv1){
 
@@ -1440,6 +1449,7 @@ void spawn_EnemyNiv3(EnemyNiv3 *e, int WIDTH, int HEIGHT) {
 
     e->active = true;
     e->nmbVie = 3;
+    e->counted = false;
     e->laserCooldown = 0;
     e->tirCooldown = rand() % 120;
 
@@ -1864,6 +1874,153 @@ void draw_death_animation(float x, float y, int timer)
         r * 0.3,
         al_map_rgb(255, 255, 150)
     );
+}
+void count_enemy1_stats(
+    EnemyNiv1 enemies[],
+    int MAX_ENEMIES,
+    GameStats *stats
+)
+{
+    static bool wasActive[100] = {0};
+
+    for(int i = 0; i < MAX_ENEMIES; i++)
+    {
+        // ennemi disparu
+        if(wasActive[i] && !enemies[i].active)
+        {
+            // ennemi raté
+            if(enemies[i].x < -30)
+            {
+                stats->enemiesMissed++;
+            }
+            else
+            {
+                stats->enemiesKilled++;
+
+                stats->score += 100;
+            }
+        }
+
+        // sauvegarde état actuel
+        wasActive[i] = enemies[i].active;
+    }
+}
+void count_enemy2_stats(
+    EnemyNiv2 enemies[],
+    int MAX_ENEMIES,
+    GameStats *stats
+)
+{
+    static bool wasActive[20] = {0};
+
+    for(int i = 0; i < MAX_ENEMIES; i++)
+    {
+        if(wasActive[i] && !enemies[i].active)
+        {
+            if(enemies[i].x < -30)
+            {
+                stats->enemiesMissed++;
+            }
+            else
+            {
+                stats->enemiesKilled++;
+
+                stats->score += 250;
+            }
+        }
+
+        wasActive[i] = enemies[i].active;
+    }
+}
+void count_enemy1BIS_stats(
+    EnemyNiv1BIS enemies[],
+    int MAX_ENEMIES,
+    GameStats *stats
+)
+{
+    static bool wasActive[100] = {0};
+
+    for(int i = 0; i < MAX_ENEMIES; i++)
+    {
+        // ennemi disparu
+        if(wasActive[i] && !enemies[i].active)
+        {
+            // ennemi raté
+            if(enemies[i].x < -30)
+            {
+                stats->enemiesMissed++;
+            }
+            else
+            {
+                stats->enemiesKilled++;
+
+                stats->score += 150;
+            }
+        }
+
+        // sauvegarde état actuel
+        wasActive[i] = enemies[i].active;
+    }
+}
+void count_enemy2BIS_stats(
+    EnemyNiv2BIS enemies[],
+    int MAX_ENEMIES,
+    GameStats *stats
+)
+{
+    static bool wasActive[100] = {0};
+
+    for(int i = 0; i < MAX_ENEMIES; i++)
+    {
+        // ennemi disparu
+        if(wasActive[i] && !enemies[i].active)
+        {
+            // ennemi raté
+            if(enemies[i].x < -30)
+            {
+                stats->enemiesMissed++;
+            }
+            else
+            {
+                stats->enemiesKilled++;
+
+                stats->score += 300;
+            }
+        }
+
+        // sauvegarde état actuel
+        wasActive[i] = enemies[i].active;
+    }
+}
+void count_enemy3_stats(
+    EnemyNiv3 enemies[],
+    int MAX_ENEMIES,
+    GameStats *stats
+)
+{
+    static bool wasActive[100] = {0};
+
+    for(int i = 0; i < MAX_ENEMIES; i++)
+    {
+        // ennemi disparu
+        if(wasActive[i] && !enemies[i].active)
+        {
+            // ennemi raté
+            if(enemies[i].x < -30)
+            {
+                stats->enemiesMissed++;
+            }
+            else
+            {
+                stats->enemiesKilled++;
+
+                stats->score += 400;
+            }
+        }
+
+        // sauvegarde état actuel
+        wasActive[i] = enemies[i].active;
+    }
 }
 
 

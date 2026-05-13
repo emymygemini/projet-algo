@@ -16,6 +16,7 @@ typedef struct {
     int laserCooldown;
     bool dying;
     int dyingTimer;
+    bool counted;
 } EnemyNiv1;
 typedef struct {
     float x;
@@ -26,6 +27,7 @@ typedef struct {
     float wave_offset;
     bool dying;
     int dyingTimer;
+    bool counted;
 } EnemyNiv1BIS;
 typedef struct {
     float x;
@@ -36,6 +38,7 @@ typedef struct {
     float wave_offset;
     bool dying;
     int dyingTimer;
+    bool counted;
 
     BulletsEnemy bullets[20];
     int tirCooldown;
@@ -50,6 +53,7 @@ typedef struct {
     float wave_offset;
     bool dying;
     int dyingTimer;
+    bool counted;
 
     BulletsEnemy bullets[20];
     int tirCooldown;
@@ -62,6 +66,7 @@ typedef struct {
     int nmbVie;
     int laserCooldown;
     float wave_offset;
+    bool counted;
 
     BulletsEnemy bullets[20];
     int tirCooldown;
@@ -70,6 +75,13 @@ typedef struct {
     int explosionTimer;  // durée explosion
 
 } EnemyNiv3;
+typedef struct
+{
+    int score;
+    int enemiesKilled;
+    int enemiesMissed;
+
+} GameStats;
 void draw_EnemyNiv1( EnemyNiv1 *e,ALLEGRO_BITMAP *EnemyNiv1);
 void update_EnemyNiv1(EnemyNiv1 *e,int *vies,float ship_x,float ship_y,int ship_w,int ship_h);
 void spawn_NIV_ENEMY1(EnemyNiv1 enemies[],int MAX_ENEMIES,int WIDTH,int HEIGHT);
@@ -164,5 +176,30 @@ void draw_EnemyNiv3(EnemyNiv3 *e,
                     int ship_h,
                     int *vies);
 void draw_death_animation(float x, float y, int timer);
+void count_enemy1_stats(
+    EnemyNiv1 enemies[],
+    int MAX_ENEMIES,
+    GameStats *stats
+);
+void count_enemy2_stats(
+    EnemyNiv2 enemies[],
+    int MAX_ENEMIES,
+    GameStats *stats
+);
+void count_enemy3_stats(
+    EnemyNiv3 enemies[],
+    int MAX_ENEMIES,
+    GameStats *stats
+);
+void count_enemy2BIS_stats(
+    EnemyNiv2BIS enemies[],
+    int MAX_ENEMIES,
+    GameStats *stats
+);
+void count_enemy1BIS_stats(
+    EnemyNiv1BIS enemies[],
+    int MAX_ENEMIES,
+    GameStats *stats
+);
 
 #endif

@@ -679,13 +679,6 @@ void niv2Grotte(int HEIGHT, int WIDTH ,int NOMBREVIE, int BULLET_SPEED, int SPEE
         else if (ev.type == ALLEGRO_EVENT_TIMER) {
             //Sortie du jeu
             if (key[ALLEGRO_KEY_ESCAPE]) running = 0;
-            if (rand() % 200 == 0) {
-                // spawn_NIV_ENEMY3(EnemysNIV3,MAX_ENEMIES3,WIDTH,HEIGHT);
-                // spawn_NIV_ENEMY2(EnemysNIV2,MAX_ENEMIES2,WIDTH,HEIGHT);
-               // spawn_NIV_ENEMY1(EnemysNIV1,MAX_ENEMIES1,WIDTH,HEIGHT);
-                //  spawn_NIV_ENEMY1BIS(EnemysNIV1BIS,MAX_ENEMIES1,WIDTH,HEIGHT);
-                //spawn_NIV_ENEMY2BIS(EnemysNIV2BIS,MAX_ENEMIES2,WIDTH,HEIGHT);
-            }
             if (tempsNiveau>0) {
                 tempsNiveau -= 1;
             }else {

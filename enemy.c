@@ -1823,7 +1823,7 @@ void update_enemyNIV3_bullets(EnemyNiv3 *e,
         e->bullets[i].y += e->bullets[i].vy;
 
         // hors écran
-        if (e->bullets[i].x < -20 ||
+        if (e->bullets[i].x < 90 ||
      e->bullets[i].x > WIDTH + 20 ||
      e->bullets[i].y < -20 ||
      e->bullets[i].y > HEIGHT + 20)

@@ -22,8 +22,8 @@ void Updatescrolling(float *x, float *y,
                      int bg_w ) {
 
 
-    if (key[ALLEGRO_KEY_UP])    *y -= SPEED;
-    if (key[ALLEGRO_KEY_DOWN]) *y += SPEED;
+    if (key[ALLEGRO_KEY_UP] || key[ALLEGRO_KEY_LEFT])    *y -= SPEED;
+    if (key[ALLEGRO_KEY_DOWN]|| key[ALLEGRO_KEY_RIGHT]) *y += SPEED;
 
     //Contraintes écran
     if (*x < 0) *x = 0;
@@ -540,8 +540,8 @@ void stalactique_collision(Stalactites s[],
         invincible_timer--;
 
     // hitbox réduite
-    float margin_x = 30;
-    float margin_y = 12;
+    float margin_x = 10;
+    float margin_y = 10;
 
     float left   = *x + margin_x;
     float right  = *x + ship_w - margin_x;
@@ -553,17 +553,17 @@ void stalactique_collision(Stalactites s[],
 
         // 🔥 ALIGNEMENT RENDU / COLLISION
         float sx = (int)(s[i].x + 0.5f);
-        float sw = (int)(s[i].width + 1);
+        float sw = (int)(s[i].width + 10);
 
         if (right > sx &&
             left < sx + sw) {
 
             // 🔥 MARGE POUR ÉVITER COLLISIONS FANTÔMES
             float top_limit =
-                s[i].gap_y + 6;
+                s[i].gap_y +1 ;
 
             float bottom_limit =
-                s[i].gap_y + s[i].gap_height - 6;
+                s[i].gap_y + s[i].gap_height +2 ;
 
             if (top < top_limit ||
                 bottom > bottom_limit) {
@@ -586,17 +586,17 @@ void stalactique_collision(Stalactites s[],
                     *y = center - ship_h / 2;
 
                     // sécurité
-                    if (*y < s[i].gap_y + 10)
-                        *y = s[i].gap_y + 10;
+                    if (*y < s[i].gap_y + 5)
+                        *y = s[i].gap_y + 5;
 
                     if (*y + ship_h >
                         s[i].gap_y +
-                        s[i].gap_height - 10)
+                        s[i].gap_height - 5)
 
                         *y =
                             s[i].gap_y +
                             s[i].gap_height -
-                            ship_h - 10;
+                            ship_h - 5;
 
                     invincible_timer = 60;
                 }
@@ -651,6 +651,14 @@ void stalactique_render(Stalactites s[],
         );
     }
 }
+void Stalactites_update_sortie(Stalactites s[], int MAX_GROTTE)
+{
+    float vitesse = 4.5f;
+
+    for (int i = 0; i < MAX_GROTTE; i++) {
+        s[i].x -= vitesse;
+    }
+}
 void spawn_coeur(CoeurVie *c,
                  int WIDTH,
                  Stalactites s[],
@@ -701,7 +709,8 @@ void update_coeur(CoeurVie *c,int *vies,
         bottom > c->y &&
         top < c->y + 30)
     {
-        (*vies)++;
+        if (*vies<3){
+        (*vies)++;}
 
         c->active = false;
     }

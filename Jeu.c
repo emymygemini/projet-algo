@@ -87,8 +87,8 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
     int redraw = 1;
     int fin = 0;
     int collision = 0;
-    int NombreEnnemi =40;
-    int NombreEnnemi1 =15;
+    int NombreEnnemi =30;
+    int NombreEnnemi1 =20;
     int niveau = 1;
     int tempsattentefinnieveau =700;
 

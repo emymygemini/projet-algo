@@ -1384,4 +1384,656 @@ void nivBOSS(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, 
             if (fin==1) running = 0;
             if (boss_is_dead()) running = 0;
         }
-    }}
+    }
+void debut(int HEIGHT, int WIDTH, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *Enemy1,ALLEGRO_BITMAP *Enemy2,ALLEGRO_BITMAP *Enemy3,ALLEGRO_BITMAP *grotte) {
+     al_init_font_addon();
+    al_init_ttf_addon();
+    ALLEGRO_FONT *font = al_load_ttf_font("PressStart2P-Regular.ttf", 10, 0);
+    ALLEGRO_FONT *fontGROS = al_load_ttf_font("PressStart2P-Regular.ttf", 50, 0);
+    ALLEGRO_FONT *fontMOYEN = al_load_ttf_font("PressStart2P-Regular.ttf", 20, 0);
+    ALLEGRO_FONT *fontMoG = al_load_ttf_font("PressStart2P-Regular.ttf", 35, 0);
+
+    bool p_pressed = false;
+    int redraw=0;
+    int phase=0;
+
+
+    bool key[ALLEGRO_KEY_MAX] = {0};
+
+    int running = 1;
+    al_start_timer(timer);
+
+    while (running) {
+        ALLEGRO_EVENT ev;
+        al_wait_for_event(queue, &ev);
+
+        // ================= INPUT =================
+        if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+            running = 0;
+            return ;
+
+        }
+
+        else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+            key[ev.keyboard.keycode] = true;
+            if (ev.keyboard.keycode == ALLEGRO_KEY_M) {
+                running=0;
+            }
+            if (ev.keyboard.keycode == ALLEGRO_KEY_N) {
+                phase++;
+            }
+
+        }
+
+        else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
+            key[ev.keyboard.keycode] = false;
+
+            if (ev.keyboard.keycode == ALLEGRO_KEY_P)
+                p_pressed = false;
+        }
+
+        // ================= UPDATE =================
+        else if (ev.type == ALLEGRO_EVENT_TIMER) {
+            redraw=1;
+        }
+
+
+        if (redraw && al_is_event_queue_empty(queue)) {
+            redraw = 0;
+            al_clear_to_color(al_map_rgb(0, 0, 0));
+
+            if (phase==0) {
+                al_draw_filled_rectangle(0,0,WIDTH,HEIGHT,
+           al_map_rgba(0,0,0,150));
+
+                al_draw_text(fontGROS,
+               al_map_rgb(255,255,255),
+                WIDTH/2,
+                  HEIGHT/2 -20,
+                  ALLEGRO_ALIGN_CENTER,
+                   "ART-TYPE");
+                al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
+                    "Helene Charpentier Emy Lecanu");
+                al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 100, ALLEGRO_ALIGN_CENTER,
+                   "Jasmine Tolley Maxime Charton");
+                al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 300, ALLEGRO_ALIGN_CENTER,
+                    "N - next ");
+
+            }
+            if (phase==1) {
+                al_draw_filled_rectangle(0,0,WIDTH,HEIGHT,
+            al_map_rgba(0,0,0,150));
+                al_draw_text(fontMOYEN,
+              al_map_rgb(255,255,255),
+               WIDTH/2,
+                 HEIGHT/2 - 200,
+                 ALLEGRO_ALIGN_CENTER,
+                  "Vous êtes un vaisseau perdu dans");
+                al_draw_text(fontMOYEN,
+              al_map_rgb(255,255,255),
+               WIDTH/2,
+                 HEIGHT/2 - 150,
+                 ALLEGRO_ALIGN_CENTER,
+                  "l'esprit de Magdalena Abakanowicz");
+                al_draw_text(fontMOYEN,
+              al_map_rgb(255,255,255),
+               WIDTH/2,
+                 HEIGHT/2 -100,
+                 ALLEGRO_ALIGN_CENTER,
+                  "Vous cherchez à en sortir");
+
+                al_draw_text(fontMoG,
+              al_map_rgb(255,255,255),
+               WIDTH/2,
+                 HEIGHT/2 - 50,
+                 ALLEGRO_ALIGN_CENTER,
+                  "Comment ?");
+                al_draw_scaled_bitmap(ship,0, 0,al_get_bitmap_width(ship),al_get_bitmap_height(ship),WIDTH/2 -300, HEIGHT/2,600, 250,0);
+                al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 300, ALLEGRO_ALIGN_CENTER,
+                    "N - next ");
+
+            }
+            if (phase==2) {
+                al_draw_filled_rectangle(0,0,WIDTH,HEIGHT,
+            al_map_rgba(0,0,0,150));
+                al_draw_text(fontMOYEN,
+              al_map_rgb(255,255,255),
+               WIDTH/2,
+                 HEIGHT/2 - 200,
+                 ALLEGRO_ALIGN_CENTER,
+                  "Vous allez devoir détruire ses creations");
+                al_draw_text(fontMOYEN,
+              al_map_rgb(255,255,255),
+               WIDTH/2,
+                 HEIGHT/2 - 150,
+                 ALLEGRO_ALIGN_CENTER,
+                  "dans les trèfonds de son imagination");
+                al_draw_text(fontMOYEN,
+              al_map_rgb(255,255,255),
+               WIDTH/2,
+                 HEIGHT/2 -100,
+                 ALLEGRO_ALIGN_CENTER,
+                  "et pour finir détruire son oeuvre finale");
+
+                al_draw_text(fontMOYEN,
+              al_map_rgb(255,255,255),
+               WIDTH/2,
+                 HEIGHT/2 - 50,
+                 ALLEGRO_ALIGN_CENTER,
+                  "Concentrez vous pour ne pas périre");
+                al_draw_scaled_bitmap(Enemy1,0, 0,al_get_bitmap_width(Enemy1),al_get_bitmap_height(Enemy1),WIDTH/2-125 , HEIGHT/2,250, 250,ALLEGRO_ALIGN_CENTER);
+                al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 300, ALLEGRO_ALIGN_CENTER,
+                    "N - next ");
+
+            }
+            if (phase==3) {
+                al_draw_filled_rectangle(0,0,WIDTH,HEIGHT,
+            al_map_rgba(0,0,0,150));
+                al_draw_text(fontGROS,
+              al_map_rgb(255,255,255),
+               WIDTH/2,
+                 HEIGHT/2 - 20,
+                 ALLEGRO_ALIGN_CENTER,
+                  "BONNE CHANCE");
+
+                al_draw_scaled_bitmap(Enemy2,0, 0,al_get_bitmap_width(Enemy2),al_get_bitmap_height(Enemy2),WIDTH/2-125 , HEIGHT/2,250, 250,ALLEGRO_ALIGN_CENTER);
+                al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 300, ALLEGRO_ALIGN_CENTER,
+                    "N - next");
+
+            }
+            if (phase==4) {
+                running =0;
+            }
+
+
+        }
+        al_flip_display();
+    }
+
+}
+void debutNIV1(int HEIGHT, int WIDTH, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *Enemy1,ALLEGRO_BITMAP *Enemy2,ALLEGRO_BITMAP *Enemy3,ALLEGRO_BITMAP *grotte) {
+    al_init_font_addon();
+    al_init_ttf_addon();
+    ALLEGRO_FONT *font = al_load_ttf_font("PressStart2P-Regular.ttf", 10, 0);
+    ALLEGRO_FONT *fontGROS = al_load_ttf_font("PressStart2P-Regular.ttf", 50, 0);
+    ALLEGRO_FONT *fontMOYEN = al_load_ttf_font("PressStart2P-Regular.ttf", 20, 0);
+
+    bool p_pressed = false;
+    int redraw=0;
+    int phase=0;
+
+
+    bool key[ALLEGRO_KEY_MAX] = {0};
+
+    int running = 1;
+    al_start_timer(timer);
+
+    while (running) {
+        ALLEGRO_EVENT ev;
+        al_wait_for_event(queue, &ev);
+
+        // ================= INPUT =================
+        if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+            running = 0;
+            return ;
+
+        }
+
+        else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+            key[ev.keyboard.keycode] = true;
+            if (ev.keyboard.keycode == ALLEGRO_KEY_M) {
+                running=0;
+            }
+            if (ev.keyboard.keycode == ALLEGRO_KEY_S) {
+                phase++;
+            }
+
+        }
+
+        else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
+            key[ev.keyboard.keycode] = false;
+
+            if (ev.keyboard.keycode == ALLEGRO_KEY_P)
+                p_pressed = false;
+        }
+
+        // ================= UPDATE =================
+        else if (ev.type == ALLEGRO_EVENT_TIMER) {
+            redraw=1;
+        }
+
+
+        if (redraw && al_is_event_queue_empty(queue)) {
+            redraw = 0;
+            al_clear_to_color(al_map_rgb(0, 0, 0));
+
+            if (phase==0) {
+                al_draw_filled_rectangle(0,0,WIDTH,HEIGHT,
+           al_map_rgba(0,0,0,150));
+
+                al_draw_text(fontGROS,
+               al_map_rgb(173,147,120),
+                WIDTH/2,
+                  HEIGHT/2 -40,
+                  ALLEGRO_ALIGN_CENTER,
+                   "NIVEAU 1");
+                al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
+                    "Espace - tir laser");
+                al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 100, ALLEGRO_ALIGN_CENTER,
+                   "Entrée - tir éparpillé");
+
+                al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 300, ALLEGRO_ALIGN_CENTER,
+                   "S - start ");
+
+            }
+            if (phase==1) {
+                running =0;
+            }
+
+
+        }
+        al_flip_display();
+    }
+
+}
+void debutNIV2(int HEIGHT, int WIDTH, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *Enemy1,ALLEGRO_BITMAP *Enemy2,ALLEGRO_BITMAP *Enemy3,ALLEGRO_BITMAP *grotte) {
+    al_init_font_addon();
+    al_init_ttf_addon();
+    ALLEGRO_FONT *font = al_load_ttf_font("PressStart2P-Regular.ttf", 10, 0);
+    ALLEGRO_FONT *fontGROS = al_load_ttf_font("PressStart2P-Regular.ttf", 50, 0);
+    ALLEGRO_FONT *fontMOYEN = al_load_ttf_font("PressStart2P-Regular.ttf", 20, 0);
+
+    bool p_pressed = false;
+    int redraw=0;
+    int phase=0;
+
+
+    bool key[ALLEGRO_KEY_MAX] = {0};
+
+    int running = 1;
+    al_start_timer(timer);
+
+    while (running) {
+        ALLEGRO_EVENT ev;
+        al_wait_for_event(queue, &ev);
+
+        // ================= INPUT =================
+        if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+            running = 0;
+            return ;
+
+        }
+
+        else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+            key[ev.keyboard.keycode] = true;
+            if (ev.keyboard.keycode == ALLEGRO_KEY_M) {
+                running=0;
+            }
+            if (ev.keyboard.keycode == ALLEGRO_KEY_S) {
+                phase++;
+            }
+
+        }
+
+        else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
+            key[ev.keyboard.keycode] = false;
+
+            if (ev.keyboard.keycode == ALLEGRO_KEY_P)
+                p_pressed = false;
+        }
+
+        // ================= UPDATE =================
+        else if (ev.type == ALLEGRO_EVENT_TIMER) {
+            redraw=1;
+        }
+
+
+        if (redraw && al_is_event_queue_empty(queue)) {
+            redraw = 0;
+            al_clear_to_color(al_map_rgb(0, 0, 0));
+
+            if (phase==0) {
+                al_draw_filled_rectangle(0,0,WIDTH,HEIGHT,
+           al_map_rgba(0,0,0,150));
+
+                al_draw_text(fontGROS,
+               al_map_rgb(173,147,120),
+                WIDTH/2,
+                  HEIGHT/2-40,
+                  ALLEGRO_ALIGN_CENTER,
+                   "NIVEAU 2");
+                al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
+                    "Espace - tir laser");
+                al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 100, ALLEGRO_ALIGN_CENTER,
+                   "Entrée - tir éparpillé");
+
+                al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 300, ALLEGRO_ALIGN_CENTER,
+                   "S - start ");
+
+            }
+            if (phase==1) {
+                running =0;
+            }
+
+
+        }
+        al_flip_display();
+    }
+
+}
+void debutNIV3(int HEIGHT, int WIDTH, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *Enemy1,ALLEGRO_BITMAP *Enemy2,ALLEGRO_BITMAP *Enemy3,ALLEGRO_BITMAP *grotte) {
+    al_init_font_addon();
+    al_init_ttf_addon();
+    ALLEGRO_FONT *font = al_load_ttf_font("PressStart2P-Regular.ttf", 10, 0);
+    ALLEGRO_FONT *fontGROS = al_load_ttf_font("PressStart2P-Regular.ttf", 50, 0);
+    ALLEGRO_FONT *fontMOYEN = al_load_ttf_font("PressStart2P-Regular.ttf", 20, 0);
+
+    bool p_pressed = false;
+    int redraw=0;
+    int phase=0;
+
+
+    bool key[ALLEGRO_KEY_MAX] = {0};
+
+    int running = 1;
+    al_start_timer(timer);
+
+    while (running) {
+        ALLEGRO_EVENT ev;
+        al_wait_for_event(queue, &ev);
+
+        // ================= INPUT =================
+        if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+            running = 0;
+            return ;
+
+        }
+
+        else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+            key[ev.keyboard.keycode] = true;
+            if (ev.keyboard.keycode == ALLEGRO_KEY_M) {
+                running=0;
+            }
+            if (ev.keyboard.keycode == ALLEGRO_KEY_S) {
+                phase++;
+            }
+
+        }
+
+        else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
+            key[ev.keyboard.keycode] = false;
+
+            if (ev.keyboard.keycode == ALLEGRO_KEY_P)
+                p_pressed = false;
+        }
+
+        // ================= UPDATE =================
+        else if (ev.type == ALLEGRO_EVENT_TIMER) {
+            redraw=1;
+        }
+
+
+        if (redraw && al_is_event_queue_empty(queue)) {
+            redraw = 0;
+            al_clear_to_color(al_map_rgb(0, 0, 0));
+
+            if (phase==0) {
+                al_draw_filled_rectangle(0,0,WIDTH,HEIGHT,
+           al_map_rgba(0,0,0,150));
+
+                al_draw_text(fontGROS,
+               al_map_rgb(173,147,120),
+                WIDTH/2,
+                  HEIGHT/2-40,
+                  ALLEGRO_ALIGN_CENTER,
+                   "NIVEAU 3");
+                al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
+                    "Espace - tir laser");
+                al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 100, ALLEGRO_ALIGN_CENTER,
+                   "Entrée - tir éparpillé");
+
+                al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 300, ALLEGRO_ALIGN_CENTER,
+                   "S - start ");
+
+            }
+            if (phase==1) {
+                running =0;
+            }
+
+
+        }
+        al_flip_display();
+    }
+
+}
+void debutNIVDebutBoss(int HEIGHT, int WIDTH, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *Enemy1,ALLEGRO_BITMAP *Enemy2,ALLEGRO_BITMAP *Enemy3,ALLEGRO_BITMAP *grotte) {
+     al_init_font_addon();
+    al_init_ttf_addon();
+    ALLEGRO_FONT *font = al_load_ttf_font("PressStart2P-Regular.ttf", 10, 0);
+    ALLEGRO_FONT *fontGROS = al_load_ttf_font("PressStart2P-Regular.ttf", 50, 0);
+    ALLEGRO_FONT *fontMOYEN = al_load_ttf_font("PressStart2P-Regular.ttf", 20, 0);
+    ALLEGRO_FONT *fontMOYENG = al_load_ttf_font("PressStart2P-Regular.ttf", 30, 0);
+
+    bool p_pressed = false;
+    int redraw=0;
+    int phase=0;
+
+
+    bool key[ALLEGRO_KEY_MAX] = {0};
+
+    int running = 1;
+    al_start_timer(timer);
+
+    while (running) {
+        ALLEGRO_EVENT ev;
+        al_wait_for_event(queue, &ev);
+
+        // ================= INPUT =================
+        if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+            running = 0;
+            return ;
+
+        }
+
+        else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+            key[ev.keyboard.keycode] = true;
+            if (ev.keyboard.keycode == ALLEGRO_KEY_M) {
+                running=0;
+            }
+            if (ev.keyboard.keycode == ALLEGRO_KEY_S) {
+                phase++;
+            }
+            if (ev.keyboard.keycode == ALLEGRO_KEY_N) {
+                phase++;
+            }
+
+        }
+
+        else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
+            key[ev.keyboard.keycode] = false;
+
+            if (ev.keyboard.keycode == ALLEGRO_KEY_P)
+                p_pressed = false;
+        }
+
+        // ================= UPDATE =================
+        else if (ev.type == ALLEGRO_EVENT_TIMER) {
+            redraw=1;
+        }
+
+
+        if (redraw && al_is_event_queue_empty(queue)) {
+            redraw = 0;
+            al_clear_to_color(al_map_rgb(0, 0, 0));
+            if (phase==0) {
+                al_draw_filled_rectangle(0,0,WIDTH,HEIGHT,
+           al_map_rgba(0,0,0,150));
+
+                al_draw_textf(fontMOYEN,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 -150, ALLEGRO_ALIGN_CENTER,
+                    "Bravo vous êtes presque sorti de cette esprit tordu");
+                al_draw_textf(fontMOYEN,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 - 100, ALLEGRO_ALIGN_CENTER,
+                   "Il ne vous reste qu'un seul montre à détruire");
+                al_draw_textf(fontMOYEN,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 - 50, ALLEGRO_ALIGN_CENTER,
+                   "et vous voilà libre");
+                al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 300, ALLEGRO_ALIGN_CENTER,
+                   "N - Next ");
+
+            }
+            if (phase==1) {
+                al_draw_filled_rectangle(0,0,WIDTH,HEIGHT,
+           al_map_rgba(0,0,0,150));
+
+                al_draw_textf(fontMOYENG,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 -10, ALLEGRO_ALIGN_CENTER,
+                    "Ce n'est pas le moment de faillir !");
+                al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 300, ALLEGRO_ALIGN_CENTER,
+                   "N - Next ");
+
+            }
+
+            if (phase==2) {
+                al_draw_filled_rectangle(0,0,WIDTH,HEIGHT,
+           al_map_rgba(0,0,0,150));
+
+                al_draw_text(fontGROS,
+               al_map_rgb(173,147,120),
+                WIDTH/2,
+                  HEIGHT/2-40,
+                  ALLEGRO_ALIGN_CENTER,
+                   "NIVEAU BOSS");
+                al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
+                    "Espace - tir laser");
+                al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 100, ALLEGRO_ALIGN_CENTER,
+                   "Entrée - tir éparpillé");
+                al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 130, ALLEGRO_ALIGN_CENTER,
+                   "Fléches pour se déplacer");
+
+                al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 300, ALLEGRO_ALIGN_CENTER,
+                   "S - start ");
+
+            }
+            if (phase==3) {
+                running =0;
+            }
+
+
+        }
+        al_flip_display();
+    }
+
+}
+void debutFin(int HEIGHT, int WIDTH, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *Enemy1,ALLEGRO_BITMAP *Enemy2,ALLEGRO_BITMAP *Enemy3,ALLEGRO_BITMAP *grotte) {
+     al_init_font_addon();
+    al_init_ttf_addon();
+    ALLEGRO_FONT *font = al_load_ttf_font("PressStart2P-Regular.ttf", 10, 0);
+    ALLEGRO_FONT *fontGROS = al_load_ttf_font("PressStart2P-Regular.ttf", 50, 0);
+    ALLEGRO_FONT *fontMOYEN = al_load_ttf_font("PressStart2P-Regular.ttf", 20, 0);
+    ALLEGRO_FONT *fontMOYENG = al_load_ttf_font("PressStart2P-Regular.ttf", 30, 0);
+
+    bool p_pressed = false;
+    int redraw=0;
+    int phase=0;
+
+
+    bool key[ALLEGRO_KEY_MAX] = {0};
+
+    int running = 1;
+    al_start_timer(timer);
+
+    while (running) {
+        ALLEGRO_EVENT ev;
+        al_wait_for_event(queue, &ev);
+
+        // ================= INPUT =================
+        if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+            running = 0;
+            return ;
+
+        }
+
+        else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+            key[ev.keyboard.keycode] = true;
+            if (ev.keyboard.keycode == ALLEGRO_KEY_M) {
+                running=0;
+            }
+            if (ev.keyboard.keycode == ALLEGRO_KEY_S) {
+                phase++;
+            }
+            if (ev.keyboard.keycode == ALLEGRO_KEY_N) {
+                phase++;
+            }
+
+        }
+
+        else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
+            key[ev.keyboard.keycode] = false;
+
+            if (ev.keyboard.keycode == ALLEGRO_KEY_P)
+                p_pressed = false;
+        }
+
+        // ================= UPDATE =================
+        else if (ev.type == ALLEGRO_EVENT_TIMER) {
+            redraw=1;
+        }
+
+
+        if (redraw && al_is_event_queue_empty(queue)) {
+            redraw = 0;
+            al_clear_to_color(al_map_rgb(0, 0, 0));
+            if (phase==0) {
+                al_draw_filled_rectangle(0,0,WIDTH,HEIGHT,
+           al_map_rgba(0,0,0,150));
+
+                al_draw_text(fontGROS,
+               al_map_rgb(173,147,120),
+                WIDTH/2,
+                  HEIGHT/2-40,
+                  ALLEGRO_ALIGN_CENTER,
+                   "BOSS BATTU");
+
+                al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 300, ALLEGRO_ALIGN_CENTER,
+                   "N - Next ");
+
+            }
+            if (phase==1) {
+                al_draw_filled_rectangle(0,0,WIDTH,HEIGHT,
+           al_map_rgba(0,0,0,150));
+
+                al_draw_textf(fontMOYEN,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 -200, ALLEGRO_ALIGN_CENTER,
+                    "Bravo vous avez réussi à vous echapper");
+                al_draw_textf(fontMOYEN,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 - 150, ALLEGRO_ALIGN_CENTER,
+                   "de l'imagination de Magdalena Abakanowicz");
+                al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 , ALLEGRO_ALIGN_CENTER,
+                   "Nous la remercions pour son inspiration");
+                al_draw_scaled_bitmap(Enemy3,0, 0,al_get_bitmap_width(Enemy3),al_get_bitmap_height(Enemy3),WIDTH/2-355 , HEIGHT/2,100, 250,ALLEGRO_ALIGN_CENTER);
+                al_draw_scaled_bitmap(Enemy1,0, 0,al_get_bitmap_width(Enemy1),al_get_bitmap_height(Enemy1),WIDTH/2-125, HEIGHT/2,250, 250,ALLEGRO_ALIGN_CENTER);
+                al_draw_scaled_bitmap(Enemy2,0, 0,al_get_bitmap_width(Enemy2),al_get_bitmap_height(Enemy2),WIDTH/2+125 , HEIGHT/2+10,250, 250,ALLEGRO_ALIGN_CENTER);
+
+                al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 300, ALLEGRO_ALIGN_CENTER,
+                   "N - Next ");
+
+            }
+            if (phase==2) {
+                al_draw_filled_rectangle(0,0,WIDTH,HEIGHT,
+           al_map_rgba(0,0,0,150));
+
+                al_draw_textf(fontMOYEN,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 -200, ALLEGRO_ALIGN_CENTER,
+                    "J'espère que ce voyage vous a plu");
+                al_draw_textf(fontMOYEN,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 -150, ALLEGRO_ALIGN_CENTER,
+                   "Au revoir");
+                al_draw_textf(fontMOYEN,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 , ALLEGRO_ALIGN_CENTER,
+                   "Et à la prochaine fois...");
+                al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 300, ALLEGRO_ALIGN_CENTER,
+                   "N - Retour au Menu ");
+
+            }
+            if (phase==3) {
+                running =0;
+            }
+
+
+        }
+        al_flip_display();
+    }
+
+}

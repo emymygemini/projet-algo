@@ -125,17 +125,17 @@ int main() {
         case MENU_NIV1:
             niv1(HEIGHT, WIDTH, NOMBREVIE, BULLET_SPEED, SPEED, MaxBullets,
                  TempsAttenteRechargement, SCROLL_SPEED, background, ship,
-                 coeur, tirLaser, tempsTir, timer, queue, display);
+                 coeur, tirLaser, tempsTir, timer, queue, display,Enemy1,Enemy2);
             break;
         case MENU_NIV2:
-            niv2(HEIGHT, WIDTH, NOMBREVIE, BULLET_SPEED, SPEED, MaxBullets,
-                 TempsAttenteRechargement, SCROLL_SPEED, background, ship,
-                 coeur, tirLaser, tempsTir, timer, queue, display, grotte);
+           // niv2(HEIGHT, WIDTH, NOMBREVIE, BULLET_SPEED, SPEED, MaxBullets,
+              //   TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+               //  coeur, tirLaser, tempsTir, timer, queue, display, grotte);
             break;
         case MENU_NIV3:
-            niv3(HEIGHT, WIDTH, NOMBREVIE, BULLET_SPEED, SPEED, MaxBullets,
-                 TempsAttenteRechargement, SCROLL_SPEED, background, ship,
-                 coeur, tirLaser, tempsTir, timer, queue, display, grotte);
+          //  niv3(HEIGHT, WIDTH, NOMBREVIE, BULLET_SPEED, SPEED, MaxBullets,
+          //       TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+          //       coeur, tirLaser, tempsTir, timer, queue, display, grotte);
             break;
         case MENU_BOSS:
             nivBOSS(HEIGHT, WIDTH, NOMBREVIE, BULLET_SPEED, SPEED, MaxBullets,

@@ -71,7 +71,7 @@ static void parts_sync_position(void) {
 //  Initialisation
 void boss_init(int WIDTH, int HEIGHT) {
     g_boss = (Boss){0};
-    g_boss.sprite = al_load_bitmap("boss.jpg");
+    g_boss.sprite = al_load_bitmap("bossf.png");
     g_boss.phase        = BOSS_PHASE1;
     g_boss.w = WIDTH * 0.25f;   // 1/4 de l'écran
     g_boss.h = HEIGHT;          // toute la hauteur

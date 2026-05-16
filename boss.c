@@ -128,7 +128,7 @@ void boss_update(float player_x, float player_y, int WIDTH, int HEIGHT) {
     //  Animation de mort
     if (g_boss.dying) {
         g_boss.death_timer++;
-        if (g_boss.death_timer > 120) {
+        if (g_boss.death_timer > 90) {
             g_boss.phase = BOSS_DEAD;
         }
         return;
@@ -206,7 +206,7 @@ void boss_update(float player_x, float player_y, int WIDTH, int HEIGHT) {
         g_boss.attack_timer--;
         if (g_boss.attack_timer <= 0) {
             fire_scatter();
-            g_boss.attack_timer = 55 + rand() % 50;
+            g_boss.attack_timer = 50 + rand() % 50;
         }
     }
     if (g_boss.x < g_boss.w * 0.5f)
@@ -575,7 +575,7 @@ void boss_check_player_spray(BulletSPRAY bullets[], int max) {
     }
 }
 
-//  Collisions : boss → joueur
+//  Collisions : boss vers le joueur
 
 // Vérifie si un projectile boss touche le joueur
 bool boss_bullet_hits_player(float px, float py, float pw, float ph) {

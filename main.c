@@ -10,8 +10,10 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
-
 #include "enemy.h"
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+
 #define WIDTH 1100
 #define HEIGHT 700
 #define FPS 60
@@ -23,17 +25,33 @@
 #define TempsAttenteRechargement 180
 #define MAX_STALAC 20
 int main() {
+
+    typedef enum {
+        GAME_MENU,
+        GAME_PLAYING,
+        GAME_OVER,
+        GAME_WIN
+    } GameState;
+    GameState game_state = GAME_MENU;
+
     //Initialisation Allegro
     if (!al_init()) return -1;
 
     al_install_keyboard();
     al_init_image_addon();
+    al_init_font_addon();
+    al_init_ttf_addon();
     //enemies_init();
 
 
     ALLEGRO_DISPLAY *display = al_create_display(WIDTH, HEIGHT);
     ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
     ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
+    ALLEGRO_FONT *font_big =
+        al_load_ttf_font("arial.ttf", 72, 0);
+
+    ALLEGRO_FONT *font_small =
+        al_load_ttf_font("arial.ttf", 32, 0);
 
     al_register_event_source(queue, al_get_display_event_source(display));
     al_register_event_source(queue, al_get_timer_event_source(timer));

@@ -1878,7 +1878,7 @@ void draw_death_animation(float x, float y, int timer)
 void count_enemy1_stats(
     EnemyNiv1 enemies[],
     int MAX_ENEMIES,
-    GameStats *stats
+    GameStats *stats,ALLEGRO_SAMPLE *son_explosion
 )
 {
     static bool wasActive[100] = {0};
@@ -1896,6 +1896,7 @@ void count_enemy1_stats(
             else
             {
                 stats->enemiesKilled++;
+                al_play_sample(son_explosion, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
 
                 stats->score += 100;
             }
@@ -1908,7 +1909,7 @@ void count_enemy1_stats(
 void count_enemy2_stats(
     EnemyNiv2 enemies[],
     int MAX_ENEMIES,
-    GameStats *stats
+    GameStats *stats,ALLEGRO_SAMPLE *son_explosion
 )
 {
     static bool wasActive[20] = {0};
@@ -1924,6 +1925,7 @@ void count_enemy2_stats(
             else
             {
                 stats->enemiesKilled++;
+                al_play_sample(son_explosion, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
 
                 stats->score += 250;
             }
@@ -1935,7 +1937,7 @@ void count_enemy2_stats(
 void count_enemy1BIS_stats(
     EnemyNiv1BIS enemies[],
     int MAX_ENEMIES,
-    GameStats *stats
+    GameStats *stats,ALLEGRO_SAMPLE *son_explosion
 )
 {
     static bool wasActive[100] = {0};
@@ -1953,6 +1955,7 @@ void count_enemy1BIS_stats(
             else
             {
                 stats->enemiesKilled++;
+                al_play_sample(son_explosion, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
 
                 stats->score += 150;
             }
@@ -1965,7 +1968,7 @@ void count_enemy1BIS_stats(
 void count_enemy2BIS_stats(
     EnemyNiv2BIS enemies[],
     int MAX_ENEMIES,
-    GameStats *stats
+    GameStats *stats,ALLEGRO_SAMPLE *son_explosion
 )
 {
     static bool wasActive[100] = {0};
@@ -1983,6 +1986,7 @@ void count_enemy2BIS_stats(
             else
             {
                 stats->enemiesKilled++;
+                al_play_sample(son_explosion, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
 
                 stats->score += 300;
             }
@@ -1995,7 +1999,7 @@ void count_enemy2BIS_stats(
 void count_enemy3_stats(
     EnemyNiv3 enemies[],
     int MAX_ENEMIES,
-    GameStats *stats
+    GameStats *stats,ALLEGRO_SAMPLE *son_explosion
 )
 {
     static bool wasActive[100] = {0};
@@ -2013,6 +2017,7 @@ void count_enemy3_stats(
             else
             {
                 stats->enemiesKilled++;
+                al_play_sample(son_explosion, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
 
                 stats->score += 400;
             }
@@ -2021,6 +2026,24 @@ void count_enemy3_stats(
         // sauvegarde état actuel
         wasActive[i] = enemies[i].active;
     }
+}
+void detecter_perte_vie(int vies_actuelles, ALLEGRO_SAMPLE *son_hit)
+{
+    static int vies_precedentes = -1;
+
+    // initialisation (première frame)
+    if (vies_precedentes == -1) {
+        vies_precedentes = vies_actuelles;
+        return;
+    }
+
+    // détection perte de vie
+    if (vies_actuelles < vies_precedentes) {
+        al_play_sample(son_hit, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+    }
+
+    // mise à jour
+    vies_precedentes = vies_actuelles;
 }
 
 

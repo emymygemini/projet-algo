@@ -179,27 +179,28 @@ void draw_death_animation(float x, float y, int timer);
 void count_enemy1_stats(
     EnemyNiv1 enemies[],
     int MAX_ENEMIES,
-    GameStats *stats
+    GameStats *stats,ALLEGRO_SAMPLE *son_explosion
 );
 void count_enemy2_stats(
     EnemyNiv2 enemies[],
     int MAX_ENEMIES,
-    GameStats *stats
+    GameStats *stats,ALLEGRO_SAMPLE *son_explosion
 );
 void count_enemy3_stats(
     EnemyNiv3 enemies[],
     int MAX_ENEMIES,
-    GameStats *stats
+    GameStats *stats,ALLEGRO_SAMPLE *son_explosion
 );
 void count_enemy2BIS_stats(
     EnemyNiv2BIS enemies[],
     int MAX_ENEMIES,
-    GameStats *stats
+    GameStats *stats,ALLEGRO_SAMPLE *son_explosion
 );
 void count_enemy1BIS_stats(
     EnemyNiv1BIS enemies[],
     int MAX_ENEMIES,
-    GameStats *stats
+    GameStats *stats,ALLEGRO_SAMPLE *son_explosion
 );
+void detecter_perte_vie(int vies_actuelles, ALLEGRO_SAMPLE *son_hit);
 
 #endif

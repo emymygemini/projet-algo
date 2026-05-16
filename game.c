@@ -789,3 +789,4 @@ void draw_laserplus(laserPlus *c,ALLEGRO_BITMAP *laser){
         0
     );
 }
+

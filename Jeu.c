@@ -326,7 +326,7 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
             key[ev.keyboard.keycode] = true;
             if (ev.keyboard.keycode == ALLEGRO_KEY_M) {
                 running=0;
-            }
+            }//je
 
         }
 

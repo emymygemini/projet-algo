@@ -9,12 +9,12 @@
 #include <stdio.h>
 
 // ─── Couleurs ─────────────────────────────────────────────────────────────────
-#define COL_FOND        al_map_rgb(5,   5,  20)
-#define COL_TITRE       al_map_rgb(255, 220, 50)
-#define COL_SELECTIONE  al_map_rgb(80,  200, 255)
-#define COL_NORMAL      al_map_rgb(180, 180, 180)
-#define COL_DESACTIVE   al_map_rgb(80,  80,  80)
-#define COL_CADRE       al_map_rgb(40,  60, 120)
+#define COL_FOND        al_map_rgb(12, 5, 3)
+#define COL_TITRE       al_map_rgb(255, 120, 40)
+#define COL_SELECTIONE  al_map_rgb(220, 80, 40)
+#define COL_NORMAL      al_map_rgb(170, 150, 130)
+#define COL_DESACTIVE   al_map_rgb(70, 50, 45)
+#define COL_CADRE       al_map_rgb(90, 35, 20)
 
 // ─── Dessine un bouton ────────────────────────────────────────────────────────
 static void dessine_bouton(ALLEGRO_FONT *font,
@@ -32,16 +32,16 @@ static void dessine_bouton(ALLEGRO_FONT *font,
     if (desactive)
         fond = al_map_rgb(20, 20, 30);
     else if (selectionne)
-        fond = al_map_rgb(20, 60, 100);
+        fond = al_map_rgb(90, 30, 15);
     else
-        fond = al_map_rgb(10, 20, 50);
+        fond = al_map_rgb(35, 15, 10);
 
     al_draw_filled_rectangle(bx, by, bx + larg, by + haut, fond);
 
     // Contour
     ALLEGRO_COLOR contour = selectionne
-        ? al_map_rgb(80, 200, 255)
-        : al_map_rgb(40, 60, 120);
+    ? al_map_rgb(255, 110, 50)
+: al_map_rgb(100, 40, 20);
     al_draw_rectangle(bx, by, bx + larg, by + haut, contour, 2);
 
     // Triangle indicateur si sélectionné
@@ -72,7 +72,7 @@ static void dessine_etoiles(int WIDTH, int HEIGHT, int frame) {
         // Scintillement
         int bright = 150 + ((i * 37 + frame / 4) % 105);
         al_draw_filled_circle(ex, ey, 1,
-                              al_map_rgb(bright, bright, bright));
+                              al_map_rgb(bright, bright / 3, 0));
     }
 }
 
@@ -82,22 +82,18 @@ static void dessine_titre(ALLEGRO_FONT *font_titre,
                           int WIDTH, int frame) {
     // Halo derrière le titre
     al_draw_filled_rectangle(WIDTH/2 - 280, 60, WIDTH/2 + 280, 130,
-                             al_map_rgba(0, 0, 60, 120));
+                             al_map_rgba(80, 20, 0, 140));
     al_draw_rectangle(WIDTH/2 - 280, 60, WIDTH/2 + 280, 130,
-                      al_map_rgb(40, 80, 180), 2);
+                      al_map_rgb(120, 50, 20), 2);
 
     // Titre principal avec léger décalage couleur (effet pulsant)
     int pulse = (int)(20 * sinf(frame * 0.05f));
     al_draw_text(font_titre,
-                 al_map_rgb(255, 220 + pulse, 50),
+                 al_map_rgb(255, 80 + pulse, 30),
                  WIDTH / 2 + 2, 68,
-                 ALLEGRO_ALIGN_CENTRE, "SPACE SHOOTER");
+                 ALLEGRO_ALIGN_CENTRE, "ART-TYPE");
 
-    // Sous-titre
-    al_draw_text(font_sous,
-                 al_map_rgb(120, 160, 255),
-                 WIDTH / 2, 132,
-                 ALLEGRO_ALIGN_CENTRE, "ECE HERO PROJECT");
+
 }
 
 // ─── Menu principal ───────────────────────────────────────────────────────────
@@ -187,7 +183,7 @@ int afficher_menu(ALLEGRO_DISPLAY *display,
             redraw = false;
 
             // Fond
-            al_clear_to_color(COL_FOND);
+            al_clear_to_color(al_map_rgb(8, 2, 2));
 
             // Étoiles
             dessine_etoiles(WIDTH, HEIGHT, frame);
@@ -226,6 +222,83 @@ int afficher_menu(ALLEGRO_DISPLAY *display,
 
     return choix;
 }
+
+int choisir_difficulte(ALLEGRO_EVENT_QUEUE *queue,
+                       ALLEGRO_TIMER *timer,
+                       int WIDTH, int HEIGHT) {
+    ALLEGRO_FONT *font = al_create_builtin_font();
+
+    const char *options[] = { "SIMPLE (vies illimitees)",
+                               "NORMAL (3 coeurs)",
+                               "DIFFICILE (1 seul coup)" };
+    int nb = 3;
+    int sel = 1; // normal par défaut
+    int choix = -1;
+    bool redraw = true;
+
+    while (choix == -1) {
+        ALLEGRO_EVENT ev;
+        al_wait_for_event(queue, &ev);
+
+        if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+            choix = DIFFICULTE_NORMAL;
+        else if (ev.type == ALLEGRO_EVENT_TIMER)
+            redraw = true;
+        else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+            switch (ev.keyboard.keycode) {
+            case ALLEGRO_KEY_UP:
+                sel = (sel - 1 + nb) % nb; break;
+            case ALLEGRO_KEY_DOWN:
+                sel = (sel + 1) % nb; break;
+            case ALLEGRO_KEY_ENTER:
+            case ALLEGRO_KEY_SPACE:
+                choix = sel; break;
+            case ALLEGRO_KEY_ESCAPE:
+                choix = DIFFICULTE_NORMAL; break;
+            }
+        }
+
+        if (redraw && al_is_event_queue_empty(queue)) {
+            redraw = false;
+            al_clear_to_color(al_map_rgb(8, 2, 2));
+
+            al_draw_text(font, al_map_rgb(255, 120, 40),
+                         WIDTH/2, 80, ALLEGRO_ALIGN_CENTRE,
+                         "CHOISIR LA DIFFICULTE");
+
+            for (int i = 0; i < nb; i++) {
+                float cy = HEIGHT/2 - 40 + i * 70;
+                bool est_sel = (i == sel);
+
+                al_draw_filled_rectangle(WIDTH/2 - 250, cy - 24,
+                                         WIDTH/2 + 250, cy + 24,
+                                         est_sel ? al_map_rgb(90, 30, 15)
+                                                 : al_map_rgb(35, 15, 10));
+                al_draw_rectangle(WIDTH/2 - 250, cy - 24,
+                                  WIDTH/2 + 250, cy + 24,
+                                  est_sel ? al_map_rgb(255, 110, 50)
+                                          : al_map_rgb(100, 40, 20), 2);
+                al_draw_text(font,
+                             est_sel ? al_map_rgb(220, 80, 40)
+                                     : al_map_rgb(170, 150, 130),
+                             WIDTH/2, cy - al_get_font_line_height(font)/2,
+                             ALLEGRO_ALIGN_CENTRE, options[i]);
+            }
+
+            al_draw_text(font, al_map_rgb(80, 80, 100),
+                         WIDTH/2, HEIGHT - 30, ALLEGRO_ALIGN_CENTRE,
+                         "HAUT / BAS : naviguer    ENTREE : valider");
+            al_flip_display();
+        }
+    }
+
+    al_destroy_font(font);
+    return choix;
+}
+
+
+
+
 
 // ─── Menu paramètres ──────────────────────────────────────────────────────────
 void afficher_parametres(ALLEGRO_DISPLAY *display,

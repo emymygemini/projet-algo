@@ -18,13 +18,13 @@
 #define BOSS_HEIGHT       300       // hauteur corps phase 1
 #define BOSS_X_POS        870.0f    // position X fixe (côté droit)
 
-#define PART_W            70        // largeur d'une partie sensible
-#define PART_H            60        // hauteur d'une partie sensible
-#define PART_HP_MAX       20        // coups nécessaires pour détruire une partie
+#define PART_W            40
+#define PART_H            35
+#define PART_HP_MAX       20
 
 #define BOSS_MINI_W       35       // largeur phase 2
 #define BOSS_MINI_H       35       // hauteur phase 2
-#define BOSS_MINI_HP      2         // coups pour tuer phase 2
+#define BOSS_MINI_HP      5
 
 // ─── Projectiles boss ─────────────────────────────────────────────────────────
 #define MAX_BOSS_BULLETS  128
@@ -41,8 +41,6 @@
 // ─── Dégâts laser joueur sur le boss ──────────────────────────────────────────
 #define LASER_HIT_COOLDOWN 8        // frames entre deux dégâts du laser joueur
 
-#define BOSS_MINI_W  30
-#define BOSS_MINI_H  30
 // ─── Structures ───────────────────────────────────────────────────────────────
 
 typedef struct {

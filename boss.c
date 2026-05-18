@@ -106,8 +106,8 @@ static void enter_phase2(int WIDTH, int HEIGHT) {
     g_boss.x        = WIDTH  * 0.5f;
     g_boss.y        = HEIGHT * 0.5f;
     g_boss.origin_y = HEIGHT * 0.5f;
-    g_boss.vx = 5.0f;
-    g_boss.vy = 4.0f;
+    g_boss.vx = 9.0f;
+    g_boss.vy = 7.0f;
     g_boss.w        = BOSS_MINI_W;
     g_boss.h        = BOSS_MINI_H;
     g_boss.hp       = BOSS_MINI_HP;
@@ -276,12 +276,6 @@ void boss_draw(int WIDTH, int HEIGHT) {
 
     0
 );
-
-        // Détails visuels du corps
-        ALLEGRO_COLOR line_col = al_map_rgb(80, 90, 110);
-        al_draw_line(bx - hw, by - hh * 0.33f, bx + hw, by - hh * 0.33f, line_col, 2);
-        al_draw_line(bx - hw, by + hh * 0.33f, bx + hw, by + hh * 0.33f, line_col, 2);
-        al_draw_line(bx,      by - hh,          bx,      by + hh,          line_col, 2);
 
         // Canon du boss
         ALLEGRO_COLOR cannon_col = al_map_rgb(40, 45, 55);

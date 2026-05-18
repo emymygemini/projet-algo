@@ -1,3 +1,4 @@
+
 #ifndef ENEMY_H
 #define ENEMY_H
 #include "fonctions.h"
@@ -88,7 +89,9 @@ void spawn_NIV_ENEMY1(EnemyNiv1 enemies[],int MAX_ENEMIES,int WIDTH,int HEIGHT);
 void render_NIV_ENEMY1(EnemyNiv1 enemies[],int MAX_ENEMIES,ALLEGRO_BITMAP *EnemyNiv1);
 void update_NIV_ENEMY1(EnemyNiv1 enemies[],int MAX_ENEMIES,int *vies,float ship_x,float ship_y,int ship_w,int ship_h,Bullet bullets[],int MAX_BULLETS,BulletLASER laser[],int MAX_LASER,BulletSPRAY spray[]);
 void spawn_EnemyNiv1(EnemyNiv1 *e,int WIDTH, int HEIGHT);
+
 void enemyNIV1_touche(EnemyNiv1 *e,Bullet bullets[],int MAX_BULLETS,BulletLASER laser[],int MAX_LASER,BulletSPRAY spray[]);
+
 void spawn_NIV_ENEMY1BIS(EnemyNiv1BIS enemies[],
                       int MAX_ENEMIES,
                       int WIDTH,

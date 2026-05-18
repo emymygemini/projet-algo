@@ -22,6 +22,8 @@
 #define MaxBullets 200
 #define TempsAttenteRechargement 1000
 #define MAX_STALAC 20
+
+
 int main() {
     //Initialisation Allegro
     if (!al_init()) return -1;
@@ -118,35 +120,71 @@ int main() {
     printf("ship_w = %d\n", ship_w);
 
     // Affiche le menu et récupère le choix
-    int choix = afficher_menu(display, queue, timer, WIDTH, HEIGHT);
+    debut(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
+      timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);
+   int choix = -1;
+    int difficulte = DIFFICULTE_NORMAL;
+    int nombrevie_reel = NOMBREVIE;
 
-    // Lance le niveau correspondant
+
+while (choix != MENU_QUITTER) {
+    choix = afficher_menu(display, queue, timer, WIDTH, HEIGHT);
+
     switch (choix) {
         case MENU_NIV1:
-            niv1(HEIGHT, WIDTH, NOMBREVIE, BULLET_SPEED, SPEED, MaxBullets,
+            difficulte = choisir_difficulte(queue, timer, WIDTH, HEIGHT);
+            if (difficulte == DIFFICULTE_SIMPLE)   nombrevie_reel = 999;
+            if (difficulte == DIFFICULTE_NORMAL)   nombrevie_reel = 3;
+            if (difficulte == DIFFICULTE_DIFFICILE) nombrevie_reel = 1;
+            debutNIV1(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
+                      timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);
+            niv1(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
                  TempsAttenteRechargement, SCROLL_SPEED, background, ship,
-                 coeur, tirLaser, tempsTir, timer, queue, display,Enemy1,Enemy2);
+                 coeur, tirLaser, tempsTir, timer, queue, display, Enemy1, Enemy2);
             break;
         case MENU_NIV2:
-           // niv2(HEIGHT, WIDTH, NOMBREVIE, BULLET_SPEED, SPEED, MaxBullets,
-              //   TempsAttenteRechargement, SCROLL_SPEED, background, ship,
-               //  coeur, tirLaser, tempsTir, timer, queue, display, grotte);
+            difficulte = choisir_difficulte(queue, timer, WIDTH, HEIGHT);
+            if (difficulte == DIFFICULTE_SIMPLE)   nombrevie_reel = 999;
+            if (difficulte == DIFFICULTE_NORMAL)   nombrevie_reel = 3;
+            if (difficulte == DIFFICULTE_DIFFICILE) nombrevie_reel = 1;
+            debutNIV2(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
+                      timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);
+            niv2(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
+                 TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+                 coeur, tirLaser, tempsTir, timer, queue, display,
+                 Enemy1, Enemy2, Enemy3, grotte);
             break;
         case MENU_NIV3:
-          //  niv3(HEIGHT, WIDTH, NOMBREVIE, BULLET_SPEED, SPEED, MaxBullets,
-          //       TempsAttenteRechargement, SCROLL_SPEED, background, ship,
-          //       coeur, tirLaser, tempsTir, timer, queue, display, grotte);
+            difficulte = choisir_difficulte(queue, timer, WIDTH, HEIGHT);
+            if (difficulte == DIFFICULTE_SIMPLE)   nombrevie_reel = 999;
+            if (difficulte == DIFFICULTE_NORMAL)   nombrevie_reel = 3;
+            if (difficulte == DIFFICULTE_DIFFICILE) nombrevie_reel = 1;
+            debutNIV3(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
+                      timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);
+            niv3(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
+                 TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+                 coeur, tirLaser, tempsTir, timer, queue, display,
+                 Enemy1, Enemy2, Enemy3, grotte);
             break;
         case MENU_BOSS:
-            nivBOSS(HEIGHT, WIDTH, NOMBREVIE, BULLET_SPEED, SPEED, MaxBullets,
+            difficulte = choisir_difficulte(queue, timer, WIDTH, HEIGHT);
+            if (difficulte == DIFFICULTE_SIMPLE)   nombrevie_reel = 999;
+            if (difficulte == DIFFICULTE_NORMAL)   nombrevie_reel = 3;
+            if (difficulte == DIFFICULTE_DIFFICILE) nombrevie_reel = 1;
+            debutNIVDebutBoss(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
+                              timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);
+            nivBOSS(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
                     TempsAttenteRechargement, SCROLL_SPEED, background, ship,
                     coeur, tirLaser, tempsTir, timer, queue, display, grotte);
+            debutFin(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
+                     timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);
             break;
         case MENU_QUITTER:
         default:
             break;
     }
-
+}
+    
     //Libération mémoire;
     al_destroy_bitmap(ship);
     al_destroy_bitmap(background);

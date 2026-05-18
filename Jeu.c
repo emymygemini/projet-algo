@@ -132,6 +132,14 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                 else if (state == STATE_PAUSE)
                     state = STATE_GAME;
             }
+             if (key[ALLEGRO_KEY_S]) {
+                 sauvegarder_partie_complete(
+                     vies, stats.score, niveau,
+                     x, y,
+                     bullet, MaxBullets,
+                     EnemysNIV1, MAX_ENEMIES1
+                 );
+             }
         }else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
             key[ev.keyboard.keycode] = false;
 
@@ -288,7 +296,9 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
               ALLEGRO_ALIGN_CENTER,
                "PAUSE - P pour reprendre ");
             al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
-                "MENU - M pour Menu");
+                "MENU - Menu");
+            al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 100, ALLEGRO_ALIGN_CENTER,
+                "S - Sauvegarde");
         }
 
         al_flip_display();
@@ -499,6 +509,14 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                     else if (state == STATE_PAUSE)
                         state = STATE_GAME;
                 }
+            }
+            if (key[ALLEGRO_KEY_S]) {
+                sauvegarder_partie_complete(
+                    vies, stats.score, niveau,
+                    x, y,
+                    bullet, MaxBullets,
+                    EnemysNIV1, MAX_ENEMIES1
+                );
             }
 
             else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
@@ -726,7 +744,10 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                   ALLEGRO_ALIGN_CENTER,
                    "PAUSE - P pour reprendre ");
                 al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
-                    "MENU - M pour Menu");
+                    "MENU - Menu");
+                al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 100, ALLEGRO_ALIGN_CENTER,
+              "S - Sauvegarde");
+
             }
             al_flip_display();
         }
@@ -936,6 +957,14 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                 if (ev.keyboard.keycode == ALLEGRO_KEY_M) {
                     running=0;
                     fin = 2;
+                }
+                if (key[ALLEGRO_KEY_S]) {
+                    sauvegarder_partie_complete(
+                        vies, stats.score, niveau,
+                        x, y,
+                        bullet, MaxBullets,
+                        EnemysNIV1, MAX_ENEMIES1
+                    );
                 }
 
                 if (ev.keyboard.keycode == ALLEGRO_KEY_P && !p_pressed) {
@@ -1203,6 +1232,9 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                    "PAUSE - P pour reprendre ");
                 al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
                     "MENU - M pour Menu");
+                al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 100, ALLEGRO_ALIGN_CENTER,
+              "S - Sauvegarde");
+
             }
             al_flip_display();
         }

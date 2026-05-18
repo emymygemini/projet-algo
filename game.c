@@ -11,7 +11,9 @@
 #include <allegro5/allegro_acodec.h>
 
 #include "enemy.h"
+#include "fonctions.h"
 #include "menu.h"
+
 
 
 void Updatescrolling(float *x, float *y,
@@ -791,3 +793,52 @@ void draw_laserplus(laserPlus *c,ALLEGRO_BITMAP *laser){
     );
 }
 
+void sauvegarder_partie_complete(
+    int vies, int score, int niveau,
+    float x, float y,
+
+    Bullet bullet[], int nb_bullets,
+    EnemyNiv1 ennemis[], int nb_ennemis
+) {
+    FILE *f = fopen("save.bin", "wb");
+    if (!f) return;
+
+    fwrite(&vies, sizeof(int), 1, f);
+    fwrite(&score, sizeof(int), 1, f);
+    fwrite(&niveau, sizeof(int), 1, f);
+    fwrite(&x, sizeof(float), 1, f);
+    fwrite(&y, sizeof(float), 1, f);
+
+    fwrite(&nb_bullets, sizeof(int), 1, f);
+    fwrite(bullet, sizeof(Bullet), nb_bullets, f);
+
+    fwrite(&nb_ennemis, sizeof(int), 1, f);
+    fwrite(ennemis, sizeof(EnemyNiv1), nb_ennemis, f);
+
+    fclose(f);
+}
+int charger_partie_complete(
+    int *vies, int *score, int *niveau,
+    float *x, float *y,
+
+    Bullet bullet[], int *nb_bullets,
+    EnemyNiv1 ennemis[], int *nb_ennemis
+) {
+    FILE *f = fopen("save.bin", "rb");
+    if (!f) return 0;
+
+    fread(vies, sizeof(int), 1, f);
+    fread(score, sizeof(int), 1, f);
+    fread(niveau, sizeof(int), 1, f);
+    fread(x, sizeof(float), 1, f);
+    fread(y, sizeof(float), 1, f);
+
+    fread(nb_bullets, sizeof(int), 1, f);
+    fread(bullet, sizeof(Bullet), *nb_bullets, f);
+
+    fread(nb_ennemis, sizeof(int), 1, f);
+    fread(ennemis, sizeof(EnemyNiv1), *nb_ennemis, f);
+
+    fclose(f);
+    return 1;
+}

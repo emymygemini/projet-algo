@@ -25,5 +25,5 @@ void instalationaudio(int *return1) {
 
 }
 
-#include "fonctions.h"
+
 

@@ -10,6 +10,8 @@
 #include <allegro5/allegro_primitives.h>
 
 
+
+
 typedef enum {
     STATE_MENU,
     STATE_LEVEL_START,
@@ -44,10 +46,12 @@ typedef struct {
     float gap_height;
     float width;
 } Stalactites;
+
 typedef struct {
     float x,y;
     bool active;
 } Bullet;
+
 typedef struct {
     float x, y;
     bool active;
@@ -94,6 +98,7 @@ void modeboss(float *x, float *y,
             int ship_w, int ship_h,
             int WIDTH, int HEIGHT
             );
+
 void vie(int* vies, ALLEGRO_BITMAP *vie, int *fin) ; // permet de dessiner les coeurs
 void draw_bulletsLASER(BulletLASER bullets[], int MAX_BULLETS,int WIDTH, float x, float y); // fonction pour dessiner le laser
 void fire_bulletLASER(BulletLASER bullets[], float x, float y, int MAX_BULLETS); //fonction qui gére si oui ou non on peut tirer un laser

@@ -10,6 +10,8 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 
+#include "enemy.h"
+
 void Updatescrolling(float *x, float *y,
                      float *bgx,
                      bool key[],

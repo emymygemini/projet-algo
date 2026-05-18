@@ -1,6 +1,8 @@
 
 #ifndef ENEMY_H
 #define ENEMY_H
+
+#include <allegro5/allegro_audio.h>
 #include "fonctions.h"
 #include "menu.h"
 
@@ -91,12 +93,13 @@ void render_NIV_ENEMY1(EnemyNiv1 enemies[],int MAX_ENEMIES,ALLEGRO_BITMAP *Enemy
 void update_NIV_ENEMY1(EnemyNiv1 enemies[],int MAX_ENEMIES,int *vies,float ship_x,float ship_y,int ship_w,int ship_h,Bullet bullets[],int MAX_BULLETS,BulletLASER laser[],int MAX_LASER,BulletSPRAY spray[]);
 void spawn_EnemyNiv1(EnemyNiv1 *e,int WIDTH, int HEIGHT);
 
-void enemyNIV1_touche(EnemyNiv1 *e,Bullet bullets[],int MAX_BULLETS,BulletLASER laser[],int MAX_LASER,BulletSPRAY spray[]);
+void enemyNIV1_touche(EnemyNiv1 *e, Bullet bullets[], int MAX_BULLETS, BulletLASER laser[], int MAX_LASER,
+                             BulletSPRAY spray[]);
 
 void spawn_NIV_ENEMY1BIS(EnemyNiv1BIS enemies[],
-                      int MAX_ENEMIES,
-                      int WIDTH,
-                      int HEIGHT);
+                         int MAX_ENEMIES,
+                         int WIDTH,
+                         int HEIGHT);
 void spawn_EnemyNiv1BIS(EnemyNiv1BIS *e,int WIDTH, int HEIGHT);
 void update_NIV_ENEMY1BIS(EnemyNiv1BIS enemies[],int MAX_ENEMIES,int *vies,float ship_x,float ship_y,int ship_w,int ship_h,Bullet bullets[],int MAX_BULLETS,BulletLASER laser[],int MAX_LASER,BulletSPRAY spray[]);
 void update_EnemyNiv1BIS(EnemyNiv1BIS *e,int *vies,float ship_x,float ship_y,int ship_w,int ship_h);
@@ -207,5 +210,19 @@ void count_enemy1BIS_stats(
 );
 void detecter_perte_vie(int vies_actuelles, ALLEGRO_SAMPLE *son_hit);
 void jouer_son(ALLEGRO_SAMPLE *son);
+void sauvegarder_partie_complete(
+    int vies, int score, int niveau,
+    float x, float y,
+
+    Bullet bullet[], int nb_bullets,
+    EnemyNiv1 ennemis[], int nb_ennemis
+) ;
+int charger_partie_complete(
+    int *vies, int *score, int *niveau,
+    float *x, float *y,
+
+    Bullet bullet[], int *nb_bullets,
+    EnemyNiv1 ennemis[], int *nb_ennemis
+);
 
 #endif

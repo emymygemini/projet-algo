@@ -1,3 +1,5 @@
+#include "enemy.h"
+
 #include <stdio.h>
 #include "fonctions.h"
 
@@ -9,10 +11,9 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
-#include "enemy.h"
-
 #include <stdlib.h>
 #include <math.h>
+#include "fonctions.h"
 
 #include "menu.h"
 

@@ -116,7 +116,6 @@ void update_coeur(CoeurVie *c,int *vies,float ship_x,float ship_y,int ship_w,int
 void draw_coeur(CoeurVie *c,ALLEGRO_BITMAP *vie); // dessine le coeur
 void spawn_laser(laserPlus *c,int WIDTH,int HEIGHT); //position aléatoire de laser que sans stalctiques
 void draw_laserplus(laserPlus *c,ALLEGRO_BITMAP *laser);
-
 void update_laser_Recup(laserPlus *c,int *maxBullet,float ship_x,float ship_y,int ship_w,int ship_h); //permet de récup laserPlus
 void stalactique_collision(Stalactites s[], int MAX_GROTTE,float *x, float *y,int ship_w, int ship_h,int HEIGHT, int *vie) ; // vérifie si le vaisseau entre en collision avec les stalactiques
 void stalactique_render(Stalactites s[], int MAX_GROTTE,int HEIGHT, int WIDTH,ALLEGRO_BITMAP *grotte);  // dessine les stalactiques

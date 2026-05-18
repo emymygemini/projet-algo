@@ -116,6 +116,7 @@ int main() {
     int fin=0;
     int collision = 0;
 
+
     al_start_timer(timer);
     printf("ship_w = %d\n", ship_w);
 
@@ -184,7 +185,7 @@ while (choix != MENU_QUITTER) {
             break;
     }
 }
-    
+
     //Libération mémoire;
     al_destroy_bitmap(ship);
     al_destroy_bitmap(background);

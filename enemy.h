@@ -2,6 +2,7 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 #include "fonctions.h"
+#include "menu.h"
 
 typedef struct {
     float x, y;
@@ -205,5 +206,6 @@ void count_enemy1BIS_stats(
     GameStats *stats,ALLEGRO_SAMPLE *son_explosion
 );
 void detecter_perte_vie(int vies_actuelles, ALLEGRO_SAMPLE *son_hit);
+void jouer_son(ALLEGRO_SAMPLE *son);
 
 #endif

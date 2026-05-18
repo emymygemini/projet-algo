@@ -237,14 +237,14 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                 if (key[ALLEGRO_KEY_SPACE] && nombreTirLaser > 0 &&
                     !bullet_active(bulletLASER, MAX_BULLET_LASER)) {
                     fire_bulletLASER(bulletLASER, x+40, y+10, MAX_BULLET_LASER);
-                    al_play_sample(son_laser, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                   jouer_son(son_laser);
                     nombreTirLaser--;
                     tempsEntreLesTires = 120;
                     }
 
                 if (key[ALLEGRO_KEY_ENTER] && TempsChargementSpray == 0) {
                     fire_bulletSPRAY(bullet_sp, x, y, MaxBullets);
-                    al_play_sample(son_tir, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                   jouer_son(son_tir);
                     TempsChargementSpray = TempsAttenteRechargement;
                 }
                 if (NOMBREVIE>3){ if (vies<NOMBREVIE) { vies++; }}
@@ -664,14 +664,14 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                     if (key[ALLEGRO_KEY_SPACE] && nombreTirLaser > 0 &&
                         !bullet_active(bulletLASER, MAX_BULLET_LASER)) {
                         fire_bulletLASER(bulletLASER, x+40, y+10, MAX_BULLET_LASER);
-                        al_play_sample(son_laser, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                       jouer_son(son_laser);
                         nombreTirLaser--;
                         tempsEntreLesTires = 120;
                         }
 
                     if (key[ALLEGRO_KEY_ENTER] && TempsChargementSpray == 0) {
                         fire_bulletSPRAY(bullet_sp, x, y, MaxBullets);
-                        al_play_sample(son_tir, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                       jouer_son(son_tir);
                         TempsChargementSpray = TempsAttenteRechargement;
                     }
                     if (NOMBREVIE>3){ if (vies<NOMBREVIE) { vies++; }}
@@ -1136,14 +1136,14 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                     if (key[ALLEGRO_KEY_SPACE] && nombreTirLaser > 0 &&
                         !bullet_active(bulletLASER, MAX_BULLET_LASER)) {
                         fire_bulletLASER(bulletLASER, x+40, y+10, MAX_BULLET_LASER);
-                        al_play_sample(son_laser, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                       jouer_son(son_laser);
                         nombreTirLaser--;
                         tempsEntreLesTires = 120;
                         }
 
                     if (key[ALLEGRO_KEY_ENTER] && TempsChargementSpray == 0) {
                         fire_bulletSPRAY(bullet_sp, x, y, MaxBullets);
-                        al_play_sample(son_tir, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                       jouer_son(son_tir);
                         TempsChargementSpray = TempsAttenteRechargement;
                     }
                     if (NOMBREVIE>3){ if (vies<NOMBREVIE) { vies++; }}
@@ -1299,7 +1299,20 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
     }
 
         void nivBOSS(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display,ALLEGRO_BITMAP *grotte  ) {
-            int ship_w = 150;
+    al_init_font_addon();
+    al_init_ttf_addon();
+    al_install_audio();
+    al_init_acodec_addon();
+    al_reserve_samples(10);
+    ALLEGRO_SAMPLE *son_laser = al_load_sample("laser.wav");
+    ALLEGRO_SAMPLE *son_explosion = al_load_sample("Mort.wav");
+    ALLEGRO_SAMPLE *son_hit = al_load_sample("Vie.wav");
+    ALLEGRO_SAMPLE *son_tir = al_load_sample("tir.wav");
+
+    if (!son_tir || !son_explosion || !son_hit || !son_laser) {
+        printf("Erreur chargement sons\n");
+    }
+    int ship_w = 150;
             int ship_h = 50;
             int bg_w = al_get_bitmap_width(background);
             int vies = NOMBREVIE;// definit le nombre de vie dans la partie
@@ -1372,6 +1385,7 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                     }
                     else {
                         fire_bullet(bullet,x,y, MaxBullets);
+
                         tempsEntreLesTires = 10;
                     }
                     if (TempsChargementSpray>0) { // permet de faire que les tirs se recharfe
@@ -1401,11 +1415,13 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                 // on vérifie quel touche ont été appuyé pour pouvoir faire les tirs qu'il faut
                 if(key[ALLEGRO_KEY_SPACE]&& nombreTirLaser>0 && !bullet_active(bullets, MAX_BULLET_LASER)){
                     fire_bulletLASER(bullets, x+40, y+10, MAX_BULLET_LASER);
+                    jouer_son(son_laser);
                     nombreTirLaser-=1;
                     tempsEntreLesTires = 120;
                 }
                 if(key[ALLEGRO_KEY_ENTER]&& TempsChargementSpray==0){
                     fire_bulletSPRAY(bullet_sp,x,y, MaxBullets);
+                    jouer_son(son_tir);
                     TempsChargementSpray = TempsAttenteRechargement;
                     tempsEntreLesTires = 120;
 
@@ -1424,6 +1440,7 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                     DrawNombreTirsLaser(nombreTirLaser,tirLaser);
                     draw_bulletsLASER(bullets,MAX_BULLET_LASER, WIDTH,x,y);
                     DrawTempsEntreTir(TempsChargementSpray,tempsTir,WIDTH,HEIGHT,TempsAttenteRechargement);
+                    detecter_perte_vie(vies, son_hit);
 
                     al_flip_display();
 

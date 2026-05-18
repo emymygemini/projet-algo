@@ -19,6 +19,9 @@
 #define DIFFICULTE_NORMAL   1
 #define DIFFICULTE_DIFFICILE 2
 
+extern bool son_active;
+extern bool musique_active;
+extern bool laser_actif;
 int choisir_difficulte(ALLEGRO_EVENT_QUEUE *queue,
                        ALLEGRO_TIMER *timer,
                        int WIDTH, int HEIGHT);

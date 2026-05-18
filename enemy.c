@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "menu.h"
+
 void spawn_EnemyNiv1(EnemyNiv1 *e,int WIDTH, int HEIGHT)
 {
 
@@ -1896,7 +1898,7 @@ void count_enemy1_stats(
             else
             {
                 stats->enemiesKilled++;
-                al_play_sample(son_explosion, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+               jouer_son(son_explosion);
 
                 stats->score += 100;
             }
@@ -1925,7 +1927,7 @@ void count_enemy2_stats(
             else
             {
                 stats->enemiesKilled++;
-                al_play_sample(son_explosion, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+               jouer_son(son_explosion);
 
                 stats->score += 250;
             }
@@ -1955,7 +1957,7 @@ void count_enemy1BIS_stats(
             else
             {
                 stats->enemiesKilled++;
-                al_play_sample(son_explosion, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+               jouer_son(son_explosion);
 
                 stats->score += 150;
             }
@@ -1986,7 +1988,7 @@ void count_enemy2BIS_stats(
             else
             {
                 stats->enemiesKilled++;
-                al_play_sample(son_explosion, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+               jouer_son(son_explosion);
 
                 stats->score += 300;
             }
@@ -2017,7 +2019,7 @@ void count_enemy3_stats(
             else
             {
                 stats->enemiesKilled++;
-                al_play_sample(son_explosion, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+               jouer_son(son_explosion);
 
                 stats->score += 400;
             }
@@ -2039,11 +2041,16 @@ void detecter_perte_vie(int vies_actuelles, ALLEGRO_SAMPLE *son_hit)
 
     // détection perte de vie
     if (vies_actuelles < vies_precedentes) {
-        al_play_sample(son_hit, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+       jouer_son(son_hit);
     }
 
     // mise à jour
     vies_precedentes = vies_actuelles;
+}
+void jouer_son(ALLEGRO_SAMPLE *son) {
+    if (son_active && son != NULL) {
+        al_play_sample(son, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+    }
 }
 
 

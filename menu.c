@@ -16,6 +16,9 @@
 #define COL_DESACTIVE   al_map_rgb(70, 50, 45)
 #define COL_CADRE       al_map_rgb(90, 35, 20)
 
+bool son_active = true;
+bool musique_active = true;
+bool laser_actif = true;
 // ─── Dessine un bouton ────────────────────────────────────────────────────────
 static void dessine_bouton(ALLEGRO_FONT *font,
                            const char *texte,
@@ -101,6 +104,7 @@ int afficher_menu(ALLEGRO_DISPLAY *display,
                   ALLEGRO_EVENT_QUEUE *queue,
                   ALLEGRO_TIMER *timer,
                   int WIDTH, int HEIGHT) {
+
 
     al_init_font_addon();
     al_init_ttf_addon();
@@ -308,10 +312,6 @@ void afficher_parametres(ALLEGRO_DISPLAY *display,
 
     ALLEGRO_FONT *font = al_create_builtin_font();
 
-    // Options son (à relier à des variables globales plus tard)
-    bool son_active      = true;
-    bool musique_active  = true;
-    bool laser_actif     = true;
 
     const char *options[] = {
         "Son general",
@@ -319,6 +319,7 @@ void afficher_parametres(ALLEGRO_DISPLAY *display,
         "Bruitages laser",
         "Retour"
     };
+
     bool *etats[] = { &son_active, &musique_active, &laser_actif, NULL };
     int nb = 4;
     int sel = 0;

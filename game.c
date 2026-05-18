@@ -11,6 +11,7 @@
 #include <allegro5/allegro_acodec.h>
 
 #include "enemy.h"
+#include "menu.h"
 
 
 void Updatescrolling(float *x, float *y,

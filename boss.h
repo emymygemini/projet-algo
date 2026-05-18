@@ -24,7 +24,7 @@
 
 #define BOSS_MINI_W       35       // largeur phase 2
 #define BOSS_MINI_H       35       // hauteur phase 2
-#define BOSS_MINI_HP      5
+#define BOSS_MINI_HP      7
 
 // ─── Projectiles boss ─────────────────────────────────────────────────────────
 #define MAX_BOSS_BULLETS  128

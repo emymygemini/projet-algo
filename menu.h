@@ -15,6 +15,14 @@
 #define MENU_NIV3    3
 #define MENU_BOSS    4
 #define MENU_QUITTER 0
+#define DIFFICULTE_SIMPLE   0
+#define DIFFICULTE_NORMAL   1
+#define DIFFICULTE_DIFFICILE 2
+
+int choisir_difficulte(ALLEGRO_EVENT_QUEUE *queue,
+                       ALLEGRO_TIMER *timer,
+                       int WIDTH, int HEIGHT);
+
 
 // Affiche le menu principal et retourne le choix du joueur
 int afficher_menu(ALLEGRO_DISPLAY *display,

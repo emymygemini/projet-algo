@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "fonctions.h"
+#include"fonctions.h"
 #include <stdbool.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
@@ -9,12 +9,6 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
-
-#include "enemy.h"
-#include "fonctions.h"
-#include "menu.h"
-
-
 
 void Updatescrolling(float *x, float *y,
                      float *bgx,

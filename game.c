@@ -125,7 +125,10 @@ void grotte_update(Grotte *g,
                    float *x, float *y,
                    int ship_w, int ship_h,
                    int HEIGHT, int WIDTH, int* vie, int *collision) {
-    g->x -= 0;
+    g->x -= 5;
+    if (g->x <= -274) {
+        g->x = 0;
+    }
     if (g->x + g->width < 0) {
         g->x = WIDTH;
 
@@ -164,7 +167,7 @@ void grotte_render(Grotte g, int HEIGHT,int WIDTH,
     // height of top part
     int top_h = g.gap_y - g.gap_height / 2;
 
-    for (int x = 0; x < WIDTH; x += tile_w) {
+    for (int x = g.x; x < WIDTH; x += tile_w) {
         al_draw_scaled_bitmap(
             grotte,
             0, 0,
@@ -179,7 +182,7 @@ void grotte_render(Grotte g, int HEIGHT,int WIDTH,
     int bottom_y = g.gap_y + g.gap_height / 2;
     int bottom_h = HEIGHT - bottom_y;
 
-    for (int x = 0; x < WIDTH; x += tile_w) {
+    for (int x = g.x; x < WIDTH; x += tile_w) {
         al_draw_scaled_bitmap(
             grotte,
             0, 0,

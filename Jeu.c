@@ -17,7 +17,7 @@
 #include "enemy.h"
 #include "menu.h"
 
-void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display,ALLEGRO_BITMAP *Enemy1,ALLEGRO_BITMAP *Enemy2) {
+int niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display,ALLEGRO_BITMAP *Enemy1,ALLEGRO_BITMAP *Enemy2) {
 
     al_init_font_addon();
     al_init_ttf_addon();
@@ -34,6 +34,7 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
     }
     ALLEGRO_FONT *font = al_load_ttf_font("PressStart2P-Regular.ttf", 20, 0);
     ALLEGRO_FONT *fontGROS = al_load_ttf_font("PressStart2P-Regular.ttf", 40, 0);
+    ALLEGRO_FONT *fontpetit = al_load_ttf_font("PressStart2P-Regular.ttf", 10, 0);
 
     GameState state = STATE_GAME;
     bool p_pressed = false;
@@ -80,6 +81,7 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
 
     int MAX_ENEMIES1 = 10;
     int MAX_ENEMIES2 = 2;
+    int victoire=0;
 
     EnemyNiv1 EnemysNIV1[MAX_ENEMIES1];
     EnemyNiv1BIS EnemysNIV1BIS[MAX_ENEMIES1];
@@ -113,7 +115,7 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
         // ================= INPUT =================
         if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
             running=0;
-            return;
+            return 0;
         }
 
 
@@ -191,9 +193,8 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
 
                             spawn_NIV_ENEMY1BIS(EnemysNIV1BIS, MAX_ENEMIES1, WIDTH, HEIGHT);
                         }
-                        if (rand() % 1000 == 0 || !coeurBonus.active)
+                        if (rand() % 3000 == 0 || !coeurBonus.active)
                         {
-
                             spawn_coeur(&coeurBonus, WIDTH,stalactites, MAX_STALAC);
                         }
 
@@ -211,6 +212,7 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                 else
                 {
                     running = 0;
+                    victoire=1;
                 }
 
 
@@ -282,6 +284,7 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
             }
             if (fin==1) {
                 running=0;
+                victoire=0;
             }
 
         }
@@ -382,7 +385,7 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                        "Vous avez tuer %d ennemis et rater %d ennemis",(NombreEnnemi+NombreEnnemi1),stats.enemiesMissed);
                     al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 100, ALLEGRO_ALIGN_CENTER,
                       "Vous avez obtenu le score de %d",stats.score);
-                    al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 130, ALLEGRO_ALIGN_CENTER,
+                    al_draw_text(fontpetit,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 200, ALLEGRO_ALIGN_CENTER,
                         "M pour Menu ou Niv suivant");
                 }
             }
@@ -390,9 +393,10 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
             al_flip_display();
         }
     }
+    return victoire;
 }
 
-void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *Enemy1,ALLEGRO_BITMAP *Enemy2,ALLEGRO_BITMAP *Enemy3,ALLEGRO_BITMAP *grotte) {
+int niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *Enemy1,ALLEGRO_BITMAP *Enemy2,ALLEGRO_BITMAP *Enemy3,ALLEGRO_BITMAP *grotte) {
     al_init_font_addon();
     al_init_ttf_addon();
     al_install_audio();
@@ -409,6 +413,7 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
 
         ALLEGRO_FONT *font = al_load_ttf_font("PressStart2P-Regular.ttf", 20, 0);
         ALLEGRO_FONT *fontGROS = al_load_ttf_font("PressStart2P-Regular.ttf", 40, 0);
+    ALLEGRO_FONT *fontpetit = al_load_ttf_font("PressStart2P-Regular.ttf", 10, 0);
 
         GameState state = STATE_GAME;
         bool p_pressed = false;
@@ -424,6 +429,7 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
         int nombreTirLaser = 3;
         int tempsEntreLesTires = 0;
         int TempsChargementSpray = 0;
+    int victoire=0;
 
         CoeurVie coeurBonus;
         coeurBonus.active = false;
@@ -491,7 +497,7 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
             // ================= INPUT =================
             if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
                 running = 0;
-                return ;
+                return 0 ;
 
             }
 
@@ -640,6 +646,7 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                     else
                     {
                         running = 0;
+                        victoire=1;
                     }
 
 
@@ -729,6 +736,7 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                 }
                 if (fin==1) {
                     running=0;
+                    victoire=0;
                 }
             }
             else if (state == STATE_PAUSE) {
@@ -817,7 +825,7 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                           HEIGHT/2,
                           ALLEGRO_ALIGN_CENTER,
                            "GAME OVER");
-                        al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
+                        al_draw_text(fontpetit,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
                             "MENU - M pour Menu");
 
                     }
@@ -835,7 +843,7 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                            "Vous avez tuer %d ennemis et rater %d ennemis",(NombreEnnemi+NombreEnnemi1+NombreEnnemi3),stats.enemiesMissed);
                         al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 100, ALLEGRO_ALIGN_CENTER,
                       "Vous avez obtenu le score de %d",stats.score);
-                        al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 130, ALLEGRO_ALIGN_CENTER,
+                        al_draw_text(fontpetit,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 200, ALLEGRO_ALIGN_CENTER,
                             "M pour Menu ou Niv suivant");
 
                     }
@@ -844,10 +852,11 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                 al_flip_display();
             }
         }
+    return victoire;
 
     }
 
-    void niv2(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *Enemy1,ALLEGRO_BITMAP *Enemy2,ALLEGRO_BITMAP *Enemy3,ALLEGRO_BITMAP *grotte) {
+    int niv2(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *Enemy1,ALLEGRO_BITMAP *Enemy2,ALLEGRO_BITMAP *Enemy3,ALLEGRO_BITMAP *grotte) {
     al_init_font_addon();
     al_init_ttf_addon();
     al_install_audio();
@@ -863,6 +872,8 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
     }
         ALLEGRO_FONT *font = al_load_ttf_font("PressStart2P-Regular.ttf", 20, 0);
         ALLEGRO_FONT *fontGROS = al_load_ttf_font("PressStart2P-Regular.ttf", 40, 0);
+    ALLEGRO_FONT *fontpetit = al_load_ttf_font("PressStart2P-Regular.ttf", 10, 0);
+
 
         GameState state = STATE_GAME;
         bool p_pressed = false;
@@ -930,6 +941,7 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
 
         float bgx = 0;
         bool key[ALLEGRO_KEY_MAX] = {0};
+    int victoire = 0;
 
         int running = 1;
         int redraw = 1;
@@ -951,7 +963,7 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
             // ================= INPUT =================
             if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
                 running = 0;
-                return ;
+                return 0;
 
             }
 
@@ -1128,6 +1140,7 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                     else
                     {
                         running = 0;
+                        victoire=1;
                     }
 
                     collision = 0;
@@ -1218,6 +1231,7 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                 }
                 if (fin==1) {
                     running=0;
+                    victoire=0;
                 }
             }
             else if (state == STATE_PAUSE) {
@@ -1306,8 +1320,8 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                           HEIGHT/2,
                           ALLEGRO_ALIGN_CENTER,
                            "GAME OVER");
-                        al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
-                            "MENU - M pour Menu");
+                        al_draw_text(fontpetit,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
+                            "M pour Menu");
 
                     }
                     else {
@@ -1324,7 +1338,7 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                            "Vous avez tuer %d ennemis et rater %d ennemis",(NombreEnnemi+NombreEnnemi1+NombreEnnemi3),stats.enemiesMissed);
                         al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 100, ALLEGRO_ALIGN_CENTER,
                       "Vous avez obtenu le score de %d",stats.score);
-                        al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 130, ALLEGRO_ALIGN_CENTER,
+                        al_draw_text(fontpetit,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 200, ALLEGRO_ALIGN_CENTER,
                             "M pour Menu ou Niv suivant");
 
                     }
@@ -1333,6 +1347,7 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                 al_flip_display();
             }
         }
+    return victoire;
     }
 
 int nivBOSS(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display,ALLEGRO_BITMAP *grotte  ) {
@@ -2228,6 +2243,28 @@ void MORTBoss(int HEIGHT, int WIDTH, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur
                 al_flip_display();
             }
 
-        }
+}
+
+if  (niv1(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
+         TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+         coeur, tirLaser, tempsTir, timer, queue, display, Enemy1, Enemy2)) {
+    if  (niv2(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
+             TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+             coeur, tirLaser, tempsTir, timer, queue, display,
+             Enemy1, Enemy2, Enemy3, grotte)) {
+        if  (niv3(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
+             TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+             coeur, tirLaser, tempsTir, timer, queue, display,
+             Enemy1, Enemy2, Enemy3, grotte)) {
+            if  (nivBOSS(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
+              TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+              coeur, tirLaser, tempsTir, timer, queue, display, grotte)){
+                debutFin(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
+                         timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);}
+             }
+             }
+         }
+
+
 
 

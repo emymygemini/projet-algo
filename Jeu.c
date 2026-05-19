@@ -380,9 +380,10 @@ void niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                        "LEVEL BEAT");
                     al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
                        "Vous avez tuer %d ennemis et rater %d ennemis",(NombreEnnemi+NombreEnnemi1),stats.enemiesMissed);
+                    al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 100, ALLEGRO_ALIGN_CENTER,
+                      "Vous avez obtenu le score de %d",stats.score);
                     al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 130, ALLEGRO_ALIGN_CENTER,
-                        "MENU - M pour Menu");
-
+                        "M pour Menu ou Niv suivant");
                 }
             }
 
@@ -832,8 +833,10 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                            "LEVEL BEAT");
                         al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
                            "Vous avez tuer %d ennemis et rater %d ennemis",(NombreEnnemi+NombreEnnemi1+NombreEnnemi3),stats.enemiesMissed);
+                        al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 100, ALLEGRO_ALIGN_CENTER,
+                      "Vous avez obtenu le score de %d",stats.score);
                         al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 130, ALLEGRO_ALIGN_CENTER,
-                            "MENU - M pour Menu");
+                            "M pour Menu ou Niv suivant");
 
                     }
                 }
@@ -1319,8 +1322,10 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                            "LEVEL BEAT");
                         al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
                            "Vous avez tuer %d ennemis et rater %d ennemis",(NombreEnnemi+NombreEnnemi1+NombreEnnemi3),stats.enemiesMissed);
+                        al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 100, ALLEGRO_ALIGN_CENTER,
+                      "Vous avez obtenu le score de %d",stats.score);
                         al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 130, ALLEGRO_ALIGN_CENTER,
-                            "MENU - M pour Menu");
+                            "M pour Menu ou Niv suivant");
 
                     }
                 }

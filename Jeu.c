@@ -1335,12 +1335,13 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
         }
     }
 
-        void nivBOSS(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display,ALLEGRO_BITMAP *grotte  ) {
+int nivBOSS(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display,ALLEGRO_BITMAP *grotte  ) {
     al_init_font_addon();
     al_init_ttf_addon();
     al_install_audio();
     al_init_acodec_addon();
     al_reserve_samples(10);
+    int victoire = 0;
     ALLEGRO_SAMPLE *son_laser = al_load_sample("laser.wav");
     ALLEGRO_SAMPLE *son_explosion = al_load_sample("Mort.wav");
     ALLEGRO_SAMPLE *son_hit = al_load_sample("Vie.wav");
@@ -1482,9 +1483,13 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                     al_flip_display();
 
                 }
-                if (fin==1) running = 0;
-                if (boss_is_dead()) running = 0;
+                if (fin==1) {
+                    running = 0;
+                    victoire=0;
+                }
+                if (boss_is_dead()){ running = 0; victoire=1;}
             }
+     return victoire;
         }
 
         void debut(int HEIGHT, int WIDTH, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *Enemy1,ALLEGRO_BITMAP *Enemy2,ALLEGRO_BITMAP *Enemy3,ALLEGRO_BITMAP *grotte) {
@@ -2142,6 +2147,87 @@ void niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int
                 }
                 al_flip_display();
             }
+        }
+void MORTBoss(int HEIGHT, int WIDTH, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *Enemy1,ALLEGRO_BITMAP *Enemy2,ALLEGRO_BITMAP *Enemy3,ALLEGRO_BITMAP *grotte) {
+            al_init_font_addon();
+            al_init_ttf_addon();
+            ALLEGRO_FONT *font = al_load_ttf_font("PressStart2P-Regular.ttf", 10, 0);
+            ALLEGRO_FONT *fontGROS = al_load_ttf_font("PressStart2P-Regular.ttf", 50, 0);
+            ALLEGRO_FONT *fontMOYEN = al_load_ttf_font("PressStart2P-Regular.ttf", 20, 0);
+
+            bool p_pressed = false;
+            int redraw=0;
+            int phase=0;
+
+
+            bool key[ALLEGRO_KEY_MAX] = {0};
+
+            int running = 1;
+            al_start_timer(timer);
+
+            while (running) {
+                ALLEGRO_EVENT ev;
+                al_wait_for_event(queue, &ev);
+
+                // ================= INPUT =================
+                if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+                    running = 0;
+                    return ;
+
+                }
+
+                else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+                    key[ev.keyboard.keycode] = true;
+                    if (ev.keyboard.keycode == ALLEGRO_KEY_M) {
+                        running=0;
+                    }
+                    if (ev.keyboard.keycode == ALLEGRO_KEY_S) {
+                        phase++;
+                    }
+
+                }
+
+                else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
+                    key[ev.keyboard.keycode] = false;
+
+                    if (ev.keyboard.keycode == ALLEGRO_KEY_P)
+                        p_pressed = false;
+                }
+
+                // ================= UPDATE =================
+                else if (ev.type == ALLEGRO_EVENT_TIMER) {
+                    redraw=1;
+                }
+
+
+                if (redraw && al_is_event_queue_empty(queue)) {
+                    redraw = 0;
+                    al_clear_to_color(al_map_rgb(0, 0, 0));
+
+                    if (phase==0) {
+                        al_draw_filled_rectangle(0,0,WIDTH,HEIGHT,
+                   al_map_rgba(0,0,0,150));
+
+                        al_draw_text(fontGROS,
+                       al_map_rgb(173,147,120),
+                        WIDTH/2,
+                          HEIGHT/2 -40,
+                          ALLEGRO_ALIGN_CENTER,
+                           "GAME OVER");
+
+                        al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 300, ALLEGRO_ALIGN_CENTER,
+                           "S - Return ");
+
+                    }
+                    if (phase==1) {
+                        running =0;
+                    }
+
+
+                }
+                al_flip_display();
+            }
+
         }
 
 

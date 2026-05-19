@@ -93,6 +93,9 @@ int main() {
     //Position joueur
     float x = 100;
     float y = HEIGHT / 2;
+    int score = 0;
+    int niveau = 1;
+
 
     //les tirs du joueur
 
@@ -174,11 +177,17 @@ while (choix != MENU_QUITTER) {
             if (difficulte == DIFFICULTE_DIFFICILE) nombrevie_reel = 1;
             debutNIVDebutBoss(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
                               timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);
-            nivBOSS(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
+
+            if  (nivBOSS(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
                     TempsAttenteRechargement, SCROLL_SPEED, background, ship,
-                    coeur, tirLaser, tempsTir, timer, queue, display, grotte);
+                    coeur, tirLaser, tempsTir, timer, queue, display, grotte)){
             debutFin(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
-                     timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);
+                     timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);}
+            else {
+                MORTBoss(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
+                    timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);
+            }
+
             break;
         case MENU_QUITTER:
         default:

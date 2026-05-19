@@ -95,7 +95,7 @@ void boss_init(int WIDTH, int HEIGHT) {
 
     // Première attaque après 2 secondes
     g_boss.attack_state = ATTACK_NONE;
-    g_boss.attack_timer = 120;
+    g_boss.attack_timer = 100;
 
     (void)WIDTH;
 }
@@ -281,9 +281,7 @@ void boss_draw(int WIDTH, int HEIGHT) {
         ALLEGRO_COLOR cannon_col = al_map_rgb(40, 45, 55);
         al_draw_filled_rectangle(bx - hw - 20, by - 10, bx - hw, by + 10, cannon_col);
 
-        // Contour corps
-        al_draw_rectangle(bx - hw, by - hh, bx + hw, by + hh,
-                          al_map_rgb(120, 130, 150), 3);
+
 
         // les 3 parties sensibles
         for (int i = 0; i < 3; i++) {

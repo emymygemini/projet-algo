@@ -125,7 +125,7 @@ void grotte_update(Grotte *g,
                    float *x, float *y,
                    int ship_w, int ship_h,
                    int HEIGHT, int WIDTH, int* vie, int *collision) {
-    g->x -= 5;
+    g->x -= 7;
     if (g->x <= -274) {
         g->x = 0;
     }

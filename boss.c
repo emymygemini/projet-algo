@@ -21,7 +21,7 @@ static void fire_targeted(float player_x, float player_y, float spread_dy) {
     int idx = bullet_alloc();
     if (idx < 0) return;
 
-    float ox = g_boss.x - g_boss.w * 0.5f;
+    float ox = g_boss.x ;//- g_boss.w * 0.5f;
     float oy = g_boss.y;
     float dx = player_x - ox;
     float dy = (player_y - oy) + spread_dy;
@@ -61,7 +61,7 @@ static void fire_scatter(void) {
 // Positions des 3parties du boooss
 static void parts_sync_position(void) {
 
-    float part_x = g_boss.x - g_boss.w * 0.5f + PART_W * 0.5f + 4;
+    float part_x = g_boss.x; //- g_boss.w * 0.5f + PART_W * 0.5f + 4;
 
     float offsets[3] = { -g_boss.h * 0.30f, 0.0f, g_boss.h * 0.30f };
 
@@ -264,7 +264,7 @@ void boss_draw(int WIDTH, int HEIGHT) {
         float hh = g_boss.h * 0.5f;
 
         // Corps principal
-        ALLEGRO_COLOR body_col = al_map_rgb(55, 60, 70);
+       // ALLEGRO_COLOR body_col = al_map_rgb(55, 60, 70);
         al_draw_scaled_bitmap(
     g_boss.sprite,
 
@@ -281,8 +281,8 @@ void boss_draw(int WIDTH, int HEIGHT) {
 );
 
         // Canon du boss
-        ALLEGRO_COLOR cannon_col = al_map_rgb(40, 45, 55);
-        al_draw_filled_rectangle(bx - hw - 20, by - 10, bx - hw, by + 10, cannon_col);
+      //  ALLEGRO_COLOR cannon_col = al_map_rgb(40, 45, 55);
+      //  al_draw_filled_rectangle(bx - hw - 20, by - 10, bx - hw, by + 10, cannon_col);
 
 
 
@@ -292,9 +292,9 @@ void boss_draw(int WIDTH, int HEIGHT) {
                 // Partie détruite : marques
                 float px = g_boss.parts[i].x;
                 float py = g_boss.parts[i].y;
-                al_draw_filled_rectangle(px - PART_W*0.5f, py - PART_H*0.5f,
+              /* al_draw_filled_rectangle(px - PART_W*0.5f, py - PART_H*0.5f,
                                          px + PART_W*0.5f, py + PART_H*0.5f,
-                                         al_map_rgb(30, 30, 30));
+                                         al_map_rgb(30, 30, 30));*/
                 al_draw_line(px - PART_W*0.5f, py - PART_H*0.5f,
                              px + PART_W*0.5f, py + PART_H*0.5f,
                              al_map_rgb(80, 80, 80), 2);
@@ -307,20 +307,20 @@ void boss_draw(int WIDTH, int HEIGHT) {
 
             // Couleur : selon HP
             ALLEGRO_COLOR part_col;
-            if (hp_ratio > 0.6f)
+           /* if (hp_ratio > 0.6f)
                 part_col = al_map_rgb(50, 220, 80);
             else if (hp_ratio > 0.3f)
                 part_col = al_map_rgb(220, 160, 30);
             else
-                part_col = al_map_rgb(220, 60,  40);
+                part_col = al_map_rgb(220, 60,  40);*/
 
             // Flash lors d'un coup reçu
             if (g_boss.parts[i].hit_flash > 0)
                 part_col = al_map_rgb(255, 255, 255);
 
-            al_draw_filled_rectangle(px - PART_W*0.5f, py - PART_H*0.5f,
+           /* al_draw_filled_rectangle(px - PART_W*0.5f, py - PART_H*0.5f,
                                      px + PART_W*0.5f, py + PART_H*0.5f,
-                                     part_col);
+                                     part_col);*/
 
             // Contour pulsant
             al_draw_rectangle(px - PART_W*0.5f, py - PART_H*0.5f,
@@ -352,11 +352,11 @@ void boss_draw(int WIDTH, int HEIGHT) {
                                  al_map_rgb(255, 60, 60), 2);
                 }
                 // Flèche d'indication côté boss
-                al_draw_filled_triangle(
+               /* al_draw_filled_triangle(
                     bx - hw - 40, g_boss.laser_y,
                     bx - hw - 10, g_boss.laser_y - 12,
                     bx - hw - 10, g_boss.laser_y + 12,
-                    al_map_rgb(255, 100, 30));
+                    al_map_rgb(255, 100, 30));*/
             } else {
                 // Laser actif : rayon rouge vif pleine largeur
                 al_draw_filled_rectangle(0, g_boss.laser_y - 8,

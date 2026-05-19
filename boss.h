@@ -35,8 +35,8 @@
 #define LASER_ACTIVE_FRAMES  45     // frames où le laser est actif
 
 // ─── Timing des attaques (frames) ─────────────────────────────────────────────
-#define BOSS_ATTACK_MIN   150       // intervalle min entre attaques
-#define BOSS_ATTACK_MAX   270       // intervalle max entre attaques
+#define BOSS_ATTACK_MIN   50       // intervalle min entre attaques
+#define BOSS_ATTACK_MAX   60       // intervalle max entre attaques
 
 // ─── Dégâts laser joueur sur le boss ──────────────────────────────────────────
 #define LASER_HIT_COOLDOWN 8        // frames entre deux dégâts du laser joueur

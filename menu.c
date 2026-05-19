@@ -127,7 +127,7 @@ int afficher_menu(ALLEGRO_DISPLAY *display,
         "NIV2",
         "NIV3",
         "NIVBOSS",
-        "JOUER TOUS LES NIVEAUX",
+        "Nouvelle Partie",
         "Sauvegarde",
         "Paramètre",
         "Quitter",
@@ -137,7 +137,7 @@ int afficher_menu(ALLEGRO_DISPLAY *display,
     int choix      = -1;  // résultat final
 
     // Positions Y des boutons
-    float debut_y = HEIGHT / 2 - 80;
+    float debut_y = HEIGHT / 2 - 175;
     float espacement = 65;
 
     int frame = 0;
@@ -202,11 +202,6 @@ int afficher_menu(ALLEGRO_DISPLAY *display,
 
             // Étoiles
             dessine_etoiles(WIDTH, HEIGHT, frame);
-
-            // Ligne décorative horizontale
-            al_draw_line(WIDTH/2 - 300, HEIGHT/2 - 115,
-                         WIDTH/2 + 300, HEIGHT/2 - 115,
-                         al_map_rgb(40, 60, 120), 1);
 
             // Titre
             dessine_titre(font_titre, font_info, WIDTH, frame);
@@ -400,7 +395,7 @@ void afficher_parametres(ALLEGRO_DISPLAY *display,
 
         if (redraw && al_is_event_queue_empty(queue)) {
             redraw = false;
-            al_clear_to_color(al_map_rgb(5, 5, 20));
+            al_clear_to_color(al_map_rgb(8, 2, 2));
 
             al_draw_text(font, al_map_rgb(255, 220, 50),
                          WIDTH / 2, 80,
@@ -415,19 +410,20 @@ void afficher_parametres(ALLEGRO_DISPLAY *display,
 
                 al_draw_filled_rectangle(WIDTH/2 - 220, cy - 24,
                                          WIDTH/2 + 220, cy + 24,
-                                         est_sel ? al_map_rgb(20, 60, 100)
-                                                 : al_map_rgb(10, 20, 50));
+                                         est_sel ? al_map_rgb(90, 30, 15)
+                                                : al_map_rgb(35, 15, 10));
                 al_draw_rectangle(WIDTH/2 - 220, cy - 24,
                                   WIDTH/2 + 220, cy + 24,
-                                  est_sel ? al_map_rgb(80, 200, 255)
-                                          : al_map_rgb(40, 60, 120), 2);
+                                  est_sel ? al_map_rgb(255, 110, 50)
+                                          : al_map_rgb(100, 40, 20), 2);
 
                 al_draw_text(font,
-                             est_sel ? al_map_rgb(80, 200, 255)
-                                     : al_map_rgb(180, 180, 180),
+                             est_sel ? al_map_rgb(220, 80, 40)
+                                     : al_map_rgb(170, 150, 130),
                              WIDTH/2 - 160,
                              cy - al_get_font_line_height(font) / 2,
                              ALLEGRO_ALIGN_LEFT, options[i]);
+
 
                 // Valeur à droite selon l'option
                 if (i == 0) {

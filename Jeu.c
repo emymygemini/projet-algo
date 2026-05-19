@@ -2245,25 +2245,7 @@ void MORTBoss(int HEIGHT, int WIDTH, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur
 
 }
 
-if  (niv1(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
-         TempsAttenteRechargement, SCROLL_SPEED, background, ship,
-         coeur, tirLaser, tempsTir, timer, queue, display, Enemy1, Enemy2)) {
-    if  (niv2(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
-             TempsAttenteRechargement, SCROLL_SPEED, background, ship,
-             coeur, tirLaser, tempsTir, timer, queue, display,
-             Enemy1, Enemy2, Enemy3, grotte)) {
-        if  (niv3(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
-             TempsAttenteRechargement, SCROLL_SPEED, background, ship,
-             coeur, tirLaser, tempsTir, timer, queue, display,
-             Enemy1, Enemy2, Enemy3, grotte)) {
-            if  (nivBOSS(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
-              TempsAttenteRechargement, SCROLL_SPEED, background, ship,
-              coeur, tirLaser, tempsTir, timer, queue, display, grotte)){
-                debutFin(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
-                         timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);}
-             }
-             }
-         }
+
 
 
 

@@ -60,8 +60,11 @@ static void fire_scatter(void) {
 
 // Positions des 3parties du boooss
 static void parts_sync_position(void) {
+
     float part_x = g_boss.x - g_boss.w * 0.5f + PART_W * 0.5f + 4;
-    float offsets[3] = {-g_boss.h * 0.33f,0.0f, g_boss.h * 0.33f};
+
+    float offsets[3] = { -g_boss.h * 0.30f, 0.0f, g_boss.h * 0.30f };
+
     for (int i = 0; i < 3; i++) {
         g_boss.parts[i].x = part_x;
         g_boss.parts[i].y = g_boss.y + offsets[i];
@@ -379,14 +382,14 @@ else if (g_boss.phase == BOSS_PHASE2) {
     float hw = g_boss.w * 0.5f;
     float hh = g_boss.h * 0.5f;
 
-    // Corps : violet clignotant si flash
+    // Corps : rouge vif, blanc si flash de dégât
     ALLEGRO_COLOR col = (g_boss.hit_flash > 0)
         ? al_map_rgb(255, 255, 255)
-        : al_map_rgb(180, 40, 220);
+        : al_map_rgb(220, 30, 30);   // ← rouge au lieu de violet/rose
 
     al_draw_filled_rectangle(bx - hw, by - hh, bx + hw, by + hh, col);
     al_draw_rectangle(bx - hw, by - hh, bx + hw, by + hh,
-                      al_map_rgb(255, 150, 255), 3);
+                      al_map_rgb(255, 100, 100), 3);
 
     // Indicateur HP (2 petits cœurs en haut)
     for (int i = 0; i < g_boss.hp; i++) {

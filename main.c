@@ -5,6 +5,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include "boss.h"
+#include "save.h"
 #include <allegro5/allegro_primitives.h>
 #include <stdio.h>
 #include <allegro5/allegro.h>
@@ -135,11 +136,10 @@ while (choix != MENU_QUITTER) {
     choix = afficher_menu(display, queue, timer, WIDTH, HEIGHT);
 
     switch (choix) {
+        int nombrevie_reel;
         case MENU_NIV1:
-            difficulte = choisir_difficulte(queue, timer, WIDTH, HEIGHT);
-            if (difficulte == DIFFICULTE_SIMPLE)   nombrevie_reel = 999;
-            if (difficulte == DIFFICULTE_NORMAL)   nombrevie_reel = 3;
-            if (difficulte == DIFFICULTE_DIFFICILE) nombrevie_reel = 1;
+            nombrevie_reel = (difficulte_globale == DIFFICULTE_SIMPLE) ? 999 :
+            (difficulte_globale == DIFFICULTE_DIFFICILE) ? 1 : 3;
             debutNIV1(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
                       timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);
             niv1(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
@@ -147,10 +147,8 @@ while (choix != MENU_QUITTER) {
                  coeur, tirLaser, tempsTir, timer, queue, display, Enemy1, Enemy2);
             break;
         case MENU_NIV2:
-            difficulte = choisir_difficulte(queue, timer, WIDTH, HEIGHT);
-            if (difficulte == DIFFICULTE_SIMPLE)   nombrevie_reel = 999;
-            if (difficulte == DIFFICULTE_NORMAL)   nombrevie_reel = 3;
-            if (difficulte == DIFFICULTE_DIFFICILE) nombrevie_reel = 1;
+            nombrevie_reel = (difficulte_globale == DIFFICULTE_SIMPLE) ? 999 :
+            (difficulte_globale == DIFFICULTE_DIFFICILE) ? 1 : 3;
             debutNIV2(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
                       timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);
             niv2(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
@@ -159,10 +157,8 @@ while (choix != MENU_QUITTER) {
                  Enemy1, Enemy2, Enemy3, grotte);
             break;
         case MENU_NIV3:
-            difficulte = choisir_difficulte(queue, timer, WIDTH, HEIGHT);
-            if (difficulte == DIFFICULTE_SIMPLE)   nombrevie_reel = 999;
-            if (difficulte == DIFFICULTE_NORMAL)   nombrevie_reel = 3;
-            if (difficulte == DIFFICULTE_DIFFICILE) nombrevie_reel = 1;
+            nombrevie_reel = (difficulte_globale == DIFFICULTE_SIMPLE) ? 999 :
+            (difficulte_globale == DIFFICULTE_DIFFICILE) ? 1 : 3;
             debutNIV3(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
                       timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);
             niv3(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
@@ -171,10 +167,8 @@ while (choix != MENU_QUITTER) {
                  Enemy1, Enemy2, Enemy3, grotte);
             break;
         case MENU_BOSS:
-            difficulte = choisir_difficulte(queue, timer, WIDTH, HEIGHT);
-            if (difficulte == DIFFICULTE_SIMPLE)   nombrevie_reel = 999;
-            if (difficulte == DIFFICULTE_NORMAL)   nombrevie_reel = 3;
-            if (difficulte == DIFFICULTE_DIFFICILE) nombrevie_reel = 1;
+            nombrevie_reel = (difficulte_globale == DIFFICULTE_SIMPLE) ? 999 :
+            (difficulte_globale == DIFFICULTE_DIFFICILE) ? 1 : 3;
             debutNIVDebutBoss(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
                               timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);
 
@@ -187,7 +181,70 @@ while (choix != MENU_QUITTER) {
                 MORTBoss(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
                     timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);
             }
+        break;
+        case MENU_TOUT: {
+               nombrevie_reel = (difficulte_globale == DIFFICULTE_SIMPLE) ? 999 :
+                        (difficulte_globale == DIFFICULTE_DIFFICILE) ? 1 : 3;
+                debut(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
+                      timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);
+                debutNIV1(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
+                          timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);
 
+                if  (niv1(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
+                         TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+                         coeur, tirLaser, tempsTir, timer, queue, display, Enemy1, Enemy2)) {
+                    if  (niv2(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
+                             TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+                             coeur, tirLaser, tempsTir, timer, queue, display,
+                             Enemy1, Enemy2, Enemy3, grotte)) {
+                        if  (niv3(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
+                             TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+                             coeur, tirLaser, tempsTir, timer, queue, display,
+                             Enemy1, Enemy2, Enemy3, grotte)) {
+                            if  (nivBOSS(HEIGHT, WIDTH, nombrevie_reel, BULLET_SPEED, SPEED, MaxBullets,
+                              TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+                              coeur, tirLaser, tempsTir, timer, queue, display, grotte)){
+                                debutFin(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
+                                         timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);}
+                             }
+                             }
+                         }
+
+                break;
+        }
+        case MENU_REPRENDRE: {
+                SaveData save;
+                if (charger_partie(&save)) {
+                    // Relance le bon niveau avec les données sauvegardées
+                    switch (save.niveau) {
+                        case 1:
+                            niv1(HEIGHT, WIDTH, save.vies, BULLET_SPEED, SPEED, MaxBullets,
+                                 TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+                                 coeur, tirLaser, tempsTir, timer, queue, display,
+                                 Enemy1, Enemy2);
+                            break;
+                        case 2:
+                            niv2(HEIGHT, WIDTH, save.vies, BULLET_SPEED, SPEED, MaxBullets,
+                                 TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+                                 coeur, tirLaser, tempsTir, timer, queue, display,
+                                 Enemy1, Enemy2, Enemy3, grotte);
+                            break;
+                        case 3:
+                            niv3(HEIGHT, WIDTH, save.vies, BULLET_SPEED, SPEED, MaxBullets,
+                                 TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+                                 coeur, tirLaser, tempsTir, timer, queue, display,
+                                 Enemy1, Enemy2, Enemy3, grotte);
+                            break;
+                        case 4:
+                            nivBOSS(HEIGHT, WIDTH, save.vies, BULLET_SPEED, SPEED, MaxBullets,
+                                    TempsAttenteRechargement, SCROLL_SPEED, background, ship,
+                                    coeur, tirLaser, tempsTir, timer, queue, display, grotte);
+                            break;
+                    }
+                    supprimer_sauvegarde(); // efface la save après reprise
+                }
+                break;
+        }
             break;
         case MENU_QUITTER:
         default:

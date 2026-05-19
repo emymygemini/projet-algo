@@ -8,6 +8,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+bool sauvegarde_disponible = false;
+
 // ─── Couleurs ─────────────────────────────────────────────────────────────────
 #define COL_FOND        al_map_rgb(12, 5, 3)
 #define COL_TITRE       al_map_rgb(255, 120, 40)
@@ -19,6 +21,8 @@
 bool son_active = true;
 bool musique_active = true;
 bool laser_actif = true;
+int difficulte_globale = DIFFICULTE_NORMAL;
+
 // ─── Dessine un bouton ────────────────────────────────────────────────────────
 static void dessine_bouton(ALLEGRO_FONT *font,
                            const char *texte,
@@ -111,22 +115,24 @@ int afficher_menu(ALLEGRO_DISPLAY *display,
     al_init_primitives_addon();
 
     // Chargement des polices
-    // Si tu n'as pas de .ttf, on utilise la police intégrée d'Allegro
     ALLEGRO_FONT *font_titre = al_create_builtin_font();
     ALLEGRO_FONT *font_menu  = al_create_builtin_font();
     ALLEGRO_FONT *font_info  = al_create_builtin_font();
 
     // ── Options du menu ──
-    // index 0..4 = boutons principaux, index 5 = paramètres
+
+    sauvegarde_disponible = (fopen("save.bin", "rb") != NULL);
     const char *labels[] = {
-        "NIVEAU 1",
-        "NIVEAU 2",
-        "NIVEAU 3",
-        "NIVEAU BOSS (direct)",
-        "PARAMETRES",
-        "QUITTER"
+        "NIV1",
+        "NIV2",
+        "NIV3",
+        "NIVBOSS",
+        "JOUER TOUS LES NIVEAUX",
+        "Sauvegarde",
+        "Paramètre",
+        "Quitter",
     };
-    int nb_options = 6;
+    int nb_options = 8;
     int selection  = 0;   // option actuellement sélectionnée
     int choix      = -1;  // résultat final
 
@@ -168,13 +174,18 @@ int afficher_menu(ALLEGRO_DISPLAY *display,
                 case 1: choix = MENU_NIV2;    break;
                 case 2: choix = MENU_NIV3;    break;
                 case 3: choix = MENU_BOSS;    break;
-                case 4:
-                    // Ouvre les paramètres puis revient au menu
-                    afficher_parametres(display, queue, timer, WIDTH, HEIGHT);
-                    break;
-                case 5: choix = MENU_QUITTER; break;
+                case 4: choix = MENU_TOUT; break;
+                case 5:
+                        // Reprendre : uniquement si save disponible
+                        if (sauvegarde_disponible)
+                            choix = MENU_REPRENDRE;
+                        break;
+                case 6:
+                        afficher_parametres(display, queue, timer, WIDTH, HEIGHT);
+                        break;
+                case 7: choix = MENU_QUITTER;   break;
                 }
-                break;
+                    break;
 
             case ALLEGRO_KEY_ESCAPE:
                 choix = MENU_QUITTER;
@@ -203,10 +214,11 @@ int afficher_menu(ALLEGRO_DISPLAY *display,
             // Boutons
             for (int i = 0; i < nb_options; i++) {
                 float cy = debut_y + i * espacement;
+                bool desactive = (i == 5 && !sauvegarde_disponible); // grise "Reprendre"
                 dessine_bouton(font_menu, labels[i],
                                WIDTH / 2.0f, cy,
                                (i == selection),
-                               false);
+                               desactive);
             }
 
             // Aide navigation
@@ -226,17 +238,22 @@ int afficher_menu(ALLEGRO_DISPLAY *display,
 
     return choix;
 }
+// ─── Choisir difficulté (avec bouton Retour) ──────────────────────────────────
 
-int choisir_difficulte(ALLEGRO_EVENT_QUEUE *queue,
+int choisir_difficulte(ALLEGRO_DISPLAY *display,
+                       ALLEGRO_EVENT_QUEUE *queue,
                        ALLEGRO_TIMER *timer,
                        int WIDTH, int HEIGHT) {
     ALLEGRO_FONT *font = al_create_builtin_font();
 
-    const char *options[] = { "SIMPLE (vies illimitees)",
-                               "NORMAL (3 coeurs)",
-                               "DIFFICILE (1 seul coup)" };
-    int nb = 3;
-    int sel = 1; // normal par défaut
+    const char *options[] = {
+        "SIMPLE (vies illimitees)",
+        "NORMAL (3 coeurs)",
+        "DIFFICILE (1 seul coup)",
+        "Retour",
+    };
+    int nb  = 4;
+    int sel = difficulte_globale; // pré-sélectionne le réglage actuel
     int choix = -1;
     bool redraw = true;
 
@@ -245,20 +262,30 @@ int choisir_difficulte(ALLEGRO_EVENT_QUEUE *queue,
         al_wait_for_event(queue, &ev);
 
         if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-            choix = DIFFICULTE_NORMAL;
+            choix = -2; // signal "fermeture"
         else if (ev.type == ALLEGRO_EVENT_TIMER)
             redraw = true;
         else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
             switch (ev.keyboard.keycode) {
             case ALLEGRO_KEY_UP:
-                sel = (sel - 1 + nb) % nb; break;
+                sel = (sel - 1 + nb) % nb;
+                break;
             case ALLEGRO_KEY_DOWN:
-                sel = (sel + 1) % nb; break;
+                sel = (sel + 1) % nb;
+                break;
             case ALLEGRO_KEY_ENTER:
             case ALLEGRO_KEY_SPACE:
-                choix = sel; break;
+                if (sel == 3) {
+                    // Retour : on ne change pas difficulte_globale
+                    choix = difficulte_globale;
+                } else {
+                    difficulte_globale = sel;
+                    choix = sel;
+                }
+                break;
             case ALLEGRO_KEY_ESCAPE:
-                choix = DIFFICULTE_NORMAL; break;
+                choix = difficulte_globale; // annule sans changer
+                break;
             }
         }
 
@@ -267,12 +294,14 @@ int choisir_difficulte(ALLEGRO_EVENT_QUEUE *queue,
             al_clear_to_color(al_map_rgb(8, 2, 2));
 
             al_draw_text(font, al_map_rgb(255, 120, 40),
-                         WIDTH/2, 80, ALLEGRO_ALIGN_CENTRE,
+                         WIDTH / 2, 80, ALLEGRO_ALIGN_CENTRE,
                          "CHOISIR LA DIFFICULTE");
 
             for (int i = 0; i < nb; i++) {
-                float cy = HEIGHT/2 - 40 + i * 70;
+                float cy     = HEIGHT / 2 - 80 + i * 70;
                 bool est_sel = (i == sel);
+                // Mise en évidence de la difficulté actuellement active
+                bool est_actif = (i == difficulte_globale && i < 3);
 
                 al_draw_filled_rectangle(WIDTH/2 - 250, cy - 24,
                                          WIDTH/2 + 250, cy + 24,
@@ -282,16 +311,26 @@ int choisir_difficulte(ALLEGRO_EVENT_QUEUE *queue,
                                   WIDTH/2 + 250, cy + 24,
                                   est_sel ? al_map_rgb(255, 110, 50)
                                           : al_map_rgb(100, 40, 20), 2);
+
                 al_draw_text(font,
-                             est_sel ? al_map_rgb(220, 80, 40)
-                                     : al_map_rgb(170, 150, 130),
-                             WIDTH/2, cy - al_get_font_line_height(font)/2,
+                             est_sel    ? al_map_rgb(220, 80, 40)
+                           : est_actif  ? al_map_rgb(80, 220, 80)  // vert = actuel
+                           :              al_map_rgb(170, 150, 130),
+                             WIDTH / 2,
+                             cy - al_get_font_line_height(font) / 2,
                              ALLEGRO_ALIGN_CENTRE, options[i]);
+
+                // Petite puce verte pour marquer le réglage en cours
+                if (est_actif)
+                    al_draw_text(font, al_map_rgb(80, 220, 80),
+                                 WIDTH/2 + 230,
+                                 cy - al_get_font_line_height(font) / 2,
+                                 ALLEGRO_ALIGN_RIGHT, "<");
             }
 
             al_draw_text(font, al_map_rgb(80, 80, 100),
-                         WIDTH/2, HEIGHT - 30, ALLEGRO_ALIGN_CENTRE,
-                         "HAUT / BAS : naviguer    ENTREE : valider");
+                         WIDTH / 2, HEIGHT - 30, ALLEGRO_ALIGN_CENTRE,
+                         "HAUT / BAS : naviguer    ENTREE : valider    ECHAP : retour");
             al_flip_display();
         }
     }
@@ -299,9 +338,6 @@ int choisir_difficulte(ALLEGRO_EVENT_QUEUE *queue,
     al_destroy_font(font);
     return choix;
 }
-
-
-
 
 
 // ─── Menu paramètres ──────────────────────────────────────────────────────────
@@ -312,16 +348,13 @@ void afficher_parametres(ALLEGRO_DISPLAY *display,
 
     ALLEGRO_FONT *font = al_create_builtin_font();
 
-
+    // 3 options seulement : Son | Difficulté | Retour
     const char *options[] = {
         "Son general",
-        "Musique",
-        "Bruitages laser",
-        "Retour"
+        "Difficulte",
+        "Retour",
     };
-
-    bool *etats[] = { &son_active, &musique_active, &laser_actif, NULL };
-    int nb = 4;
+    int nb  = 3;
     int sel = 0;
     bool quitter = false;
     bool redraw  = true;
@@ -330,35 +363,38 @@ void afficher_parametres(ALLEGRO_DISPLAY *display,
         ALLEGRO_EVENT ev;
         al_wait_for_event(queue, &ev);
 
-        if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) quitter = true;
-
-        else if (ev.type == ALLEGRO_EVENT_TIMER) redraw = true;
-
+        if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+            quitter = true;
+        else if (ev.type == ALLEGRO_EVENT_TIMER)
+            redraw = true;
         else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
             switch (ev.keyboard.keycode) {
 
-            case ALLEGRO_KEY_UP:
-                sel = (sel - 1 + nb) % nb;
-                break;
+                case ALLEGRO_KEY_UP:
+                    sel = (sel - 1 + nb) % nb;
+                    break;
+                case ALLEGRO_KEY_DOWN:
+                    sel = (sel + 1) % nb;
+                    break;
 
-            case ALLEGRO_KEY_DOWN:
-                sel = (sel + 1) % nb;
-                break;
+                case ALLEGRO_KEY_ENTER:
+                case ALLEGRO_KEY_SPACE:
+                    switch (sel) {
+                    case 0:
+                            son_active = !son_active;
+                            break;
+                    case 1:
+                            choisir_difficulte(display, queue, timer, WIDTH, HEIGHT);
+                            break;
+                    case 2:
+                            quitter = true;
+                            break;
+                    }
+                    break;
 
-            case ALLEGRO_KEY_ENTER:
-            case ALLEGRO_KEY_SPACE:
-                if (sel == nb - 1) {
-                    // Retour
+                case ALLEGRO_KEY_ESCAPE:   // ← un seul, ici
                     quitter = true;
-                } else {
-                    // Toggle on/off
-                    *etats[sel] = !(*etats[sel]);
-                }
-                break;
-
-            case ALLEGRO_KEY_ESCAPE:
-                quitter = true;
-                break;
+                    break;
             }
         }
 
@@ -366,66 +402,59 @@ void afficher_parametres(ALLEGRO_DISPLAY *display,
             redraw = false;
             al_clear_to_color(al_map_rgb(5, 5, 20));
 
-            // Titre
-            al_draw_text(font,
-                         al_map_rgb(255, 220, 50),
+            al_draw_text(font, al_map_rgb(255, 220, 50),
                          WIDTH / 2, 80,
                          ALLEGRO_ALIGN_CENTRE, "PARAMETRES");
 
-            al_draw_text(font,
-                         al_map_rgb(80, 80, 120),
-                         WIDTH / 2, 108,
-                         ALLEGRO_ALIGN_CENTRE,
-                         "(Les options son seront actives dans une prochaine version)");
-
-            // Options
             float debut_y = HEIGHT / 2 - 60;
             float esp     = 65;
 
             for (int i = 0; i < nb; i++) {
-                float cy = debut_y + i * esp;
+                float cy     = debut_y + i * esp;
                 bool est_sel = (i == sel);
 
-                // Cadre
-                al_draw_filled_rectangle(WIDTH/2 - 200, cy - 24,
-                                         WIDTH/2 + 200, cy + 24,
-                                         est_sel
-                                             ? al_map_rgb(20, 60, 100)
-                                             : al_map_rgb(10, 20, 50));
-                al_draw_rectangle(WIDTH/2 - 200, cy - 24,
-                                  WIDTH/2 + 200, cy + 24,
-                                  est_sel
-                                      ? al_map_rgb(80, 200, 255)
-                                      : al_map_rgb(40, 60, 120), 2);
+                al_draw_filled_rectangle(WIDTH/2 - 220, cy - 24,
+                                         WIDTH/2 + 220, cy + 24,
+                                         est_sel ? al_map_rgb(20, 60, 100)
+                                                 : al_map_rgb(10, 20, 50));
+                al_draw_rectangle(WIDTH/2 - 220, cy - 24,
+                                  WIDTH/2 + 220, cy + 24,
+                                  est_sel ? al_map_rgb(80, 200, 255)
+                                          : al_map_rgb(40, 60, 120), 2);
 
-                // Texte option
                 al_draw_text(font,
-                             est_sel
-                                 ? al_map_rgb(80, 200, 255)
-                                 : al_map_rgb(180, 180, 180),
-                             WIDTH/2 - 140,
+                             est_sel ? al_map_rgb(80, 200, 255)
+                                     : al_map_rgb(180, 180, 180),
+                             WIDTH/2 - 160,
                              cy - al_get_font_line_height(font) / 2,
                              ALLEGRO_ALIGN_LEFT, options[i]);
 
-                // État ON/OFF (sauf "Retour")
-                if (etats[i] != NULL) {
-                    bool val = *etats[i];
+                // Valeur à droite selon l'option
+                if (i == 0) {
+                    // Son : ON / OFF
                     al_draw_text(font,
-                                 val ? al_map_rgb(50, 220, 80)
-                                     : al_map_rgb(200, 60, 40),
-                                 WIDTH/2 + 140,
+                                 son_active ? al_map_rgb(50, 220, 80)
+                                            : al_map_rgb(200, 60, 40),
+                                 WIDTH/2 + 160,
                                  cy - al_get_font_line_height(font) / 2,
                                  ALLEGRO_ALIGN_RIGHT,
-                                 val ? "ON" : "OFF");
+                                 son_active ? "ON" : "OFF");
+                } else if (i == 1) {
+                    // Difficulté : affiche le nom du réglage actuel
+                    const char *noms_diff[] = { "SIMPLE", "NORMAL", "DIFFICILE" };
+                    al_draw_text(font,
+                                 al_map_rgb(255, 200, 50),
+                                 WIDTH/2 + 160,
+                                 cy - al_get_font_line_height(font) / 2,
+                                 ALLEGRO_ALIGN_RIGHT,
+                                 noms_diff[difficulte_globale]);
                 }
             }
 
-            al_draw_text(font,
-                         al_map_rgb(80, 80, 100),
+            al_draw_text(font, al_map_rgb(80, 80, 100),
                          WIDTH / 2, HEIGHT - 30,
                          ALLEGRO_ALIGN_CENTRE,
-                         "HAUT / BAS : naviguer    ENTREE : toggle / valider");
-
+                         "HAUT / BAS : naviguer    ENTREE : valider    ECHAP : retour");
             al_flip_display();
         }
     }

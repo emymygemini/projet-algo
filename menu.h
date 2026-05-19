@@ -8,6 +8,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
+#include <stdbool.h>
 
 // Valeurs de retour du menu
 #define MENU_NIV1    1
@@ -18,11 +19,19 @@
 #define DIFFICULTE_SIMPLE   0
 #define DIFFICULTE_NORMAL   1
 #define DIFFICULTE_DIFFICILE 2
+#define MENU_TOUT    5
+#define CHOIX_MENU      0
+#define CHOIX_SUIVANT   1
+#define MENU_REPRENDRE  6
 
+extern bool sauvegarde_disponible;
 extern bool son_active;
-extern bool musique_active;
-extern bool laser_actif;
-int choisir_difficulte(ALLEGRO_EVENT_QUEUE *queue,
+
+extern int difficulte_globale;
+
+//
+int choisir_difficulte(ALLEGRO_DISPLAY *display,
+                       ALLEGRO_EVENT_QUEUE *queue,
                        ALLEGRO_TIMER *timer,
                        int WIDTH, int HEIGHT);
 

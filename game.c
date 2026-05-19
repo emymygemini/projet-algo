@@ -816,6 +816,8 @@ void sauvegarder_partie_complete(
 
     fclose(f);
 }
+
+//sauvegarde
 int charger_partie_complete(
     int *vies, int *score, int *niveau,
     float *x, float *y,

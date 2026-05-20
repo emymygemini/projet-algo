@@ -122,14 +122,16 @@ int main() {
 
 
     al_start_timer(timer);
+    int difficulte = DIFFICULTE_NORMAL;
+    int nombrevie_reel = NOMBREVIE;
     printf("ship_w = %d\n", ship_w);
 
     // Affiche le menu et récupère le choix
     debut(HEIGHT, WIDTH, ship, coeur, tirLaser, tempsTir,
       timer, queue, display, Enemy1, Enemy2, Enemy3, grotte);
    int choix = -1;
-    int difficulte = DIFFICULTE_NORMAL;
-    int nombrevie_reel = NOMBREVIE;
+
+
 
 
 while (choix != MENU_QUITTER) {

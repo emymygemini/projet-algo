@@ -16,6 +16,7 @@
 
 #include "enemy.h"
 #include "menu.h"
+#include "save.h"
 
 int niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int MaxBullets, int TempsAttenteRechargement, int SCROLL_SPEED, ALLEGRO_BITMAP *background, ALLEGRO_BITMAP *ship, ALLEGRO_BITMAP *coeur,ALLEGRO_BITMAP *tirLaser, ALLEGRO_BITMAP *tempsTir,ALLEGRO_TIMER *timer,ALLEGRO_EVENT_QUEUE *queue,ALLEGRO_DISPLAY *display,ALLEGRO_BITMAP *Enemy1,ALLEGRO_BITMAP *Enemy2) {
 
@@ -135,12 +136,17 @@ int niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int 
                     state = STATE_GAME;
             }
              if (key[ALLEGRO_KEY_S]) {
-                 sauvegarder_partie_complete(
-                     vies, stats.score, niveau,
-                     x, y,
-                     bullet, MaxBullets,
-                     EnemysNIV1, MAX_ENEMIES1
-                 );
+                 SaveData save;
+                 save.vies = vies;
+                 save.score = stats.score;
+                 save.niveau = 2;
+
+                 save.x = x;
+                 save.y = y;
+
+                 sauvegarder_partie(&save);
+
+                 printf("Sauvegarde OK\n");
              }
         }else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
             key[ev.keyboard.keycode] = false;
@@ -518,12 +524,17 @@ int niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int 
                 }
             }
             if (key[ALLEGRO_KEY_S]) {
-                sauvegarder_partie_complete(
-                    vies, stats.score, niveau,
-                    x, y,
-                    bullet, MaxBullets,
-                    EnemysNIV1, MAX_ENEMIES1
-                );
+                SaveData save;
+                save.vies = vies;
+                save.score = stats.score;
+                save.niveau = 3;
+
+                save.x = x;
+                save.y = y;
+
+                sauvegarder_partie(&save);
+
+                printf("Sauvegarde OK\n");
             }
 
             else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
@@ -974,12 +985,17 @@ int niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int 
                     fin = 2;
                 }
                 if (key[ALLEGRO_KEY_S]) {
-                    sauvegarder_partie_complete(
-                        vies, stats.score, niveau,
-                        x, y,
-                        bullet, MaxBullets,
-                        EnemysNIV1, MAX_ENEMIES1
-                    );
+                    SaveData save;
+                    save.vies = vies;
+        save.score = stats.score;
+        save.niveau = 2;
+
+        save.x = x;
+        save.y = y;
+
+        sauvegarder_partie(&save);
+
+        printf("Sauvegarde OK\n");
                 }
 
                 if (ev.keyboard.keycode == ALLEGRO_KEY_P && !p_pressed) {

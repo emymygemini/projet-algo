@@ -415,7 +415,7 @@ void DrawTempsEntreTir(int temps, ALLEGRO_BITMAP *tirSPRAY, int WIDTH, int HEIGH
         0, 0,
         al_get_bitmap_width(tirSPRAY),
         al_get_bitmap_height(tirSPRAY),
-        x - 50,   // 👈 à gauche de la barre
+        x - 50,   //  à gauche de la barre
         y,
         20,
         20,

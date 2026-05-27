@@ -30,6 +30,7 @@ int main() {
     if (!al_init()) return -1;
 
 
+
     al_install_keyboard();
     al_init_image_addon();
     //enemies_init();

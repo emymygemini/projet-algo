@@ -139,7 +139,7 @@ int niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int 
                  SaveData save;
                  save.vies = vies;
                  save.score = stats.score;
-                 save.niveau = 2;
+                 save.niveau = 1;
 
                  save.x = x;
                  save.y = y;
@@ -522,7 +522,7 @@ int niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int 
                     else if (state == STATE_PAUSE)
                         state = STATE_GAME;
                 }
-            }
+
             if (key[ALLEGRO_KEY_S]) {
                 SaveData save;
                 save.vies = vies;
@@ -533,8 +533,8 @@ int niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int 
                 save.y = y;
 
                 sauvegarder_partie(&save);
-
                 printf("Sauvegarde OK\n");
+            }
             }
 
             else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
@@ -694,7 +694,7 @@ int niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int 
                     count_enemy2BIS_stats(EnemysNIV2BIS,MAX_ENEMIES2,&stats,son_explosion);
                     update_NIV_ENEMY1BIS(EnemysNIV1BIS,MAX_ENEMIES1,&vies,x,y,ship_w,ship_h,bullet,MaxBullets,bulletLASER,MAX_BULLET_LASER,bullet_sp);
                     count_enemy1BIS_stats(EnemysNIV1BIS,MAX_ENEMIES1,&stats,son_explosion);
-                    update_laser_Recup(&laserBonus,&vies,x,y,ship_w,ship_h);
+                    update_laser_Recup(&laserBonus,&nombreTirLaser,x,y,ship_w,ship_h);
                     detecter_perte_vie(vies, son_hit);
                     redraw = 1;
 
@@ -987,15 +987,12 @@ int niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int 
                 if (key[ALLEGRO_KEY_S]) {
                     SaveData save;
                     save.vies = vies;
-        save.score = stats.score;
-        save.niveau = 2;
-
-        save.x = x;
-        save.y = y;
-
-        sauvegarder_partie(&save);
-
-        printf("Sauvegarde OK\n");
+                    save.score = stats.score;
+                    save.niveau = 2;
+                    save.x = x;
+                    save.y = y;
+                    sauvegarder_partie(&save);
+                    printf("Sauvegarde OK\n");
                 }
 
                 if (ev.keyboard.keycode == ALLEGRO_KEY_P && !p_pressed) {
@@ -1189,7 +1186,7 @@ int niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int 
                     count_enemy2BIS_stats(EnemysNIV2BIS,MAX_ENEMIES2,&stats,son_explosion);
                     update_NIV_ENEMY1BIS(EnemysNIV1BIS,MAX_ENEMIES1,&vies,x,y,ship_w,ship_h,bullet,MaxBullets,bulletLASER,MAX_BULLET_LASER,bullet_sp);
                     count_enemy1BIS_stats(EnemysNIV1BIS,MAX_ENEMIES1,&stats,son_explosion);
-                    update_laser_Recup(&laserBonus,&vies,x,y,ship_w,ship_h);
+                    update_laser_Recup(&laserBonus,&nombreTirLaser,x,y,ship_w,ship_h);
                     detecter_perte_vie(vies, son_hit);
 
                     redraw = 1;

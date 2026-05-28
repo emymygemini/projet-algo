@@ -386,9 +386,10 @@ int niv1(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int 
                     WIDTH/2  ,
                       HEIGHT/2 -40,
                       ALLEGRO_ALIGN_CENTER,
-                       "LEVEL BEAT");
+                       "LEVEL BEATEN");
                     al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
-                       "Vous avez tuer %d ennemis et rater %d ennemis",(NombreEnnemi+NombreEnnemi1),stats.enemiesMissed);
+                       "Vous avez tué %d ennemis et raté %d ennemis",(NombreEnnemi+NombreEnnemi1),stats
+                       .enemiesMissed);
                     al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 100, ALLEGRO_ALIGN_CENTER,
                       "Vous avez obtenu le score de %d",stats.score);
                     al_draw_text(fontpetit,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 200, ALLEGRO_ALIGN_CENTER,
@@ -849,9 +850,9 @@ int niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int 
                         WIDTH/2  ,
                           HEIGHT/2 -40,
                           ALLEGRO_ALIGN_CENTER,
-                           "LEVEL BEAT");
+                           "LEVEL BEATEN");
                         al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
-                           "Vous avez tuer %d ennemis et rater %d ennemis",(NombreEnnemi+NombreEnnemi1+NombreEnnemi3),stats.enemiesMissed);
+                           "Vous avez tué %d ennemis et raté %d ennemis",(NombreEnnemi+NombreEnnemi1+NombreEnnemi3),stats.enemiesMissed);
                         al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 100, ALLEGRO_ALIGN_CENTER,
                       "Vous avez obtenu le score de %d",stats.score);
                         al_draw_text(fontpetit,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 200, ALLEGRO_ALIGN_CENTER,
@@ -1346,9 +1347,9 @@ int niv3(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, int 
                         WIDTH/2  ,
                           HEIGHT/2 -40,
                           ALLEGRO_ALIGN_CENTER,
-                           "LEVEL BEAT");
+                           "LEVEL BEATEN");
                         al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 70, ALLEGRO_ALIGN_CENTER,
-                           "Vous avez tuer %d ennemis et rater %d ennemis",(NombreEnnemi+NombreEnnemi1+NombreEnnemi3),stats.enemiesMissed);
+                           "Vous avez tué %d ennemis et raté %d ennemis",(NombreEnnemi+NombreEnnemi1+NombreEnnemi3),stats.enemiesMissed);
                         al_draw_textf(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 100, ALLEGRO_ALIGN_CENTER,
                       "Vous avez obtenu le score de %d",stats.score);
                         al_draw_text(fontpetit,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 200, ALLEGRO_ALIGN_CENTER,
@@ -1642,20 +1643,20 @@ int nivBOSS(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, i
                        WIDTH/2,
                          HEIGHT/2 - 150,
                          ALLEGRO_ALIGN_CENTER,
-                          "dans les trèfonds de son imagination");
+                          "dans les tréfonds de son imagination");
                         al_draw_text(fontMOYEN,
                       al_map_rgb(255,255,255),
                        WIDTH/2,
                          HEIGHT/2 -100,
                          ALLEGRO_ALIGN_CENTER,
-                          "et pour finir détruire son oeuvre finale");
+                          "et enfin détruire son oeuvre finale");
 
                         al_draw_text(fontMOYEN,
                       al_map_rgb(255,255,255),
                        WIDTH/2,
                          HEIGHT/2 - 50,
                          ALLEGRO_ALIGN_CENTER,
-                          "Concentrez vous pour ne pas périre");
+                          "Concentrez-vous pour ne pas périr");
                         al_draw_scaled_bitmap(Enemy1,0, 0,al_get_bitmap_width(Enemy1),al_get_bitmap_height(Enemy1),WIDTH/2-125 , HEIGHT/2,250, 250,ALLEGRO_ALIGN_CENTER);
                         al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 300, ALLEGRO_ALIGN_CENTER,
                             "N - next ");
@@ -2009,9 +2010,9 @@ int nivBOSS(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, i
                    al_map_rgba(0,0,0,150));
 
                         al_draw_textf(fontMOYEN,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 -150, ALLEGRO_ALIGN_CENTER,
-                            "Bravo vous êtes presque sorti de cette esprit tordu");
+                            "Bravo vous êtes presque sorti de cet esprit tordu");
                         al_draw_textf(fontMOYEN,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 - 100, ALLEGRO_ALIGN_CENTER,
-                           "Il ne vous reste qu'un seul montre à détruire");
+                           "Il ne vous reste qu'un seul monstre à détruire");
                         al_draw_textf(fontMOYEN,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 - 50, ALLEGRO_ALIGN_CENTER,
                            "et vous voilà libre");
                         al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 300, ALLEGRO_ALIGN_CENTER,
@@ -2129,7 +2130,7 @@ int nivBOSS(int HEIGHT, int WIDTH, int NOMBREVIE, int BULLET_SPEED, int SPEED, i
                         WIDTH/2,
                           HEIGHT/2-40,
                           ALLEGRO_ALIGN_CENTER,
-                           "BOSS BATTU");
+                           "BOSS BEATEN");
 
                         al_draw_text(font,al_map_rgb(255,255,255),WIDTH/2,HEIGHT/2 + 300, ALLEGRO_ALIGN_CENTER,
                            "N - Next ");
